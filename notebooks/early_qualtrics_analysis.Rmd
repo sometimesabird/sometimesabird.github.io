@@ -1,0 +1,550 @@
+---
+title: "Early Analysis"
+author: "George B. Y."
+date: "11/5/2020"
+output: 
+  prettydoc::html_pretty:
+    theme: tactile
+---
+
+
+```{r setup, include = FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+
+# SETUP -------------------------------------------------------------------
+if (!require("pacman")) install.packages("pacman") # This installs this package if not available.
+pacman::p_load(dplyr, readr, ggplot2, stringr, janitor, ggplot2, tidyr, ggthemes, RColorBrewer, stargazer, car, AER, ggpubr, prettydoc) # this neat loads packages and installs them if they are not installed
+datapath <- ifelse(Sys.info()['user'] == 'kiwi', '~/Box', 'PUT YOUR FULL PATH TO DATA FOLDER HERE') # this neat bit checks if the user is me, in which case it assigns my path, or not, in which case it will assign whatever you put there
+
+RenameImportantIssues <- function(col) {
+  col %>% 
+    str_replace('COVID-19 outbreak', 'Covid') %>% 
+    str_replace('Law enforcement', 'Police') %>% 
+    str_replace('Supreme Court nominations', 'Court')
+}
+CorrectMissingValues <- function(col, default) {
+  col[is.na(col)] <- default
+  col
+}
+
+ReadInitialSurvey <- function() {
+  # df <- 
+  paste0(datapath, '/microtargeting/qualtrics/FINAL+SURVEY_November+5,+2020_16.38.csv') %>% # combine the strings
+      readr::read_csv() %>% 
+      .[2:nrow(.), ] %>% 
+      # filter(finished == 'True') %>% 
+      mutate(TreatmentSuccess = coalesce(QID134, QID135),
+             TimeOnTreatment = as.numeric(QID133_PAGE_SUBMIT),
+             Treatment = 
+               setNames(c('Ads', 'No Ads', 'Ads', 'No Ads'), 
+                        nm = c('A', 'P', 'Alcohol', 'Political'))[treatment],
+             QID62_OS = str_extract(QID62_OS, '^[A-z]*')) %>% 
+      select(ID = '_recordId',
+             Name = first,
+             LastName = surname,
+             Email = email, 
+             Campaign = cmp,  
+             Treatment,
+             TreatmentSuccess,
+             TimeOnTreatment,
+             Time = duration,
+             URL = Q_URL,
+             Lat = locationLatitude,
+             Lon = locationLongitude,
+             Browser = QID62_BROWSER,
+             OS = QID62_OS,
+             YoB = QID129_1,
+             Zip = QID129_2) %>% 
+      # filter(Name != '-1') %>% 
+      mutate(Time = as.numeric(Time))
+}
+ReadFollowUpSurvey <- function() {
+  # df <- 
+  paste0(datapath, '/microtargeting/qualtrics/final.csv') %>% # combine the strings
+  readr::read_csv() %>% 
+  .[2:nrow(.), ] %>% 
+  filter(finished == 'True') %>% 
+  mutate(ID = plrk,
+         Name2 = QID60_1,
+         LastName2 = QID60_2,
+         Time2 = duration,
+         Lat2 = locationLatitude,
+         Lon2 = locationLongitude) %>% 
+  mutate(QID47 = str_replace(QID47, 'Not very strong', 'Light'),
+         QID48 = str_remove(QID48, 's$')) %>% 
+  mutate(Alignment = paste(QID9, coalesce(QID47, QID48), sep = '-')) %>%
+  mutate(Alignment = factor(Alignment, 
+                            levels = c('Republican-Strong', 
+                                       'Republican-Light', 
+                                       'Independent-Republican', 
+                                       'Independent-Democrat', 
+                                       'Democrat-Light', 
+                                       'Democrat-Strong')),
+         AlignmentRough = ifelse(str_detect(Alignment, 'Republican'), 
+                                 'Republican', 'Democrat'),
+         ImportantIssue = RenameImportantIssues(QID13)
+         ) %>% 
+  select(ID, 
+         Name2,
+         LastName2,
+         Time2,
+         Lat2,
+         Lon2,
+         Alignment,
+         AlignmentRough,
+         ImportantIssue,
+         PolicyCourt = QID11_1,
+         PolicyCovid = QID11_2,
+         PolicyPolice = QID11_4,
+         PolicyAbortion = QID11_5,
+         PolicyHealthcare = QID11_10,
+         DictatorSplit = QID30_1,
+         Thermometer = QID1_1,
+         Voting = QID15,
+         Donation = QID17,
+         Vote = QID23,
+         PredictionCourt = QID19_1,
+         PredictionCovid = QID19_2,
+         PredictionPolice = QID19_4,
+         PredictionAbortion = QID19_5,
+         PredictionHealthcare = QID19_9,
+         FactPolice = QID33_1,
+         FactSleepy = QID33_2,
+         FactTaxes = QID33_4,
+         FactCourt = QID33_5,
+         FactRadical = QID33_10,
+         AdsSeen = QID10,
+         Compliance = QID59, 
+         NewsConsumption = QID20,
+         VoteDate = QID16,
+         VoteCongress = QID24,
+         Sex = QID25,
+         Income = QID26,
+         Education = QID27,
+         Race = QID36) %>% 
+  mutate(Time2 = as.numeric(Time2),
+         across(c(starts_with('Policy'),
+                  'DictatorSplit',
+                  'Thermometer',
+                  starts_with('Prediction'),
+                  starts_with('Fact')
+                  ), as.numeric),
+         across(c(starts_with('Policy'),
+                  'Thermometer',
+                  starts_with('Prediction'),
+                  starts_with('Fact')
+                  ),
+                ~ CorrectMissingValues(.x, default = 50)),
+         DictatorSplit = CorrectMissingValues(col = DictatorSplit, default = 0),
+         PolicyCourtR = 100 - PolicyCourt,
+         PolicyHealthcareR = 100 - PolicyHealthcare,
+         PolicyPoliceR = 100 - PolicyPolice,
+         PredictionCourtR = 100 - PredictionCourt,
+         PredictionHealthcareR = 100 - PredictionHealthcare,
+         PredictionPoliceR = 100 - PredictionPolice
+         ) %>% 
+  mutate(CumulativePolicyR = rowMeans(select(., c('PolicyAbortion',
+                                       'PolicyCourtR',
+                                       'PolicyCovid',
+                                       'PolicyHealthcareR',
+                                       'PolicyPoliceR'))
+                                      ),
+         CumulativePredictionR = rowMeans(select(., c('PredictionAbortion',
+                                       'PredictionCourtR',
+                                       'PredictionCovid',
+                                       'PredictionHealthcareR',
+                                       'PredictionPoliceR'))
+                                      ),
+         CumulativeFactR = rowMeans(select(., c('FactPolice',
+                                       'FactSleepy',
+                                       'FactTaxes',
+                                       'FactCourt',
+                                       'FactRadical'))
+                                      )
+         ) %>%
+  filter(Compliance == 'Yes') %>% 
+  select(-c(PolicyCourtR, PolicyHealthcareR, PolicyPoliceR, PredictionCourtR, PredictionHealthcareR, PredictionPoliceR))
+}
+```
+
+```{r, include = FALSE}
+# LOADING DATA ------------------------------------------------------------
+
+df <- 
+  ReadFollowUpSurvey() %>% 
+  left_join(
+    ReadInitialSurvey(), 
+    .) %>% 
+  filter(!is.na(Time2))
+
+df2 <- 
+  ReadFollowUpSurvey() %>%
+  rename(ID2 = ID) %>% 
+  left_join(
+    ReadInitialSurvey(), 
+    .,
+    by = c('Name' = 'Name2', 'LastName' = 'LastName2')) %>% 
+  filter(!is.na(Time2)) %>% 
+  distinct(Email, .keep_all = TRUE) %>% 
+  select(ID, ID2, everything()) %>% 
+  filter(is.na(ID2))
+
+df <- bind_rows(df, df2) %>% 
+  distinct(Email, .keep_all = TRUE)
+```
+
+
+# Birsdeye View
+## Observations
+Number of matched observations: `r nrow(df)`, with `r sum(df$Campaign == 'BM')` coming from BM campaign and `r sum(df$Campaign == 'PP')` -- from PP. This is not the final count, because some observations are unmatched, and some are duplicates, but this is largely reasonable data. We can maybe add at least a hundred more.
+
+I haven't analyzed the extension data _at all_ yet.
+
+## Timing
+Distribution of time spent on treatment in the first survey (excluding outliers). This is a proxy for compliance with the request to change settings. The idea is that if you don't look at the instructions carefully you surely haven't complied:
+
+```{r}
+df %>% 
+  filter(TimeOnTreatment < 300) %>% 
+  ggplot(aes(TimeOnTreatment)) +
+  geom_histogram(binwidth = 5) +
+  xlab('Seconds Spent on Treatment')
+```
+
+```{r}
+df %>% 
+  filter(TimeOnTreatment < 300) %>% 
+  gghistogram(x = "TimeOnTreatment",
+   add = "mean", rug = TRUE,
+   color = "#665c54", fill = "#ebdbb2",
+   binwidth = 5) +
+  bgcolor("#282828") +
+  border("#fabd2f")
+```
+
+
+
+And focusing on those who spent less than 30 seconds:
+
+```{r}
+df %>% 
+  filter(TimeOnTreatment < 30) %>% 
+  ggplot(aes(TimeOnTreatment)) +
+  geom_histogram(binwidth = 1) +
+  xlab('Seconds Spent on Treatment')
+```
+
+```{r}
+df <- df %>% 
+  filter(TimeOnTreatment >= 5)
+```
+
+From now on I will drop those who spent less than 5 seconds, leaving us with `r nrow(df)` observations.
+
+Here is time spent on the entirety of the follow-up survey. We do not have specific attention checks, and this looks very good. People clearly spend time on the survey, and looks about the amount needed to answer it:
+
+```{r}
+df %>% 
+  filter(Time2 < 2000) %>%
+  ggplot(aes(Time2)) +
+  geom_histogram() +
+  xlab('Seconds Spent on the Follow-Up Survey')
+```
+
+And focusing on those who spent less than 5 minutes:
+
+```{r}
+df %>% 
+  filter(Time2 < 300) %>%
+  ggplot(aes(Time2)) +
+  geom_histogram() +
+  xlab('Seconds Spent on the Follow-Up Survey')
+```
+## Sample Description
+
+```{r}
+df %>% 
+  ggplot(aes(y = Browser, fill = Treatment)) +
+  geom_bar(position = 'dodge')
+```
+
+
+
+Treatment assigned evenly in general and across groups.
+
+```{r}
+df %>% 
+  ggplot(aes(x = AlignmentRough, fill = Treatment)) +
+  geom_bar(position = 'dodge')
+```
+
+
+
+
+## Issues
+
+Issue importance by alignment (the topic that was the most important during these elections):
+
+```{r}
+df %>% 
+  ggplot(aes(x = Treatment, fill = Alignment)) +
+  geom_bar() +
+  scale_fill_brewer(palette = 'RdBu') +
+  facet_grid(. ~ ImportantIssue)
+```
+
+Policy opinions on the following issues:
+
+- Access to abortion during the first trimester should be restricted.
+- We should increase the number of Supreme Court justices.
+- Response of the Federal Government to the Covid-19 pandemic was adequate.
+- Free health care for everyone is a good policy.
+- We need to reduce police funding.
+
+
+```{r}
+df %>% 
+  select(starts_with('Policy'),
+         Treatment, Alignment) %>% 
+  pivot_longer(starts_with('Policy'), 
+               names_to = 'PolicyIssue', 
+               values_to = 'Agreement') %>% 
+  mutate(PolicyIssue = str_remove(PolicyIssue, 'Policy')) %>% 
+  ggplot(aes(x = Treatment, y = Agreement)) +
+  geom_boxplot() +
+  scale_fill_brewer(palette = 'RdBu') +
+  facet_grid(PolicyIssue ~ Alignment)
+```
+
+And policy opinions, aggregating alignment into two sides. It looks like there is more movement among the Republicans than Democrats.
+
+```{r}
+df %>% 
+  select(starts_with('Policy'),
+         Treatment, AlignmentRough) %>% 
+  pivot_longer(starts_with('Policy'), 
+               names_to = 'PolicyIssue', 
+               values_to = 'Agreement') %>% 
+  mutate(PolicyIssue = str_remove(PolicyIssue, 'Policy')) %>% 
+  ggplot(aes(x = Treatment, y = Agreement)) +
+  geom_boxplot() +
+  scale_fill_brewer(palette = 'RdBu') +
+  facet_grid(AlignmentRough ~ PolicyIssue)
+```
+
+# Polarization Outcomes
+
+## Dictator Game
+
+For the love of me I can't figure out how to make a group-specific relative frequency histogram, so these are _counts_. Meaning that it seems that Republicans are "nicer" than Democrats, because a higher proportion on them donates the entire dollar.
+
+```{r}
+df %>%
+  ggplot(aes(x = DictatorSplit, fill = AlignmentRough)) +
+  geom_histogram(position = 'dodge') +
+  xlab('Dictator Game Offer to Opposing Side') +
+  scale_fill_manual(values = brewer.pal(6, "RdBu")[c(6, 1)])
+```
+
+Same thing split by detailed alignment:
+
+```{r}
+df %>%
+  ggplot(aes(x = DictatorSplit, fill = Alignment)) +
+  geom_histogram(position = 'dodge', binwidth = 0.2) +
+  xlab('Dictator Game Offer to Opposing Side') +
+  scale_fill_manual(values = brewer.pal(6, "RdBu")) +
+  theme_classic()
+```
+
+Now, the effect of treatment (looks zero):
+
+```{r}
+df %>%
+  ggplot(aes(x = DictatorSplit, fill = Treatment)) +
+  geom_histogram(position = 'dodge', binwidth = 0.1) +
+  xlab('Dictator Game Offer to Opposing Side')
+```
+
+Thermometer
+
+```{r}
+df %>%
+  ggplot(aes(x = Thermometer, fill = Treatment)) +
+  geom_histogram(position = 'dodge', binwidth = 10)
+```
+
+
+Mean Effect on Thermometer by rough alignment.
+
+```{r}
+df %>%
+  group_by(Treatment, AlignmentRough) %>%
+  summarize(MeanThermometer = mean(Thermometer),
+            sd = sd(Thermometer),
+            size = n()) %>% 
+  ggplot(aes(y = MeanThermometer, x = Treatment)) +
+  geom_bar(stat = 'identity') +
+  facet_grid(.~ AlignmentRough)
+```
+
+Mean Effect on Dictator Split by rough alignment.
+
+```{r}
+df %>%
+  group_by(Treatment, AlignmentRough) %>%
+  summarize(MeanDictatorSplit = mean(DictatorSplit),
+            sd = sd(DictatorSplit),
+            size = n()) %>% 
+  ggplot(aes(y = MeanDictatorSplit, x = Treatment)) +
+  geom_bar(stat = 'identity') +
+  facet_grid(.~ AlignmentRough)
+```
+
+
+## Beliefs
+
+```{r}
+df %>% 
+  select(starts_with('Prediction'),
+         Treatment, Alignment) %>% 
+  pivot_longer(starts_with('Prediction'), 
+               names_to = 'PolicyIssue', 
+               values_to = 'Prediction') %>% 
+  mutate(PolicyIssue = str_remove(PolicyIssue, 'Prediction')) %>% 
+  ggplot(aes(x = Treatment, y = Prediction)) +
+  geom_boxplot() +
+  scale_fill_brewer(palette = 'RdBu') +
+  facet_grid(PolicyIssue ~ Alignment)
+```
+
+```{r}
+df %>% 
+  select(starts_with('Prediction'),
+         Treatment, AlignmentRough) %>% 
+  pivot_longer(starts_with('Prediction'), 
+               names_to = 'PolicyIssue', 
+               values_to = 'Prediction') %>% 
+  mutate(PolicyIssue = str_remove(PolicyIssue, 'Prediction')) %>% 
+  ggplot(aes(x = Treatment, y = Prediction)) +
+  geom_boxplot() +
+  scale_fill_brewer(palette = 'RdBu') +
+  facet_grid(AlignmentRough ~ PolicyIssue)
+```
+
+Looking at cumulative beliefs (partly reversed to represent the standpoint of a Republican)
+
+```{r}
+df %>% 
+  ggplot(aes(x = Treatment, y = CumulativePredictionR)) +
+  geom_boxplot() +
+  scale_fill_brewer(palette = 'RdBu') +
+  facet_grid( ~ Alignment)
+
+# df %>%
+#   group_by(Alignment, Treatment) %>%
+#   summarize(MeanPredictionR = mean(CumulativePredictionR),
+#          sd = sd(CumulativePredictionR)) %>%
+#   ggplot(aes(y = MeanPredictionR, x = Treatment)) +
+#     geom_bar(stat = "identity", position = 'dodge') +
+#     # scale_fill_brewer(palette = 'RdBu') +
+#     facet_grid(. ~ Alignment) +
+#     geom_errorbar(aes(ymin = MeanPredictionR - sd,
+#                       ymax = MeanPredictionR + sd))
+
+
+```
+
+
+
+# Political Outcomes
+
+Votes are looking pretty zero.
+
+```{r}
+df %>% 
+  drop_na(Vote) %>% 
+  ggplot(aes(x = Vote, fill = Treatment)) +
+  geom_bar(position = 'dodge') +
+  # scale_fill_brewer(palette = 'RdBu') +
+  facet_grid(. ~ AlignmentRough)
+
+# df %>% 
+#   drop_na(Vote) %>% 
+#   mutate(VoteAligned = ifelse(AlignmentRough == 'Republican',
+#                               (Vote == 'Trump and Pence') * 1,
+#                               (Vote == 'Biden and Harris') * 1)) %>% 
+#   group_by(AlignmentRough, Treatment) %>% 
+#   summarize(VoteAlignedProbability = mean(VoteAligned),
+#          sd = sd(VoteAligned)) %>% 
+#   ggplot(aes(y = VoteAlignedProbability, x = Treatment)) +
+#     geom_bar(stat = "identity", position = 'dodge') +
+#     # scale_fill_brewer(palette = 'RdBu') +
+#     facet_grid(. ~ AlignmentRough) +
+#     geom_errorbar(aes(ymin = VoteAlignedProbability - sd,
+#                       ymax = VoteAlignedProbability + sd))
+
+```
+
+Effect on turnout:
+
+```{r}
+df %>% 
+  drop_na(Voting) %>% 
+  ggplot(aes(x = Voting, fill = Treatment)) +
+  geom_bar(position = 'dodge') +
+  # scale_fill_brewer(palette = 'RdBu') +
+  facet_grid(. ~ Alignment)
+
+```
+
+
+## Misinformation
+
+Agreement with the following factual statements:
+
+- Joe Biden and Kamala Harris support defunding the police.
+- Joe Biden lacks stamina and has poor health.
+- Raising taxes is a part of Joe Biden's program.
+- Joe Biden wants to increase the number of Supreme Court justices.
+- Joe Biden supports policies advocated by the radical left.
+
+```{r}
+df %>% 
+  select(starts_with('Fact'),
+         Treatment, Alignment) %>% 
+  pivot_longer(starts_with('Fact'), 
+               names_to = 'FactIssue', 
+               values_to = 'Agreement') %>% 
+  mutate(PolicyIssue = str_remove(FactIssue, 'Fact')) %>% 
+  ggplot(aes(x = Treatment, y = Agreement)) +
+  geom_boxplot() +
+  scale_fill_brewer(palette = 'RdBu') +
+  facet_grid(PolicyIssue ~ Alignment)
+```
+
+```{r}
+df %>% 
+  select(starts_with('Fact'),
+         Treatment, AlignmentRough) %>% 
+  pivot_longer(starts_with('Fact'), 
+               names_to = 'FactIssue', 
+               values_to = 'Agreement') %>% 
+  mutate(PolicyIssue = str_remove(FactIssue, 'Fact')) %>% 
+  ggplot(aes(x = Treatment, y = Agreement)) +
+  geom_boxplot() +
+  scale_fill_brewer(palette = 'RdBu') +
+  facet_grid(AlignmentRough ~ PolicyIssue)
+```
+
+
+
+# Regressions
+
+```{r}
+# model1 <- lm(data = df, CumulativePredictionR ~ Treatment * Alignment)
+# model2 <- lm(data = df, CumulativePredictionR ~ Treatment + Alignment)
+# anova(model1, model2)
+# stargazer(model1, model2, type = 'text')
+```
+
