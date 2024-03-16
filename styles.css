@@ -1,0 +1,271 @@
+/* Style the buttons that are used to open and close the accordion panel */
+.accordion {
+    background-color: #eee;
+    color: #444;
+    cursor: pointer;
+    padding: 18px;
+    width: 100%;
+    text-align: left;
+    border: none;
+    outline: none;
+    transition: 0.4s;
+}
+
+/* Add a background color to the button if it is clicked on (add the .active class with JS), and when you move the mouse over it (hover) */
+.active,
+.accordion:hover {
+    background-color: #ccc;
+}
+
+/* Style the accordion panel. Note: hidden by default */
+.panel {
+    padding: 0 18px;
+    background-color: white;
+    display: none;
+    overflow: hidden;
+}
+
+/* the base of the website */
+body {
+    font-family: Arial, Helvetica, sans-serif;
+    background-color: #282828;
+    color: #cc241d;
+}
+
+main {
+    margin: auto;
+    max-width: 70ch;
+    padding: 2ch;
+}
+
+ul {
+    list-style-type: none;
+    padding: 1rem 0;
+}
+
+li {
+    margin-bottom: 0.5rem;
+}
+
+a {
+    color: #ebdbb2;
+    outline: 0;
+    text-decoration: none;
+}
+
+a:hover {
+    text-decoration: underline;
+    text-decoration-color: #ebdbb2;
+}
+
+::selection {
+    background-color: #fb4934;
+}
+
+h1 {
+    color: #ebdbb2;
+    text-align: center;
+}
+
+h2 {
+    color: #ebdbb2;
+    text-align: left;
+}
+
+.red {
+    color: #cc241d
+}
+
+.section-title {
+    color: #cc241d;
+    margin-top: 0ch;
+}
+
+.section-block {
+    margin-left: 0rem;
+    margin-bottom: 1.5rem;
+}
+
+.paper-title {
+    color: #ebdbb2;
+}
+
+.paper-details {
+    margin-left: 3rem;
+}
+
+.paper-coauthors {
+    color: #bdae93;
+    font-style: italic;
+}
+
+.paper-coauthors a {
+    color: inherit;
+    /* Inherit color from parent span */
+
+}
+
+.paper-source {
+    color: #bdae93;
+    font-style: italic;
+}
+
+.paper-abstract {
+    position: relative;
+    left: -1.5rem;
+    color: #a89984;
+    display: flex;
+    justify-content: center;
+}
+
+.text-accent {
+    color: #ebdbb2
+}
+
+.dark0_hard {
+    color: #1d2021
+}
+
+.dark0 {
+    color: #282828
+}
+
+.dark0_soft {
+    color: #32302f
+}
+
+.dark1 {
+    color: #3c3836
+}
+
+.dark2 {
+    color: #504945
+}
+
+.dark3 {
+    color: #665c54
+}
+
+.dark4 {
+    color: #7c6f64
+}
+
+.gray_245 {
+    color: #928374
+}
+
+.gray_244 {
+    color: #928374
+}
+
+.light0_hard {
+    color: #f9f5d7
+}
+
+.light0 {
+    color: #fbf1c7
+}
+
+.light0_soft {
+    color: #f2e5bc
+}
+
+.light1 {
+    color: #ebdbb2
+}
+
+.light2 {
+    color: #d5c4a1
+}
+
+.light3 {
+    color: #bdae93
+}
+
+.light4 {
+    color: #a89984
+}
+
+.bright_red {
+    color: #fb4934
+}
+
+.bright_green {
+    color: #b8bb26
+}
+
+.bright_yellow {
+    color: #fabd2f
+}
+
+.bright_blue {
+    color: #83a598
+}
+
+.bright_purple {
+    color: #d3869b
+}
+
+.bright_aqua {
+    color: #8ec07c
+}
+
+.bright_orange {
+    color: #fe8019
+}
+
+.neutral_red {
+    color: #cc241d
+}
+
+.neutral_green {
+    color: #98971a
+}
+
+.neutral_yellow {
+    color: #d79921
+}
+
+.neutral_blue {
+    color: #458588
+}
+
+.neutral_purple {
+    color: #b16286
+}
+
+.neutral_aqua {
+    color: #689d6a
+}
+
+.neutral_orange {
+    color: #d65d0e
+}
+
+.faded_red {
+    color: #9d0006
+}
+
+.faded_green {
+    color: #79740e
+}
+
+.faded_yellow {
+    color: #b57614
+}
+
+.faded_blue {
+    color: #076678
+}
+
+.faded_purple {
+    color: #8f3f71
+}
+
+.faded_aqua {
+    color: #427b58
+}
+
+.faded_orange {
+    color: #af3a03
+}
