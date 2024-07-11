@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Extension Uninstalled</title>
+    <script src="https://www.gstatic.com/firebasejs/9.0.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.0.0/firebase-firestore.js"></script>
+    <style>
+        body {
+            background-color: #282828;
+            color: #a89984; /* A muted brownish color from Gruvbox */
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            text-align: center;
+        }
+        h1 {
+            color: #fb4934; /* Original red from Gruvbox */
+        }
+        p {
+            color: #a89984; /* A muted brownish color from Gruvbox */
+        }
+    </style>
+    <script>
+        // Your web app's Firebase configuration
+        const firebaseConfig = {
+            apiKey: 'AIzaSyCBDbUlWC6RPfx__ik7Rft3GO6H3DuaypM',
+            authDomain: 'toxicity-extension-5a9a7.firebaseapp.com',
+            projectId: 'toxicity-extension-5a9a7',
+            storageBucket: 'toxicity-extension-5a9a7.appspot.com',
+            messagingSenderId: '537729629989',
+            appId: '1:537729629989:web:913b91c2e0de245e5564cc',
+        };
+
+        // Initialize Firebase
+        firebase.initializeApp(firebaseConfig);
+        const db = firebase.firestore();
+
+        // Function to get query parameters
+        function getQueryParams() {
+            const params = {};
+            window.location.search.substring(1).split("&").forEach(function (param) {
+                const [key, value] = param.split("=");
+                params[key] = decodeURIComponent(value);
+            });
+            return params;
+        }
+
+        // Function to record uninstallation in Firestore
+        function recordUninstall() {
+            const params = getQueryParams();
+            if (params.anonid && params.uninstall) {
+                db.collection("uninstalls").add({
+                    timestamp: firebase.firestore.FieldValue.serverTimestamp(),
+                    anonid: params.anonid
+                }).then(() => {
+                    console.log("Uninstall recorded");
+                }).catch((error) => {
+                    console.error("Error recording uninstall: ", error);
+                });
+            }
+        }
+
+        // Record the uninstall event when the page loads
+        window.onload = recordUninstall;
+    </script>
+</head>
+<body>
+    <div>
+        <h1>We're sorry to see you go!</h1>
+        <p>Thank you for your participation.</p>
+    </div>
+</body>
+</html>
