@@ -37,9 +37,9 @@
         };
 
         // Initialize Firebase
-        const app = firebase.initializeApp(firebaseConfig);
-        const db = firebase.firestore(app);
-
+        firebase.initializeApp(firebaseConfig);
+        const db = firebase.firestore();
+        
         // Function to get query parameters
         function getQueryParams() {
             const params = {};
