@@ -4,8 +4,46 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Extension Uninstalled</title>
-    <script src="https://www.gstatic.com/firebasejs/9.0.0/firebase-app.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.0.0/firebase-firestore.js"></script>
+    
+    <script type="module">
+  import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.11.0/firebase-app.js';
+  import { getFirestore, serverTimestamp, doc, setDoc } from 'https://www.gstatic.com/firebasejs/10.11.0/firebase-firestore.js';
+
+  const firebaseConfig = {
+    apiKey: 'AIzaSyCBDbUlWC6RPfx__ik7Rft3GO6H3DuaypM',
+    authDomain: 'toxicity-extension-5a9a7.firebaseapp.com',
+    projectId: 'toxicity-extension-5a9a7',
+    storageBucket: 'toxicity-extension-5a9a7.appspot.com',
+    messagingSenderId: '537729629989',
+    appId: '1:537729629989:web:913b91c2e0de245e5564cc',
+  };
+
+  const app = initializeApp(firebaseConfig);
+  const db = getFirestore(app);
+
+  const storeUninstallRecord = async (anonid) => {
+    const uninstallRecord = {
+      anonid,
+      timestamp: serverTimestamp(),
+    };
+
+    try {
+      await setDoc(doc(db, 'ads-uninstalls', anonid), uninstallRecord);
+      console.log('Uninstall record stored successfully');
+    } catch (e) {
+      console.error('Error storing uninstall record', e);
+    }
+  };
+
+  const urlParams = new URLSearchParams(window.location.search);
+  const anonid = urlParams.get('anonid');
+
+  if (anonid) {
+    storeUninstallRecord(anonid);
+  }
+</script>
+
+    
     <style>
         body {
             background-color: #282828;
@@ -25,49 +63,6 @@
             color: #a89984; /* A muted brownish color from Gruvbox */
         }
     </style>
-    <script>
-        // Your web app's Firebase configuration
-        const firebaseConfig = {
-            apiKey: 'AIzaSyCBDbUlWC6RPfx__ik7Rft3GO6H3DuaypM',
-            authDomain: 'toxicity-extension-5a9a7.firebaseapp.com',
-            projectId: 'toxicity-extension-5a9a7',
-            storageBucket: 'toxicity-extension-5a9a7.appspot.com',
-            messagingSenderId: '537729629989',
-            appId: '1:537729629989:web:913b91c2e0de245e5564cc',
-        };
-
-        // Initialize Firebase
-        firebase.initializeApp(firebaseConfig);
-        const db = firebase.firestore();
-        
-        // Function to get query parameters
-        function getQueryParams() {
-            const params = {};
-            window.location.search.substring(1).split("&").forEach(function (param) {
-                const [key, value] = param.split("=");
-                params[key] = decodeURIComponent(value);
-            });
-            return params;
-        }
-
-        // Function to record uninstallation in Firestore
-        function recordUninstall() {
-            const params = getQueryParams();
-            if (params.anonid && params.uninstall) {
-                db.collection("uninstalls").add({
-                    timestamp: firebase.firestore.FieldValue.serverTimestamp(),
-                    anonid: params.anonid
-                }).then(() => {
-                    console.log("Uninstall recorded");
-                }).catch((error) => {
-                    console.error("Error recording uninstall: ", error);
-                });
-            }
-        }
-
-        // Record the uninstall event when the page loads
-        window.onload = recordUninstall;
-    </script>
 </head>
 <body>
     <div>
