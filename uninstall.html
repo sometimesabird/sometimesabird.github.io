@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Extension Uninstalled</title>
+    
+    <script type="module">
+  import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.11.0/firebase-app.js';
+  import { getFirestore, serverTimestamp, doc, setDoc } from 'https://www.gstatic.com/firebasejs/10.11.0/firebase-firestore.js';
+
+  const firebaseConfig = {
+    apiKey: 'AIzaSyCBDbUlWC6RPfx__ik7Rft3GO6H3DuaypM',
+    authDomain: 'toxicity-extension-5a9a7.firebaseapp.com',
+    projectId: 'toxicity-extension-5a9a7',
+    storageBucket: 'toxicity-extension-5a9a7.appspot.com',
+    messagingSenderId: '537729629989',
+    appId: '1:537729629989:web:913b91c2e0de245e5564cc',
+  };
+
+  const app = initializeApp(firebaseConfig);
+  const db = getFirestore(app);
+
+  const storeUninstallRecord = async (anonid) => {
+    const uninstallRecord = {
+      anonid,
+      timestamp: serverTimestamp(),
+    };
+
+    try {
+      await setDoc(doc(db, 'ads-uninstalls', anonid), uninstallRecord);
+      console.log('Uninstall record stored successfully');
+    } catch (e) {
+      console.error('Error storing uninstall record', e);
+    }
+  };
+
+  const urlParams = new URLSearchParams(window.location.search);
+  const anonid = urlParams.get('anonid');
+
+  if (anonid) {
+    storeUninstallRecord(anonid);
+  }
+</script>
+
+    
+    <style>
+        body {
+            background-color: #282828;
+            color: #a89984; /* A muted brownish color from Gruvbox */
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            text-align: center;
+        }
+        h1 {
+            color: #fb4934; /* Original red from Gruvbox */
+        }
+        p {
+            color: #a89984; /* A muted brownish color from Gruvbox */
+        }
+    </style>
+</head>
+<body>
+    <div>
+        <h1>We're sorry to see you go!</h1>
+        <p>Thank you for your participation.</p>
+    </div>
+</body>
+</html>
