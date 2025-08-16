@@ -109,6 +109,12 @@ h2 {
     color: inherit;
 }
 
+.paper-mentions a {
+    color: #458588;
+    text-decoration-color: #ebdbb2;
+    /* Inherit color from parent span */
+}
+
 .paper-abstract {
     position: relative;
     left: -1.5rem;
