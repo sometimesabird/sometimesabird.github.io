@@ -473,14 +473,126 @@ body.split {
     }
 }
 
+/* the photo is a button that opens the larger copy in .photo-view */
 .portrait {
     display: block;
     width: 12rem;
     height: 12rem;
-    object-fit: cover;
+    padding: 0;
+    overflow: hidden;
     border-radius: 4px;
     border: 1px solid var(--bg2);
+    background: none;
     margin-bottom: 1.5rem;
+    cursor: zoom-in;
+}
+
+.portrait img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.portrait:hover {
+    border-color: var(--bg4);
+}
+
+.portrait:focus-visible {
+    outline: 2px solid var(--yellow-bright);
+    outline-offset: 3px;
+}
+
+/* enlarged photo: a full-viewport modal dialog over a dimmed page; tapping
+   anywhere but the photo closes it, so pinching or double-tapping the photo
+   to zoom never does */
+.photo-view[open] {
+    box-sizing: border-box;
+    display: grid;
+    place-items: center;
+    width: 100%;
+    height: 100%;
+    max-width: none;
+    max-height: none;
+    margin: 0;
+    padding: 1.25rem;
+    border: 0;
+    background: none;
+    cursor: zoom-out;
+    animation: photo-fade 0.15s ease-out;
+}
+
+.photo-view::backdrop {
+    background: rgba(29, 32, 33, 0.92);
+    animation: photo-fade 0.15s ease-out;
+}
+
+.photo-view img {
+    box-sizing: border-box;
+    display: block;
+    /* the uncropped 2:3 photo, as large as fits; svh keeps it clear of
+       mobile browser toolbars, with vh as the fallback */
+    width: min(100%, 85vh * 2 / 3);
+    width: min(100%, 85svh * 2 / 3);
+    height: auto;
+    border-radius: 4px;
+    border: 1px solid var(--bg2);
+    cursor: auto;
+    animation: photo-grow 0.15s ease-out;
+    /* headshot-full.jpg is lazy, so it only downloads once the dialog opens;
+       until it arrives, the sidebar's already-cached square crop stands in
+       over its top two-thirds, which is exactly where that crop came from */
+    background: url(assets/headshot.jpg) top / 100% no-repeat;
+}
+
+.photo-close {
+    position: absolute;
+    top: 0.75rem;
+    right: 0.75rem;
+    width: 2.75rem;
+    height: 2.75rem;
+    padding: 0;
+    border: 0;
+    border-radius: 50%;
+    background: none;
+    color: var(--fg);
+    font: 2rem/1 var(--serif);
+    cursor: pointer;
+}
+
+.photo-close:hover {
+    background: var(--bg1);
+}
+
+.photo-close:focus-visible {
+    outline: 2px solid var(--yellow-bright);
+    outline-offset: 1px;
+}
+
+/* the page behind stays put while the photo is open */
+html:has(.photo-view[open]) {
+    overflow: hidden;
+    scrollbar-gutter: stable;
+}
+
+@keyframes photo-fade {
+    from {
+        opacity: 0;
+    }
+}
+
+@keyframes photo-grow {
+    from {
+        transform: scale(0.94);
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .photo-view[open],
+    .photo-view::backdrop,
+    .photo-view img {
+        animation: none;
+    }
 }
 
 .page h1 {
@@ -598,9 +710,37 @@ body.split {
     display: none;
 }
 
-/* cv + contact; fills the rest of the panel so the contact can sit at its bottom */
+/* google scholar and cv icons (academicons glyphs, inlined as svg) in round
+   hit areas; the negative margin lines the first glyph up with the column edge */
+.icon-links {
+    display: flex;
+    gap: 0.4rem;
+    margin: 0.5rem 0 0 -0.7rem;
+}
+
+.icon-links a {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 2.75rem;
+    height: 2.75rem;
+    border-radius: 50%;
+    color: var(--fg);
+    transition: background 0.15s, transform 0.15s;
+}
+
+.icon-links a:hover {
+    background: var(--bg1);
+    transform: scale(1.12);
+}
+
+.icon-links svg {
+    fill: currentColor;
+}
+
+/* email above the scholar / cv icons, under the nav */
 .links {
-    flex: 1;
+    margin-top: 2rem;
     display: flex;
     flex-direction: column;
     align-items: flex-start;
@@ -622,7 +762,7 @@ body.split {
     gap: 0.35rem;
 }
 
-.contact .email {
+.links .email {
     font-size: 0.875rem;
     color: var(--fg);
 }
@@ -1015,7 +1155,12 @@ body.split {
         display: inline;
     }
 
-    /* email and social links join the cv button's row */
+    .icon-links {
+        gap: 0.1rem;
+        margin-top: 0;
+    }
+
+    /* email and social links join the icons' row */
     .contact {
         display: contents;
     }
