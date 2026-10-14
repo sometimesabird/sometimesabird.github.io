@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>George Beknazar-Yuzbashev</title>
+<link rel="icon" href="../favicon.ico">
+<style>
+:root{--bg:#282828;--bg0s:#32302f;--bg1:#3c3836;--bg2:#504945;--bg3:#665c54;--bg4:#7c6f64;--fg:#ebdbb2;--fg2:#d5c4a1;--fg3:#bdae93;--fg4:#a89984;--gray:#928374;--red:#cc241d;--redb:#fb4934;--yellowb:#fabd2f;--blueb:#83a598;--aquab:#8ec07c;--greenb:#b8bb26}
+*{box-sizing:border-box}
+html{background:var(--bg)}
+body{margin:0;font-family:ui-monospace,"Fira Code","JetBrains Mono","SF Mono",Menlo,Consolas,"DejaVu Sans Mono","Liberation Mono",monospace;color:var(--fg);line-height:1.65;font-size:15px;-webkit-font-smoothing:antialiased}
+a{color:inherit;text-decoration:none}
+a:hover{text-decoration:underline;text-underline-offset:.2em;text-decoration-color:var(--redb)}
+a:focus-visible{outline:2px solid var(--yellowb);outline-offset:2px}
+::selection{background:var(--red);color:var(--fg)}
+main{max-width:80ch;margin:0 auto;padding:3.5rem 1.5rem 6.5rem}
+.line{margin:2rem 0 .4rem;color:var(--fg4)}
+.line:first-child{margin-top:0}
+.prompt{color:var(--aquab);font-weight:700}
+.cmd{color:var(--yellowb)}
+.out{margin:0}
+h1.name{font-size:1.9rem;line-height:1.2;margin:0 0 .4rem;font-weight:700;letter-spacing:-.01em}
+h1.name .red{color:var(--red)}
+.sub{color:var(--fg3)}
+.tags{display:flex;flex-wrap:wrap;gap:.5rem}
+.tags span{border:1px solid var(--bg3);padding:.05rem .6rem;border-radius:3px;color:var(--fg2)}
+.status .dot{color:var(--yellowb);animation:pulse 2s ease-in-out infinite}
+.status a{color:var(--blueb);text-decoration:underline;text-underline-offset:.2em;text-decoration-color:var(--bg3)}
+.status a:hover{text-decoration-color:var(--blueb)}
+.ls{list-style:none;padding:0;margin:0}
+.ls li{display:grid;grid-template-columns:6ch minmax(0,1fr);gap:1.25rem;padding:.75rem 0;border-top:1px dashed var(--bg2)}
+.ls li:last-child{border-bottom:1px dashed var(--bg2)}
+.tag{color:var(--fg4);font-size:.85em;padding-top:.2em}
+.tag.jmp{color:var(--bg);background:var(--yellowb);font-weight:700;align-self:start;text-align:center;border-radius:2px;line-height:1.5;padding:0}
+.ls a.t{color:var(--fg);font-weight:600}
+.ls a.t:hover{color:var(--yellowb);text-decoration:none}
+.meta{display:block;color:var(--fg4);font-size:.9em;margin-top:.15rem}
+.meta.teaser{color:var(--fg3);margin-top:.45rem}
+.dim{color:var(--gray)}
+.cursor{display:inline-block;width:.6em;height:1.05em;background:var(--fg);vertical-align:-.15em;margin-left:.15em;animation:blink 1.1s steps(1) infinite}
+@keyframes blink{50%{opacity:0}}
+@keyframes pulse{50%{opacity:.35}}
+@media (prefers-reduced-motion:reduce){.cursor,.status .dot{animation:none}}
+.statusline{position:fixed;left:0;right:0;bottom:0;display:flex;align-items:stretch;background:var(--bg1);color:var(--fg3);font-size:.9rem;line-height:2.3;overflow-x:auto;white-space:nowrap;scrollbar-width:none}
+.statusline a{padding:0 .9rem;color:var(--fg3)}
+.statusline a:hover{background:var(--bg2);color:var(--fg);text-decoration:none}
+.statusline .mode{background:var(--red);color:var(--fg);font-weight:700;letter-spacing:.08em;padding:0 1rem}
+.statusline .spacer{flex:1}
+.statusline .pos{background:var(--bg2);color:var(--fg2);padding:0 1rem}
+@media (max-width:520px){.statusline{flex-wrap:wrap;white-space:normal}.statusline .spacer{display:none}main{padding:2.25rem 1rem 7rem}h1.name{font-size:1.5rem}.ls li{grid-template-columns:5ch 1fr;gap:.8rem}.statusline .pos{display:none}}
+</style>
+</head>
+<body>
+<main>
+  <div class="line"><span class="prompt">~ ❯</span> <span class="cmd">whoami</span></div>
+  <h1 class="out name">George <span class="red">Beknazar-Yuzbashev</span></h1>
+  <p class="out sub">Postdoctoral Scholar, Department of Economics, University of Chicago<br>PhD Economics, Columbia University, 2025</p>
+
+  <div class="line"><span class="prompt">~ ❯</span> <span class="cmd">cat fields.txt</span></div>
+  <p class="out tags"><span>political economics</span><span>behavioral economics</span><span>experimental economics</span><span>social media</span></p>
+
+  <div class="line"><span class="prompt">~ ❯</span> <span class="cmd">cat status.txt</span></div>
+  <p class="out status"><span class="dot" aria-hidden="true">●</span> on the 2026–2027 academic job market &nbsp;→&nbsp; <a href="../assets/cv.pdf">cv.pdf</a></p>
+
+  <div class="line"><span class="prompt">~ ❯</span> <span class="cmd">ls research/ --sort=relevance</span></div>
+  <ul class="out ls" aria-label="Selected research">
+    <li><span class="tag jmp">JMP</span><div><a class="t" href="https://www.dropbox.com/scl/fi/1f34l0ktrbfofodotbviq/paper.pdf?rlkey=zv3ou56swlcfvwej34nqq3nf6&amp;dl=0">Social Media Toxicity and Mental Health</a><span class="meta">with Capozza, Rutherford, and Stalinski</span><span class="meta teaser">A browser extension hides toxic posts for randomly assigned users for six weeks (N = 664). Filtering toxicity worsens mental health: +0.15σ on a GAD-7/PHQ-8 index.</span></div></li>
+    <li><span class="tag">AER</span><div><a class="t" href="https://papers.ssrn.com/sol3/papers.cfm?abstract_id=4307346">Toxic Content and User Engagement on Social Media: Evidence from a Field Experiment</a><span class="meta">conditionally accepted · with Jiménez-Durán, Stalinski, and McCrosky</span></div></li>
+    <li><span class="tag">JPubE</span><div><a class="t" href="https://www.sciencedirect.com/science/article/pii/S0047272722001372">Do Social Media Ads Matter for Political Behavior? A Field Experiment</a><span class="meta">2022 · with Stalinski · in the 2023 Economic Report of the President</span></div></li>
+    <li><span class="tag dim">…</span><div><a class="dim" href="../research.html">4 more → research/</a></div></li>
+  </ul>
+
+  <div class="line"><span class="prompt">~ ❯</span> <span class="cmd">fortune</span></div>
+  <p class="out dim">i come from a hooligan country and fight krakens</p>
+
+  <div class="line" aria-hidden="true"><span class="prompt">~ ❯</span> <span class="cursor"></span></div>
+</main>
+
+<nav class="statusline" aria-label="Main navigation">
+  <a class="mode" href="../index.html" aria-current="page">HOME</a>
+  <a href="../research.html">research</a>
+  <a href="../fun.html">fun</a>
+  <span class="spacer"></span>
+  <a href="mailto:beknazar@uchicago.edu">mail</a>
+  <a href="https://github.com/sometimesabird">github</a>
+  <a href="https://twitter.com/sometimesabird">twitter</a>
+  <a href="https://www.instagram.com/endangeredspecies">instagram</a>
+  <span class="pos">george.by</span>
+</nav>
+</body>
+</html>

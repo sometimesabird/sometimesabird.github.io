@@ -1,0 +1,7 @@
+# GitHub Pages runs Jekyll on this repo by default. Jekyll already skips
+# anything whose name starts with an underscore, so _testing/ (drafts and
+# old page versions) stays off www.george.by automatically. This list covers
+# repo-only files at the root. Everything here is still visible on GitHub,
+# since the repo is public.
+exclude:
+  - CLAUDE.md

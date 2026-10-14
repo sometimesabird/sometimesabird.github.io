@@ -1,180 +1,426 @@
 <!DOCTYPE html>
-<html lang=en>
+<html lang="en">
 
 <head>
-    <title>George Beknazar-Yuzbashev</title>
-    <meta name="viewport" content="width=device-width">
+    <title>Research | George Beknazar-Yuzbashev</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta charset="UTF-8">
-    <link rel=icon href=favicon.ico>
-    <link rel="stylesheet" href="bootstrap-styles.css">
+    <meta name="description" content="Research by George Beknazar-Yuzbashev: field experiments on social media, political behavior, and mental health. Job market paper, publications, and working papers.">
+    <link rel="icon" href="favicon.ico">
     <link rel="stylesheet" href="styles.css">
+    <style>
+        /* Preview-specific styles; the homepage stylesheet stays shared. */
+        .profile-name {
+            margin: 0;
+            font-size: 1.5rem;
+            line-height: 1.15;
+            font-weight: 700;
+            letter-spacing: -0.01em;
+        }
+
+        .profile-name .last {
+            display: block;
+            white-space: nowrap;
+        }
+
+        .page .research-heading {
+            margin: 0 0 2.25rem;
+            font: 400 2.75rem/1.1 var(--serif);
+            letter-spacing: -0.025em;
+        }
+
+        .page .research-section {
+            margin-bottom: 3rem;
+        }
+
+        .research-entry {
+            padding: 1.5rem 0;
+            border-top: 1px solid var(--bg1);
+        }
+
+        .research-entry:last-child {
+            border-bottom: 1px solid var(--bg1);
+        }
+
+        .research-entry h3 {
+            margin: 0;
+            font-size: 1.1875rem;
+            font-weight: 600;
+            line-height: 1.4;
+            letter-spacing: -0.01em;
+            text-wrap: pretty;
+        }
+
+        .research-authors {
+            margin: 0.5rem 0 0;
+            color: var(--fg4);
+            font-size: 0.8125rem;
+            line-height: 1.65;
+        }
+
+        .research-authors a {
+            color: var(--blue-bright);
+        }
+
+        .research-venue {
+            margin: 0.55rem 0 0;
+            color: var(--fg3);
+            font-size: 0.875rem;
+            line-height: 1.6;
+        }
+
+        .research-venue em {
+            color: #b8bb26; /* Journal green from index-split.css. */
+            font-weight: 400;
+        }
+
+        .research-status {
+            display: block;
+            font-size: 0.8125rem;
+        }
+
+        .research-summary {
+            margin: 0.8rem 0 0;
+            color: var(--fg3);
+            font-size: 0.9375rem;
+            line-height: 1.7;
+        }
+
+        .research-note {
+            margin: 0.6rem 0 0;
+            color: var(--fg4);
+            font-size: 0.75rem;
+            line-height: 1.65;
+        }
+
+        .research-note a {
+            text-decoration: underline;
+            text-decoration-color: var(--bg3);
+            text-underline-offset: 0.2em;
+        }
+
+        .research-actions {
+            display: flow-root;
+            margin-top: 0.65rem;
+            font-size: 0.8125rem;
+            line-height: 1.5;
+        }
+
+        .research-download {
+            float: left;
+            margin-right: 1.5rem;
+            padding: 0.6rem 0;
+        }
+
+        .research-download span {
+            margin-left: 0.35rem;
+            color: var(--fg4);
+        }
+
+        .research-abstract summary {
+            width: fit-content;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.6rem 0;
+            list-style: none;
+            cursor: pointer;
+            color: var(--fg3);
+        }
+
+        .research-abstract summary::-webkit-details-marker {
+            display: none;
+        }
+
+        .research-abstract summary::before {
+            content: '';
+            width: 0.35rem;
+            height: 0.35rem;
+            border-right: 1px solid currentColor;
+            border-bottom: 1px solid currentColor;
+            transform: rotate(-45deg);
+        }
+
+        .research-abstract[open] summary::before {
+            transform: translateY(-0.1rem) rotate(45deg);
+        }
+
+        .research-abstract summary:hover,
+        .research-abstract[open] summary {
+            color: var(--fg);
+        }
+
+        .research-abstract summary:focus-visible {
+            outline: 2px solid var(--yellow-bright);
+            outline-offset: 3px;
+        }
+
+        .abstract-text {
+            clear: both;
+            margin-top: 0.5rem;
+            padding: 0.2rem 0 0.2rem 1rem;
+            border-left: 2px solid var(--bg2);
+            color: var(--fg3);
+            font-size: 0.875rem;
+            line-height: 1.8;
+        }
+
+        .abstract-text p {
+            margin: 0;
+        }
+
+        .research-entry.research-jmp {
+            padding: 1.4rem 1.5rem 1rem;
+            border: 0;
+            border-top: 2px solid var(--red-bright);
+            background: var(--bg0s);
+        }
+
+        .research-jmp h3 {
+            font: 400 2rem/1.2 var(--serif);
+            letter-spacing: -0.02em;
+        }
+
+        .research-jmp .research-authors {
+            margin-top: 0.7rem;
+        }
+
+        .skip-link {
+            position: absolute;
+            top: 0.75rem;
+            left: 0.75rem;
+            z-index: 2;
+            padding: 0.6rem 0.9rem;
+            background: var(--deep);
+            color: var(--fg);
+            transform: translateY(-200%);
+        }
+
+        .skip-link:focus {
+            transform: translateY(0);
+            outline: 2px solid var(--yellow-bright);
+        }
+
+        @media (max-width: 760px) {
+            .profile-name {
+                font-size: 1.375rem;
+            }
+
+            .profile-name .last {
+                white-space: normal;
+            }
+
+            .page .research-heading {
+                margin-bottom: 1.75rem;
+                font-size: 2.25rem;
+            }
+
+            .research-entry.research-jmp {
+                padding: 1.25rem 1.125rem 0.85rem;
+            }
+
+            .research-jmp h3 {
+                font-size: 1.75rem;
+            }
+        }
+
+        @media print {
+            .skip-link {
+                display: none;
+            }
+
+            .research-venue em {
+                color: var(--fg);
+            }
+
+            .page .research-heading {
+                margin-bottom: 1.25rem;
+            }
+
+            .research-entry {
+                break-inside: avoid;
+            }
+
+            .research-entry.research-jmp {
+                border: 1px solid var(--bg1);
+                border-top: 2px solid var(--red-bright);
+            }
+        }
+    </style>
 </head>
 
-<body>
-    <main>
-        <h1>My <span class='red'>Research</span></h1>
-        <nav>
-            <ul>
-                <li><a href="index.html">home</a> <span class="text-accent">|</span> <a class="red" href="research.html">research</a> <span class="text-accent">|</span> <a href="fun.html">fun</a></li>
-                <li>---</li>
-                <div class="accordion accordion-flush" id="accordionFlush">
-                    <p>
-                        <div class='section-title'>WORKING PAPERS</div>
-                    </p>
+<body class="split">
+    <a class="skip-link" href="#research">Skip to research</a>
+    <div class="page">
+        <aside class="side">
+<img alt="George Beknazar-Yuzbashev" class="portrait" height="512" src="assets/headshot.jpg" width="512"/>
+<div class="identity">
+<p class="profile-name">George <span class="last">Beknazar-Yuzbashev</span></p>
+<p class="nickname">I also go by <strong>George B. Y.</strong></p>
+</div>
+<p class="role">Postdoctoral Scholar<br/>Department of Economics<br/><strong>University of Chicago</strong></p>
+<p class="edu">PhD Economics, Columbia, 2025</p>
+<nav aria-label="Main navigation" class="site-nav">
+<a href="index.html">home</a>
+<a aria-current="page" href="research.html">research</a>
+<a href="fun.html">fun</a>
+</nav>
+<div class="links">
+<a class="button" href="assets/cv.pdf"><span class="cv-long">curriculum vitae</span><span class="cv-short">cv</span> <span aria-hidden="true">↗</span></a>
+<div class="contact">
+<div class="email-row">
+<a class="email" href="mailto:beknazar@uchicago.edu">beknazar@uchicago.edu</a>
+<button aria-label="Copy email address" class="copy" data-copy="beknazar@uchicago.edu" hidden="" title="Copy email address" type="button">
+<svg aria-hidden="true" height="15" viewbox="0 0 16 16" width="15"><rect height="8" rx="1.5" width="8" x="5.5" y="5.5"></rect><path d="M10.5 3.5v-.5a1.5 1.5 0 0 0-1.5-1.5H4A1.5 1.5 0 0 0 2.5 3v5A1.5 1.5 0 0 0 4 9.5h.5"></path></svg>
+</button>
+<span class="copied" role="status"></span>
+</div>
+<nav aria-label="Social links" class="socials">
+<a href="https://scholar.google.com/citations?user=KiIlB9IAAAAJ">google scholar</a>
+<a href="https://github.com/sometimesabird">github</a>
+</nav>
+</div>
+</div>
+</aside>
 
-                    <div class="accordion-item">
-                        <div class="accordion-header">
-                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseThree" aria-expanded="false" aria-controls="flush-collapseThree">
-                                <div>
-                                    <div class='paper-title'>Toxic Content and User Engagement on Social Media: Evidence from a Field Experiment</div>
-                                    <div class="paper-details">
-                                        <div class='paper-coauthors'>With <a href="https://www.rafaeljjd.com/" onclick="window.location.href='https://www.rafaeljjd.com/'; return false;" data-bs-toggle="collapse" data-bs-target>Rafael Jiménez-Durán</a>, <a href="https://www.mstalinski.net/" onclick="window.location.href='https://www.mstalinski.net/'; return false;" data-bs-toggle="collapse" data-bs-target>Mateusz Stalinski</a>, and Jesse McCrosky</a></div>
-                                        <div class='paper-source'><b>American Economic Review</b>, Conditionally Accepted</div>
-                                    </div>
-                                </div>
-                            </button>
-                        </div>
-                        <div id="flush-collapseThree" class="accordion-collapse collapse" data-bs-parent="#accordionFlush">
-                            <div class="accordion-body">
-                                Most social media users have encountered harassment online, but there is scarce evidence of how this type of toxic content impacts engagement. In a pre-registered browser extension field experiment, we randomly hid toxic content for six weeks on Facebook, Twitter, and YouTube. Lowering exposure to toxicity reduced advertising impressions, time spent, and other measures of engagement, and reduced the toxicity of user-generated content. A survey experiment provides evidence that toxicity triggers curiosity and that engagement and welfare are not necessarily aligned. Taken together, our results suggest that platforms face a trade-off between curbing toxicity and increasing engagement.
-                                <p><a href="https://papers.ssrn.com/sol3/papers.cfm?abstract_id=4307346">full text</a></p>
-                            </div>
-                        </div>
-                    </div>
+        <main id="research">
+            <h1 class="research-heading">Research</h1>
 
-                    <div class="accordion-item">
-                        <div class="accordion-header">
-                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseMentalHealth" aria-expanded="false" aria-controls="flush-collapseMentalHealth">
-                                <div>
-                                    <div class='paper-title'>Social Media Toxicity and Mental Health</div>
-                                    <div class="paper-details">
-                                        <div class='paper-coauthors'>With <a href="https://sites.google.com/view/francescocapozza" onclick="window.location.href='https://sites.google.com/view/francescocapozza'; return false;" data-bs-toggle="collapse" data-bs-target>Francesco Capozza</a>, <a href="https://www.kylanrutherford.me/" onclick="window.location.href='https://www.kylanrutherford.me/'; return false;" data-bs-toggle="collapse" data-bs-target>Kylan Rutherford</a>, and <a href="https://www.mstalinski.net/" onclick="window.location.href='https://www.mstalinski.net/'; return false;" data-bs-toggle="collapse" data-bs-target>Mateusz Stalinski</a></a></div>
-                                    </div>
-                                </div>
-                            </button>
-                        </div>
-                        <div id="flush-collapseMentalHealth" class="accordion-collapse collapse" data-bs-parent="#accordionFlush">
-                            <div class="accordion-body">
-                                We study whether content-level moderation that reduces exposure to social media toxicity, holding platform access constant, affects mental health. We deploy, for randomly assigned users, a cross-platform browser extension that hides posts and comments exceeding a prespecified toxicity threshold, and follow N = 664 desktop users over a six-week intervention across two waves – one during the 2024 U.S. election campaign and one outside of it. Contrary to basic intuition, filtering toxicity worsens mental health: treatment raises a standardized index of GAD-7 and PHQ-8 symptoms by 0.15σ, and the share of respondents above a moderate-symptom screening cutoff rises by about 12 pp. A QALY-based calibration implies a welfare cost of about $158 per treated participant. Heightened loneliness and a diminished relative moral self-view emerge as potential channels. We conclude that curbing toxic content can impose unintended psychological costs, even where it yields other social benefits.
-                                <p><a href="https://www.dropbox.com/scl/fi/1f34l0ktrbfofodotbviq/paper.pdf?rlkey=zv3ou56swlcfvwej34nqq3nf6&st=hn3nmh3h&e=1&dl=0">full text</a></p>
-                            </div>
-                        </div>
+            <section class="research-section" aria-labelledby="jmp-heading">
+                <h2 id="jmp-heading">job market paper</h2>
+                <article class="research-entry research-jmp" aria-labelledby="jmp-title">
+                    <h3 id="jmp-title"><a href="assets/jmp.pdf">Social Media Toxicity and Mental Health</a></h3>
+                    <p class="research-authors">with <a href="https://sites.google.com/view/francescocapozza/">Francesco Capozza</a>, <a href="https://www.kylanrutherford.me/">Kylan Rutherford</a>, and <a href="https://www.mstalinski.net/">Mateusz Stalinski</a></p>
+                    <p class="research-summary">A six-week field experiment (N&nbsp;=&nbsp;664) randomly assigns users to filtering toxic content on Facebook, X, and Reddit. Contrary to intuition, filtering worsens mental health: the ITT on a GAD-7/PHQ-8 symptom index is 0.15σ. Heightened loneliness and a diminished relative moral self-view are candidate channels.</p>
+                    <div class="research-actions">
+                        <a class="research-download" href="assets/jmp.pdf" aria-label="Read Social Media Toxicity and Mental Health (PDF)">paper (PDF) <span aria-hidden="true">↗</span></a>
+                        <details class="research-abstract">
+                            <summary aria-label="Abstract: Social Media Toxicity and Mental Health">Abstract</summary>
+                            <div class="abstract-text"><p>We study whether content-level moderation that reduces exposure to social media toxicity, holding platform access constant, affects mental health. We deploy, for randomly assigned users, a cross-platform browser extension that hides posts and comments exceeding a prespecified toxicity threshold, and follow N = 664 desktop users over a six-week intervention across two waves – one during the 2024 U.S. election campaign and one outside of it. Contrary to basic intuition, filtering toxicity worsens mental health: treatment raises a standardized index of GAD-7 and PHQ-8 symptoms by 0.15σ, and the share of respondents above a moderate-symptom screening cutoff rises by about 12 pp. A QALY-based calibration implies a welfare cost of about $158 per treated participant. Heightened loneliness and a diminished relative moral self-view emerge as potential channels. We conclude that curbing toxic content can impose unintended psychological costs, even where it yields other social benefits.</p></div>
+                        </details>
                     </div>
+                </article>
+            </section>
+
+            <section class="research-section" aria-labelledby="publications-heading">
+                <h2 id="publications-heading">publications and conditionally accepted papers</h2>
+                <article class="research-entry" aria-labelledby="toxic-content-title">
+                    <h3 id="toxic-content-title"><a href="https://papers.ssrn.com/sol3/papers.cfm?abstract_id=4307346">Toxic Content and User Engagement on Social Media: Evidence from a Field Experiment</a></h3>
+                    <p class="research-authors">with <a href="https://www.rafaeljjd.com/">Rafael Jiménez-Durán</a>, <a href="https://www.mstalinski.net/">Mateusz Stalinski</a>, and Jesse McCrosky</p>
+                    <p class="research-venue"><em>American Economic Review</em> <span class="research-status">conditionally accepted</span></p>
+                    <p class="research-summary">Randomly hiding toxic content for six weeks on Facebook, Twitter, and YouTube reduces time spent, ad impressions, and the toxicity of users’ own posts. A survey experiment provides evidence that toxicity triggers curiosity. Together, the results imply a trade-off for platforms between curbing toxicity and engagement.</p>
                     
-                    <div class="accordion-item">
-                        <div class="accordion-header">
-                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseFive" aria-expanded="false" aria-controls="flush-collapseFive">
-                                <div>
-                                    <div class='paper-title'>Social Media Advertising Loads as Prices</div>
-                                    <div class="paper-details">
-                                        <div class='paper-coauthors'>With <a href="https://www.rafaeljjd.com/" onclick="window.location.href='https://www.rafaeljjd.com/'; return false;" data-bs-toggle="collapse" data-bs-target>Rafael Jiménez-Durán</a>, <a href="https://www.andreysimonov.com/" onclick="window.location.href='https://www.andreysimonov.com/'; return false;" data-bs-toggle="collapse" data-bs-target>Andrey Simonov</a>, and <a href="https://www.mstalinski.net/" onclick="window.location.href='https://www.mstalinski.net/'; return false;" data-bs-toggle="collapse" data-bs-target>Mateusz Stalinski</a></div>
-                                    </div>
-                                </div>
-                            </button>
-                        </div>
-                        <div id="flush-collapseFive" class="accordion-collapse collapse" data-bs-parent="#accordionFlush">
-                            <div class="accordion-body">
-                                Most digital platforms are funded through advertising rather than direct payments. Why? We argue that three main factors could explain this prevalence: users are more sensitive to monetary prices than to ad loads, microtargeting improves the match quality between users and ads, and platforms can personalize ad loads and thus price discriminate. We conduct a field experiment on Facebook with 1,810 users who install a browser extension that (i) hides nearly all ads or (ii) replaces microtargeted ads with untargeted ones. We find that hiding 82% of ads increases time on the platform by only 6%, showing that users are highly insensitive to ad loads. Removing targeting sharply reduces ad clicks and long-run engagement, indicating that targeting increases the match quality between users and ads. Finally, two-thirds of ad-load variation occurs across users, consistent with ad-load discrimination. Counterfactual simulations indicate that an ad-funded model performs at least as well as a subscription model in terms of profits and delivers higher consumer surplus. The key mechanism is that users are much less sensitive to ad loads than to monetary prices, making advertising a relatively efficient revenue source.
-                                <p><a href="https://papers.ssrn.com/sol3/papers.cfm?abstract_id=5952337">full text</a></p>
-                            </div>
-                        </div>
+                    <div class="research-actions">
+                        <a class="research-download" href="https://papers.ssrn.com/sol3/papers.cfm?abstract_id=4307346" aria-label="Read Toxic Content and User Engagement on Social Media: Evidence from a Field Experiment">paper <span aria-hidden="true">↗</span></a>
+                        <details class="research-abstract">
+                            <summary aria-label="Abstract: Toxic Content and User Engagement on Social Media: Evidence from a Field Experiment">Abstract</summary>
+                            <div class="abstract-text"><p>Most social media users have encountered harassment online, but there is scarce evidence of how this type of toxic content impacts engagement. In a pre-registered browser extension field experiment, we randomly hid toxic content for six weeks on Facebook, Twitter, and YouTube. Lowering exposure to toxicity reduced advertising impressions, time spent, and other measures of engagement, and reduced the toxicity of user-generated content. A survey experiment provides evidence that toxicity triggers curiosity and that engagement and welfare are not necessarily aligned. Taken together, our results suggest that platforms face a trade-off between curbing toxicity and increasing engagement.</p></div>
+                        </details>
                     </div>
+                </article>
 
-                    <div class="accordion-item">
-                        <div class="accordion-header">
-                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseSix" aria-expanded="false" aria-controls="flush-collapseSix">
-                                <div>
-                                    <div class='paper-title'>The Prosocial Ranking Challenge: Reducing Polarization on Social Media without Sacrificing Engagement</div>
-                                    <div class="paper-details">
-                                        <div class='paper-coauthors'>With <a href="http://jonathanstray.com/" onclick="window.location.href='http://jonathanstray.com/'; return false;" data-bs-toggle="collapse" data-bs-target>Jonathan Stray</a>, Ian Baker, <a href="https://www.mstalinski.net/" onclick="window.location.href='https://www.mstalinski.net/'; return false;" data-bs-toggle="collapse" data-bs-target>Mateusz Stalinski</a>, and others</div>
-                                    </div>
-                                </div>
-                            </button>
-                        </div>
-                        <div id="flush-collapseSix" class="accordion-collapse collapse" data-bs-parent="#accordionFlush">
-                            <div class="accordion-body">
-                                We report the first direct comparisons of multiple alternative social media algorithms on multiple platforms on outcomes of societal interest. We used a browser extension to modify which posts were shown to desktop social media users, randomly assigning 9,386 users to a control group or one of five alternative ranking algorithms which simultaneously altered content across three platforms for six months during the US 2024 presidential election. This reduced our preregistered index of affective polarization by an average of 0.03 standard deviations (p &lt; 0.05), including a 1.5 degree decrease in differences between the 100 point inparty and outparty feeling thermometers. We saw reductions in active use time for Facebook (-0.37 min/day) and Reddit (-0.2 min/day), but an increase of 0.32 min/day (p &lt; 0.01) for X/Twitter. We saw an increase in reports of negative social media experiences but found no effects on well-being, news knowledge, outgroup empathy, perceptions of and support for partisan violence. This implies that bridging content can improve some societal outcomes without necessarily conflicting with the engagement-driven business model of social media.
-                                <p><a href="https://arxiv.org/abs/2603.19626">full text</a></p>
-                            </div>
-                        </div>
-                    </div>
-
-                    <p>
-                        <div class='section-title'>PUBLICATIONS</div>
-                    </p>
-
-                    <div class="accordion-item">
-                        <div class="accordion-header">
-                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseFour" aria-expanded="false" aria-controls="flush-collapseOne">
-                                <div>
-                                    <div class='paper-title'>To the Depths of the Sunk Cost: Experiments Revisiting the Elusive Effect</div>
-                                    <div class="paper-details">
-                                        <div class='paper-coauthors'>With <a href="https://www.sotaichiba.net/" onclick="window.location.href='https://www.sotaichiba.net/'; return false;" data-bs-toggle="collapse" data-bs-target>Sota Ichiba</a> and <a href="https://www.mstalinski.net/" onclick="window.location.href='https://www.mstalinski.net/'; return false;" data-bs-toggle="collapse" data-bs-target>Mateusz Stalinski</a></div>
-                                        <div class='paper-source'><b>Journal of Economic Behavior and Organization</b>, 241 (2026): 107352</div>
-                                    </div>
-                                </div>
-                            </button>
-                        </div>
-                        <div id="flush-collapseFour" class="accordion-collapse collapse" data-bs-parent="#accordionFlush">
-                            <div class="accordion-body">
-                                Despite being often discussed both in practice and academic circles, the sunk cost effect remains empirically elusive. Our model based on reference point dependence suggests that the traditional way of testing it—by assigning discounts—may not produce the desired effect. Motivated by this, we evaluate it across the gain-loss divide in two pre-registered experiments. In an online study with N=1,806, we randomize the price (low, medium, or high) of a ticket to enter a real-effort task, and observe its effect on play time. Our intervention, which varies the sunk cost by $2 for a 14-minute task, results in a moderate sunk cost effect (0.12 SD or 1.3 minutes). We further explore the economic applications of the effect in a field experiment on YouTube with N = 11,328 videos in which we randomize whether the time until a pre-video ad becomes skippable is shortened (0 s), default (5 s), or extended (10 s). The intervention has an overall insignificant effect on video engagement. This is driven by a sizable negative effect on the extensive margin, a channel which is not present in the online study. Specifically, more users leave before the video starts in the extended treatment (5.2 pp or 28% more relative to the shortened treatment). Taking the results of both studies together, we offer evidence of the sunk cost effect in a controlled environment, but its application in policy settings may prove challenging.
-                                <p><a href="https://papers.ssrn.com/sol3/papers.cfm?abstract_id=5050522">full text</a></p>
-                            </div>
-                        </div>
-                    </div>
-
+                <article class="research-entry" aria-labelledby="sunk-cost-title">
+                    <h3 id="sunk-cost-title"><a href="https://papers.ssrn.com/sol3/papers.cfm?abstract_id=5050522">To the Depths of the Sunk Cost: Experiments Revisiting the Elusive Effect</a></h3>
+                    <p class="research-authors">with <a href="https://www.sotaichiba.net/">Sota Ichiba</a> and <a href="https://www.mstalinski.net/">Mateusz Stalinski</a></p>
+                    <p class="research-venue"><em>Journal of Economic Behavior and Organization</em>, 241 (2026): 107352</p>
+                    <p class="research-summary">Randomizing the price of a ticket to a real-effort task produces a moderate sunk cost effect: 0.12&nbsp;SD, or 1.3 minutes more play time. Randomizing how long a YouTube pre-roll ad stays unskippable produces no statistically significant overall change in viewing, as more users leave before the video starts.</p>
                     
-                    <div class="accordion-item">
-                        <div class="accordion-header">
-                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseOne" aria-expanded="false" aria-controls="flush-collapseOne">
-                                <div>
-                                    <div class='paper-title'>A Model of Harmful yet Engaging Content on Social Media</div>
-                                    <div class="paper-details">
-                                        <div class='paper-coauthors'>With <a href="https://www.rafaeljjd.com/" onclick="window.location.href='https://www.rafaeljjd.com/'; return false;" data-bs-toggle="collapse" data-bs-target>Rafael Jiménez-Durán</a> and <a href="https://www.mstalinski.net/" onclick="window.location.href='https://www.mstalinski.net/'; return false;" data-bs-toggle="collapse" data-bs-target>Mateusz Stalinski</a></div>
-                                        <div class='paper-source'><b>AEA Papers and Proceedings</b>, 114 (2024): 678-83</div>
-                                    </div>
-                                </div>
-                            </button>
-                        </div>
-                        <div id="flush-collapseOne" class="accordion-collapse collapse" data-bs-parent="#accordionFlush">
-                            <div class="accordion-body">
-                                Most social media users have encountered harassment online, but there is scarce evidence of how this type of toxic content impacts engagement. In a pre-registered browser extension field experiment, we randomly hid toxic content for six weeks on Facebook, Twitter, and YouTube. Lowering exposure to toxicity reduced advertising impressions, time spent, and other measures of engagement, and reduced the toxicity of user-generated content. A survey experiment provides evidence that toxicity triggers curiosity and that engagement and welfare are not necessarily aligned. Taken together, our results suggest that platforms face a trade-off between curbing toxicity and increasing engagement.
-                                <p><a href="https://www.aeaweb.org/articles?id=10.1257/pandp.20241004">full text</a></p>
-                            </div>
-                        </div>
+                    <div class="research-actions">
+                        <a class="research-download" href="https://papers.ssrn.com/sol3/papers.cfm?abstract_id=5050522" aria-label="Read To the Depths of the Sunk Cost: Experiments Revisiting the Elusive Effect">paper <span aria-hidden="true">↗</span></a>
+                        <details class="research-abstract">
+                            <summary aria-label="Abstract: To the Depths of the Sunk Cost: Experiments Revisiting the Elusive Effect">Abstract</summary>
+                            <div class="abstract-text"><p>Despite being often discussed both in practice and academic circles, the sunk cost effect remains empirically elusive. Our model based on reference point dependence suggests that the traditional way of testing it—by assigning discounts—may not produce the desired effect. Motivated by this, we evaluate it across the gain-loss divide in two pre-registered experiments. In an online study with N=1,806, we randomize the price (low, medium, or high) of a ticket to enter a real-effort task, and observe its effect on play time. Our intervention, which varies the sunk cost by $2 for a 14-minute task, results in a moderate sunk cost effect (0.12 SD or 1.3 minutes). We further explore the economic applications of the effect in a field experiment on YouTube with N = 11,328 videos in which we randomize whether the time until a pre-video ad becomes skippable is shortened (0 s), default (5 s), or extended (10 s). The intervention has an overall insignificant effect on video engagement. This is driven by a sizable negative effect on the extensive margin, a channel which is not present in the online study. Specifically, more users leave before the video starts in the extended treatment (5.2 pp or 28% more relative to the shortened treatment). Taking the results of both studies together, we offer evidence of the sunk cost effect in a controlled environment, but its application in policy settings may prove challenging.</p></div>
+                        </details>
                     </div>
+                </article>
 
-
-
-                    <div class="accordion-item">
-                        <div class="accordion-header">
-                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseTwo" aria-expanded="false" aria-controls="flush-collapseTwo">
-                                <div>
-                                    <div class='paper-title'>Do Social Media Ads Matter for Political Behavior? A Field Experiment</div>
-                                    <div class="paper-details">
-                                        <div class='paper-coauthors'>With <a href="https://www.mstalinski.net/" onclick="window.location.href='https://www.mstalinski.net/'; return false;" data-bs-toggle="collapse" data-bs-target>Mateusz Stalinski</a></div>
-                                        <div class='paper-source'><b>Journal of Public Economics</b>, 214 (2022): 104735</div>
-                                        <div class='paper-mentions'>Included in the <a href="https://www.govinfo.gov/content/pkg/ERP-2023/pdf/ERP-2023-chapter7.pdf" onclick="window.location.href='https://www.govinfo.gov/content/pkg/ERP-2023/pdf/ERP-2023-chapter7.pdf'; return false;" data-bs-toggle="collapse" data-bs-target>2023 Economic Report of the President</a></div>
-                                    </div>
-                                </div>
-
-                            </button>
-                            <div id="flush-collapseTwo" class="accordion-collapse collapse" data-bs-parent="#accordionFlush">
-                                <div class="accordion-body">
-                                    We exploit Facebook’s introduction of a filter hiding ads from the feed as a unique opportunity to study the effects of online ads on political behavior. In a pre-registered experiment, we randomly assigned participants to hide political ads (treatment) or alcohol ads (control) for several weeks preceding the 2020 US elections. We report an insignificant intent-to-treat effect of political ads on turnout (2.3 pp.), but we cannot rule out a sizable positive effect, with 95% confidence interval of [-2.8, 7.4]. The result may mask important heterogeneity, with political ads making Democrats slightly more motivated to vote and Republicans – substantially less. We explore the reasons for this effect, such as natural variation in ad content: the majority of Facebook ads on users’ feeds skewed Democratic. Lastly, the effect on measures of affective polarization and informedness was negligible.
-                                    <p><a href="https://www.sciencedirect.com/science/article/pii/S0047272722001372">full text</a></p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+                <article class="research-entry" aria-labelledby="harmful-content-title">
+                    <h3 id="harmful-content-title"><a href="https://www.aeaweb.org/articles?id=10.1257/pandp.20241004">A Model of Harmful yet Engaging Content on Social Media</a></h3>
+                    <p class="research-authors">with <a href="https://www.rafaeljjd.com/">Rafael Jiménez-Durán</a> and <a href="https://www.mstalinski.net/">Mateusz Stalinski</a></p>
+                    <p class="research-venue"><em>AEA Papers and Proceedings</em>, 114 (2024): 678–83</p>
+                    <p class="research-summary">A simple model shows that ad-funded platforms can profit from harmful content when it complements time spent. Under a subscription model the incentive disappears, absent network effects, since harm lowers willingness to pay. Rising engagement need not signal rising welfare.</p>
                     
-                </div>
-            </ul>
-        </nav>
-    </main>
+                    <div class="research-actions">
+                        <a class="research-download" href="https://www.aeaweb.org/articles?id=10.1257/pandp.20241004" aria-label="Read A Model of Harmful yet Engaging Content on Social Media">paper <span aria-hidden="true">↗</span></a>
+                        <details class="research-abstract">
+                            <summary aria-label="Abstract: A Model of Harmful yet Engaging Content on Social Media">Abstract</summary>
+                            <div class="abstract-text"><p>Why do social media users spend so much time consuming content that seemingly harms them? We build a simple model to argue that advertising-driven platforms can find it profitable to display content that harms users when it is complementary to their time spent on the platform. These incentives disappear, absent network effects, in the case of a subscription-based business model because harmful content reduces the willingness to pay for the platform. Our results warn against interpreting increases in engagement on social media as welfare increases.</p></div>
+                        </details>
+                    </div>
+                </article>
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+                <article class="research-entry" aria-labelledby="political-ads-title">
+                    <h3 id="political-ads-title"><a href="https://www.sciencedirect.com/science/article/pii/S0047272722001372">Do Social Media Ads Matter for Political Behavior? A Field Experiment</a></h3>
+                    <p class="research-authors">with <a href="https://www.mstalinski.net/">Mateusz Stalinski</a></p>
+                    <p class="research-venue"><em>Journal of Public Economics</em>, 214 (2022): 104735</p>
+                    <p class="research-summary">A preregistered experiment randomly hid political ads on Facebook before the 2020 U.S. elections. The reported ITT of political-ad exposure on turnout is 2.3&nbsp;pp but imprecise (95% CI: −2.8 to 7.4), and may mask heterogeneity: Democrats slightly more motivated to vote, Republicans substantially less.</p>
+                    <p class="research-note">Included in the <a href="https://www.govinfo.gov/content/pkg/ERP-2023/pdf/ERP-2023-chapter7.pdf">2023 Economic Report of the President</a></p>
+                    <div class="research-actions">
+                        <a class="research-download" href="https://www.sciencedirect.com/science/article/pii/S0047272722001372" aria-label="Read Do Social Media Ads Matter for Political Behavior? A Field Experiment">paper <span aria-hidden="true">↗</span></a>
+                        <details class="research-abstract">
+                            <summary aria-label="Abstract: Do Social Media Ads Matter for Political Behavior? A Field Experiment">Abstract</summary>
+                            <div class="abstract-text"><p>We exploit Facebook’s introduction of a filter hiding ads from the feed as a unique opportunity to study the effects of online ads on political behavior. In a pre-registered experiment, we randomly assigned participants to hide political ads (treatment) or alcohol ads (control) for several weeks preceding the 2020 US elections. We report an insignificant intent-to-treat effect of political ads on turnout (2.3 pp.), but we cannot rule out a sizable positive effect, with 95% confidence interval of [-2.8, 7.4]. The result may mask important heterogeneity, with political ads making Democrats slightly more motivated to vote and Republicans – substantially less. We explore the reasons for this effect, such as natural variation in ad content: the majority of Facebook ads on users’ feeds skewed Democratic. Lastly, the effect on measures of affective polarization and informedness was negligible.</p></div>
+                        </details>
+                    </div>
+                </article>
+            </section>
 
+            <section class="research-section" aria-labelledby="working-heading">
+                <h2 id="working-heading">working papers</h2>
+                <article class="research-entry" aria-labelledby="prosocial-ranking-title">
+                    <h3 id="prosocial-ranking-title"><a href="https://arxiv.org/abs/2603.19626">The Prosocial Ranking Challenge: Reducing Polarization on Social Media without Sacrificing Engagement</a></h3>
+                    <p class="research-authors">with <a href="http://jonathanstray.com/">Jonathan Stray</a>, Ian Baker, <a href="https://www.mstalinski.net/">Mateusz Stalinski</a>, and others</p>
+                    
+                    <p class="research-summary">Over six months around the 2024 U.S. election, 9,386 users were randomly assigned to a control arm or one of five feed-ranking algorithms across three platforms. The pooled DiD estimate on affective polarization is −0.03&nbsp;SD (p&nbsp;&lt;&nbsp;0.05); time spent falls on Facebook and Reddit but rises on X.</p>
+                    
+                    <div class="research-actions">
+                        <a class="research-download" href="https://arxiv.org/abs/2603.19626" aria-label="Read The Prosocial Ranking Challenge: Reducing Polarization on Social Media without Sacrificing Engagement">paper <span aria-hidden="true">↗</span></a>
+                        <details class="research-abstract">
+                            <summary aria-label="Abstract: The Prosocial Ranking Challenge: Reducing Polarization on Social Media without Sacrificing Engagement">Abstract</summary>
+                            <div class="abstract-text"><p>We report the first direct comparisons of multiple alternative social media algorithms on multiple platforms on outcomes of societal interest. We used a browser extension to modify which posts were shown to desktop social media users, randomly assigning 9,386 users to a control group or one of five alternative ranking algorithms which simultaneously altered content across three platforms for six months during the US 2024 presidential election. This reduced our preregistered index of affective polarization by an average of 0.03 standard deviations (p &lt; 0.05), including a 1.5 degree decrease in differences between the 100 point inparty and outparty feeling thermometers. We saw reductions in active use time for Facebook (-0.37 min/day) and Reddit (-0.2 min/day), but an increase of 0.32 min/day (p &lt; 0.01) for X/Twitter. We saw an increase in reports of negative social media experiences but found no effects on well-being, news knowledge, outgroup empathy, perceptions of and support for partisan violence. This implies that bridging content can improve some societal outcomes without necessarily conflicting with the engagement-driven business model of social media.</p></div>
+                        </details>
+                    </div>
+                </article>
+
+                <article class="research-entry" aria-labelledby="advertising-loads-title">
+                    <h3 id="advertising-loads-title"><a href="https://papers.ssrn.com/sol3/papers.cfm?abstract_id=5952337">Social Media Advertising Loads as Prices</a></h3>
+                    <p class="research-authors">with <a href="https://www.rafaeljjd.com/">Rafael Jiménez-Durán</a>, <a href="https://www.andreysimonov.com/">Andrey Simonov</a>, and <a href="https://www.mstalinski.net/">Mateusz Stalinski</a></p>
+                    
+                    <p class="research-summary">A Facebook field experiment (N&nbsp;=&nbsp;1,810) shows users are highly insensitive to ad loads: hiding 82% of ads raises time on the platform by only 6%, while removing targeting sharply cuts ad clicks and long-run engagement. Counterfactual simulations indicate ad funding matches or exceeds subscription profits and yields higher consumer surplus.</p>
+                    
+                    <div class="research-actions">
+                        <a class="research-download" href="https://papers.ssrn.com/sol3/papers.cfm?abstract_id=5952337" aria-label="Read Social Media Advertising Loads as Prices">paper <span aria-hidden="true">↗</span></a>
+                        <details class="research-abstract">
+                            <summary aria-label="Abstract: Social Media Advertising Loads as Prices">Abstract</summary>
+                            <div class="abstract-text"><p>Most digital platforms are funded through advertising rather than direct payments. Why? We argue that three main factors could explain this prevalence: users are more sensitive to monetary prices than to ad loads, microtargeting improves the match quality between users and ads, and platforms can personalize ad loads and thus price discriminate. We conduct a field experiment on Facebook with 1,810 users who install a browser extension that (i) hides nearly all ads or (ii) replaces microtargeted ads with untargeted ones. We find that hiding 82% of ads increases time on the platform by only 6%, showing that users are highly insensitive to ad loads. Removing targeting sharply reduces ad clicks and long-run engagement, indicating that targeting increases the match quality between users and ads. Finally, two-thirds of ad-load variation occurs across users, consistent with ad-load discrimination. Counterfactual simulations indicate that an ad-funded model performs at least as well as a subscription model in terms of profits and delivers higher consumer surplus. The key mechanism is that users are much less sensitive to ad loads than to monetary prices, making advertising a relatively efficient revenue source.</p></div>
+                        </details>
+                    </div>
+                </article>
+            </section>
+        </main>
+    </div>
+
+    <script>
+        // copy-email button: revealed only where the clipboard API exists, so the
+        // plain mailto link is all that shows without it
+        (function () {
+            var button = document.querySelector('.copy');
+            var status = document.querySelector('.copied');
+            if (!navigator.clipboard) return;
+            var timer;
+            button.hidden = false;
+            button.addEventListener('click', function () {
+                navigator.clipboard.writeText(button.dataset.copy).then(function () {
+                    status.textContent = 'copied';
+                }, function () {
+                    status.textContent = 'copy failed';
+                }).then(function () {
+                    clearTimeout(timer);
+                    timer = setTimeout(function () { status.textContent = ''; }, 1800);
+                });
+            });
+        })();
+    </script>
 </body>
 
 </html>
