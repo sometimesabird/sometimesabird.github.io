@@ -407,6 +407,11 @@ h2 {
     --deep: #1d2021;
     --mono: "Courier New", monospace;
     --serif: Georgia, "Times New Roman", serif;
+    /* hover fades: quick to answer the cursor, slower to let go. a transition
+       is set by the state being entered, so the :hover rule's duration is the
+       fade-in and the resting rule's is the fade-out */
+    --fade-in: 0.2s;
+    --fade-out: 0.5s;
 }
 
 /* two-tone canvas: the dark shade runs from the viewport's left edge to just
@@ -437,16 +442,21 @@ body.split {
     box-sizing: border-box;
 }
 
+/* links keep a transparent underline at rest, so on hover the color and the
+   red underline both fade, on the same timing as the nav dash, instead of
+   snapping */
 .page a {
     color: inherit;
-    text-decoration: none;
+    text-decoration: underline;
+    text-decoration-color: transparent;
+    text-underline-offset: 0.18em;
+    transition: color var(--fade-out), text-decoration-color var(--fade-out), border-color var(--fade-out);
 }
 
 .page a:hover {
     color: var(--fg);
-    text-decoration: underline;
-    text-underline-offset: 0.18em;
     text-decoration-color: var(--red);
+    transition-duration: var(--fade-in);
 }
 
 .page a:focus-visible {
@@ -473,6 +483,38 @@ body.split {
     }
 }
 
+/* moving between pages cross-fades the old page into the new over 0.15s.
+   where the sidebar is pinned (wide, tall windows) it is captured on its
+   own, so it holds still and only its nav marker changes while the main
+   column fades; elsewhere it scrolls with the page, and capturing it would
+   slide it in from wherever it had been scrolled to, so the whole page
+   fades. browsers without cross-document view transitions, and visitors who
+   ask for reduced motion, get an ordinary page load */
+@media (prefers-reduced-motion: no-preference) {
+    @view-transition {
+        navigation: auto;
+    }
+}
+
+@media (min-width: 761px) and (min-height: 821px) {
+    .side {
+        view-transition-name: sidebar;
+    }
+}
+
+::view-transition-group(*) {
+    animation-duration: 0.15s;
+}
+
+/* the sidebar is never slid between pages: it sits 8px lower at the top of
+   a page than once scrolled (the body margin), and a scrollbar on one page
+   but not the other shifts it sideways, so it takes the new page's place at
+   once and only its contents fade. animation-name rather than the shorthand,
+   which would also zero the duration its fading images inherit */
+::view-transition-group(sidebar) {
+    animation-name: none;
+}
+
 /* the photo is a button that opens the larger copy in .photo-view */
 .portrait {
     display: block;
@@ -485,6 +527,12 @@ body.split {
     background: none;
     margin-bottom: 1.5rem;
     cursor: zoom-in;
+    /* the border keeps its own timing rather than the links' hover fades:
+       it settles back over 0.6s, so it trails the photo's 0.4s return like a
+       faint reflection lingering at the edge of the frame */
+    transition: border-color 0.6s ease;
+    /* keeps Safari clipping the zoomed photo to the rounded corners */
+    isolation: isolate;
 }
 
 .portrait img {
@@ -492,10 +540,20 @@ body.split {
     width: 100%;
     height: 100%;
     object-fit: cover;
+    transition: transform 0.4s ease-out;
 }
 
+/* ...and brightens on the zoom's own 0.4s ease-out, in step with the photo */
 .portrait:hover {
     border-color: var(--bg4);
+    transition: border-color 0.4s ease-out;
+}
+
+/* the photo leans in a hair inside its frame, echoing the zoom-in cursor */
+@media (hover: hover) and (prefers-reduced-motion: no-preference) {
+    .portrait:hover img {
+        transform: scale(1.03);
+    }
 }
 
 .portrait:focus-visible {
@@ -539,9 +597,10 @@ body.split {
     border: 1px solid var(--bg2);
     cursor: auto;
     animation: photo-grow 0.15s ease-out;
-    /* headshot-full.jpg is lazy, so it only downloads once the dialog opens;
-       until it arrives, the sidebar's already-cached square crop stands in
-       over its top two-thirds, which is exactly where that crop came from */
+    /* headshot-full.jpg is lazy, so it only downloads once the portrait is
+       hovered or focused (the page script) or the dialog opens; until it
+       arrives, the sidebar's already-cached square crop stands in over its
+       top two-thirds, which is exactly where that crop came from */
     background: url(assets/headshot.jpg) top / 100% no-repeat;
 }
 
@@ -662,17 +721,21 @@ html:has(.photo-view[open]) {
     width: 0.5rem;
     height: 2px;
     background: var(--bg3);
-    transition: width 0.15s, background 0.15s;
+    transition: width var(--fade-out), background var(--fade-out);
 }
 
+/* nav links never underline; the color stays transparent rather than the
+   line being removed, since a removed line comes back instantly on mouse-out
+   while its color is still fading out of red */
 .site-nav a:hover {
     color: var(--fg);
-    text-decoration: none;
+    text-decoration-color: transparent;
 }
 
 .site-nav a:hover::before {
     width: 0.7rem;
     background: var(--fg);
+    transition-duration: var(--fade-in);
 }
 
 .site-nav a[aria-current] {
@@ -729,9 +792,12 @@ html:has(.photo-view[open]) {
     transition: background 0.15s, transform 0.15s;
 }
 
+/* the scale is motion, so it keeps its own quick timing both ways rather
+   than the links' hover fades */
 .icon-links a:hover {
     background: var(--bg1);
     transform: scale(1.12);
+    transition-duration: 0.15s;
 }
 
 .icon-links svg {
@@ -780,6 +846,7 @@ html:has(.photo-view[open]) {
     background: none;
     color: var(--fg4);
     cursor: pointer;
+    transition: color var(--fade-out), background var(--fade-out);
 }
 
 .copy[hidden] {
@@ -795,6 +862,43 @@ html:has(.photo-view[open]) {
 .copy:hover {
     background: var(--bg1);
     color: var(--fg);
+    transition-duration: var(--fade-in);
+}
+
+/* a successful copy swaps the clipboard for a check, in yellow, for 1.8s
+   (the page script sets .done) */
+.copy:not(.done) .icon-check,
+.copy.done .icon-copy {
+    display: none;
+}
+
+.copy.done {
+    color: var(--yellow-bright);
+}
+
+.copy .icon-check {
+    stroke-width: 1.5;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+}
+
+/* the check draws itself, short end first; its path has pathLength="1", so
+   one dash covers it and the offset starts it just out of sight */
+@media (prefers-reduced-motion: no-preference) {
+    .copy.done .icon-check path {
+        stroke-dasharray: 1 2;
+        animation: check-draw 0.25s ease-out both;
+    }
+}
+
+@keyframes check-draw {
+    from {
+        stroke-dashoffset: 1.1;
+    }
+
+    to {
+        stroke-dashoffset: 0;
+    }
 }
 
 .copy:focus-visible {
@@ -802,7 +906,7 @@ html:has(.photo-view[open]) {
     outline-offset: 1px;
 }
 
-/* "copied" tag floats above the icon so the row never reflows; it stays
+/* status tag: floats above the icon so the row never reflows; it stays
    rendered while empty so screen readers keep the live region */
 .copied {
     position: absolute;
@@ -818,6 +922,16 @@ html:has(.photo-view[open]) {
     padding: 0.1rem 0.45rem;
     border-radius: 3px;
     background: var(--bg1);
+}
+
+/* the check already says "copied", so on success the tag is for screen
+   readers only; "copy failed" has no icon of its own and stays visible */
+.copy.done + .copied {
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    overflow: hidden;
+    clip-path: inset(50%);
 }
 
 .socials {
@@ -856,6 +970,20 @@ html:has(.photo-view[open]) {
     border-radius: 50%;
     background: var(--yellow-bright);
     box-shadow: 0 0 0 4px rgba(250, 189, 47, 0.15);
+}
+
+/* the halo widens and fades a little, then settles, about one resting breath
+   every four seconds: the line is live */
+@media (prefers-reduced-motion: no-preference) {
+    .market .dot {
+        animation: dot-breathe 4s ease-in-out infinite;
+    }
+}
+
+@keyframes dot-breathe {
+    50% {
+        box-shadow: 0 0 0 6px rgba(250, 189, 47, 0.1);
+    }
 }
 
 .lede {
@@ -971,9 +1099,35 @@ html:has(.photo-view[open]) {
     margin-left: 0.45em;
 }
 
+/* arrow glyphs lean the way they point while their link is hovered; only the
+   glyph moves, never the words. each is an inline-block, since plain inline
+   boxes can't be transformed, which also stops a hover underline at the
+   words. on links that underline (not .text-link, which uses a border), the
+   gap before the arrow is margin, not a space, so the underline doesn't
+   overhang either. the research page's .research-download arrows share this */
+.page .text-link span,
+.research-download span,
+.more span {
+    display: inline-block;
+    transition: transform 0.15s ease-out;
+}
+
+@media (hover: hover) and (prefers-reduced-motion: no-preference) {
+    .page .text-link:hover span,
+    .research-download:hover span {
+        transform: translate(0.12em, -0.12em);
+    }
+
+    .more a:hover span {
+        transform: translateX(0.2em);
+    }
+}
+
+/* the border is the underline here; the text's own stays transparent, as in
+   the nav, so it can't flash on mouse-out */
 .page .text-link:hover {
     border-color: currentColor;
-    text-decoration: none;
+    text-decoration-color: transparent;
 }
 
 .card .text-link {
@@ -1061,6 +1215,10 @@ html:has(.photo-view[open]) {
 
 .more a {
     color: var(--fg3);
+}
+
+.more span {
+    margin-left: 0.25em;
 }
 
 /* mid widths: the main column narrows, so shrink the card title */

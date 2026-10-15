@@ -5,6 +5,10 @@
     <title>Fun | George Beknazar-Yuzbashev</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta charset="UTF-8">
+    <!-- the site is dark, said before any CSS loads: the browser then fills any
+         moment with nothing painted yet, as between two pages, with dark rather
+         than white. it also darkens browser-drawn parts such as scrollbars -->
+    <meta name="color-scheme" content="dark">
     <meta name="description" content="What is fun? According to George Beknazar-Yuzbashev, research.">
     <link rel="icon" href="favicon.ico">
     <link rel="stylesheet" href="styles.css">
@@ -82,7 +86,8 @@
                 <div class="email-row">
                     <a class="email" href="mailto:beknazar@uchicago.edu">beknazar@uchicago.edu</a>
                     <button class="copy" type="button" data-copy="beknazar@uchicago.edu" aria-label="Copy email address" title="Copy email address" hidden>
-                        <svg viewBox="0 0 16 16" width="15" height="15" aria-hidden="true"><rect x="5.5" y="5.5" width="8" height="8" rx="1.5"/><path d="M10.5 3.5v-.5a1.5 1.5 0 0 0-1.5-1.5H4A1.5 1.5 0 0 0 2.5 3v5A1.5 1.5 0 0 0 4 9.5h.5"/></svg>
+                        <svg class="icon-copy" viewBox="0 0 16 16" width="15" height="15" aria-hidden="true"><rect x="5.5" y="5.5" width="8" height="8" rx="1.5"/><path d="M10.5 3.5v-.5a1.5 1.5 0 0 0-1.5-1.5H4A1.5 1.5 0 0 0 2.5 3v5A1.5 1.5 0 0 0 4 9.5h.5"/></svg>
+                        <svg class="icon-check" viewBox="0 0 16 16" width="15" height="15" aria-hidden="true"><path d="M3.5 8.25l3 3 6.25-6.75" pathLength="1"/></svg>
                     </button>
                     <span class="copied" role="status"></span>
                 </div>
@@ -106,7 +111,9 @@
 
     <script>
         // copy-email button: revealed only where the clipboard API exists, so the
-        // plain mailto link is all that shows without it
+        // plain mailto link is all that shows without it. a successful copy swaps
+        // its icon for a check, and "copied" is announced to screen readers only;
+        // a failure shows "copy failed" beside the icon
         (function () {
             var button = document.querySelector('.copy');
             var status = document.querySelector('.copied');
@@ -116,22 +123,35 @@
             button.addEventListener('click', function () {
                 navigator.clipboard.writeText(button.dataset.copy).then(function () {
                     status.textContent = 'copied';
+                    button.classList.add('done');
                 }, function () {
                     status.textContent = 'copy failed';
+                    button.classList.remove('done');
                 }).then(function () {
                     clearTimeout(timer);
-                    timer = setTimeout(function () { status.textContent = ''; }, 1800);
+                    timer = setTimeout(function () {
+                        status.textContent = '';
+                        button.classList.remove('done');
+                    }, 1800);
                 });
             });
         })();
 
         // enlarged photo: the sidebar portrait opens it as a modal dialog. a click
         // anywhere but the photo itself (the dimmed page, the close button) closes
-        // it; Esc and the Android back gesture close it natively
+        // it; Esc and the Android back gesture close it natively. the full-size
+        // file is lazy, so it costs nothing unless wanted, but hovering or focusing
+        // the portrait starts its download, so it is usually in hand on open
         (function () {
             var view = document.querySelector('.photo-view');
             var photo = view.querySelector('img');
-            document.querySelector('.portrait').addEventListener('click', function () {
+            var portrait = document.querySelector('.portrait');
+            function fetchPhoto() {
+                photo.loading = 'eager';
+            }
+            portrait.addEventListener('pointerenter', fetchPhoto, { once: true });
+            portrait.addEventListener('focus', fetchPhoto, { once: true });
+            portrait.addEventListener('click', function () {
                 view.showModal();
             });
             view.addEventListener('click', function (event) {

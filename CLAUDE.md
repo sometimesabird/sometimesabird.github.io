@@ -14,7 +14,7 @@ Static HTML website — no build system, no SSG (Jekyll/Hugo), no templating eng
 |---|---|
 | `index.html` | Homepage: sidebar (photo, name, position, nav, contact) + job-market line, JMP card, selected work |
 | `assets/headshot.jpg` | 512×512 headshot used in the sidebar and as the social-preview image |
-| `assets/headshot-full.jpg` | 1536×2304 uncropped version of the Columbia headshot (`headshot.jpg` is its top square), shown when the sidebar photo is clicked; lazy, so it only downloads when opened |
+| `assets/headshot-full.jpg` | 1536×2304 uncropped version of the Columbia headshot (`headshot.jpg` is its top square), shown when the sidebar photo is clicked; lazy, so it only downloads once the sidebar photo is hovered, focused, or opened |
 | `assets/cv.pdf` | CV, linked from the sidebar button |
 | `assets/jmp.pdf` | Job market paper, linked from the homepage card and research page; a copy of `~/Dropbox/Research/mental_health/paper/paper.pdf`, so re-copy it when the paper is revised |
 | `research.html` | Research page: job market paper, publications, and working papers, each with a short summary and an expandable abstract |
