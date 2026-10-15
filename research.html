@@ -9,6 +9,9 @@
          moment with nothing painted yet, as between two pages, with dark rather
          than white. it also darkens browser-drawn parts such as scrollbars -->
     <meta name="color-scheme" content="dark">
+    <!-- the sidebar's deep shade for the mobile toolbar (Chrome on Android;
+         Safari 26 ignores this and tints from the body background instead) -->
+    <meta name="theme-color" content="#1d2021">
     <meta name="description" content="Research by George Beknazar-Yuzbashev: field experiments on social media, political behavior, and mental health. Job market paper, publications, and working papers.">
     <link rel="icon" href="favicon.ico">
     <link rel="stylesheet" href="styles.css">
@@ -40,10 +43,25 @@
         .research-entry {
             padding: 1.5rem 0;
             border-top: 1px solid var(--bg1);
+            transition: border-color var(--fade-out);
         }
 
         .research-entry:last-child {
             border-bottom: 1px solid var(--bg1);
+        }
+
+        /* the hairline above an entry lightens to bg3, the tone of the field
+           pills' borders and the resting nav dash, while the pointer rests in
+           it, on the links' hover fades (one step, to bg2, could not be seen
+           on a 1px line). still quiet enough that moving down the list never
+           reads as selecting rows. hover-capable pointers only, so a tap
+           can't leave a rule lit. the job market entry's red rule has its
+           own reflection and glow in styles.css */
+        @media (hover: hover) {
+            .research-entry:not(.research-jmp):hover {
+                border-top-color: var(--bg3);
+                transition-duration: var(--fade-in);
+            }
         }
 
         .research-entry h3 {
@@ -148,6 +166,15 @@
 
         .research-abstract[open] summary::before {
             transform: translateY(-0.1rem) rotate(45deg);
+        }
+
+        /* the chevron turns its quarter from right to down over 0.2s, easing
+           out so it settles straight into place; the abstract itself appears
+           at once */
+        @media (prefers-reduced-motion: no-preference) {
+            .research-abstract summary::before {
+                transition: transform 0.2s ease-out;
+            }
         }
 
         .research-abstract summary:hover,

@@ -414,6 +414,12 @@ h2 {
     --fade-out: 0.5s;
 }
 
+/* the page scrollbar in Gruvbox greys: the thumb takes the resting nav dash's
+   tone, the track the page background it sits against */
+:root {
+    scrollbar-color: var(--bg3) var(--bg);
+}
+
 /* two-tone canvas: the dark shade runs from the viewport's left edge to just
    past the sidebar column, so the sidebar reads as a full-height panel while
    the page keeps its centered 68rem grid (2rem padding + 17rem column + 1.5rem) */
@@ -481,38 +487,6 @@ body.split {
         position: static;
         height: auto;
     }
-}
-
-/* moving between pages cross-fades the old page into the new over 0.15s.
-   where the sidebar is pinned (wide, tall windows) it is captured on its
-   own, so it holds still and only its nav marker changes while the main
-   column fades; elsewhere it scrolls with the page, and capturing it would
-   slide it in from wherever it had been scrolled to, so the whole page
-   fades. browsers without cross-document view transitions, and visitors who
-   ask for reduced motion, get an ordinary page load */
-@media (prefers-reduced-motion: no-preference) {
-    @view-transition {
-        navigation: auto;
-    }
-}
-
-@media (min-width: 761px) and (min-height: 821px) {
-    .side {
-        view-transition-name: sidebar;
-    }
-}
-
-::view-transition-group(*) {
-    animation-duration: 0.15s;
-}
-
-/* the sidebar is never slid between pages: it sits 8px lower at the top of
-   a page than once scrolled (the body margin), and a scrollbar on one page
-   but not the other shifts it sideways, so it takes the new page's place at
-   once and only its contents fade. animation-name rather than the shorthand,
-   which would also zero the duration its fading images inherit */
-::view-transition-group(sidebar) {
-    animation-name: none;
 }
 
 /* the photo is a button that opens the larger copy in .photo-view */
@@ -1050,6 +1024,63 @@ html:has(.photo-view[open]) {
     border-top: 2px solid var(--red-bright);
 }
 
+/* Both JMP cards: a still reflection along the 2px rule, with a trace of
+   reflected red inside the card. The overlays never move or reflow text.
+   Screen-only, so print keeps the plain red rule. */
+@media screen {
+    .page :is(.card, .research-jmp) {
+        position: relative;
+        --jmp-border-opacity: 0;
+        --jmp-border-fade: 0.6s;
+    }
+
+    .page :is(.card, .research-jmp)::before,
+    .page :is(.card, .research-jmp)::after {
+        content: "";
+        position: absolute;
+        pointer-events: none;
+        left: 0;
+        right: 0;
+        opacity: var(--jmp-border-opacity);
+        transition: opacity var(--jmp-border-fade) ease;
+    }
+
+    .page :is(.card, .research-jmp)::before {
+        top: -2px;
+        height: 2px;
+        background: linear-gradient(100deg,
+            #ce3829 0%, #ed5038 18%, #fa895b 38%,
+            #f36242 54%, #d43b2b 80%, #c93125 100%);
+    }
+
+    .page :is(.card, .research-jmp)::after {
+        top: 0;
+        height: 8px;
+        background: linear-gradient(to bottom,
+            rgb(251 73 52 / 0.19), rgb(251 73 52 / 0.05) 45%,
+            rgb(251 73 52 / 0));
+    }
+
+    .page :is(.card, .research-jmp):focus-within {
+        --jmp-border-opacity: 1;
+        --jmp-border-fade: 0.35s;
+    }
+}
+
+@media screen and (hover: hover) {
+    .page :is(.card, .research-jmp):hover {
+        --jmp-border-opacity: 1;
+        --jmp-border-fade: 0.35s;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .page :is(.card, .research-jmp)::before,
+    .page :is(.card, .research-jmp)::after {
+        transition: none;
+    }
+}
+
 .card h3 {
     margin: 0;
     max-width: 550px;
@@ -1124,9 +1155,12 @@ html:has(.photo-view[open]) {
 }
 
 /* the border is the underline here; the text's own stays transparent, as in
-   the nav, so it can't flash on mouse-out */
+   the nav, so it can't flash on mouse-out. on hover the line takes on a
+   little more ink, up to the muted text tone rather than the text's own, so
+   it answers the cursor without competing with the words; its thickness and
+   position hold */
 .page .text-link:hover {
-    border-color: currentColor;
+    border-color: var(--fg4);
     text-decoration-color: transparent;
 }
 
