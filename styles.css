@@ -1613,3 +1613,27 @@ html:has(.photo-view[open]) {
         break-inside: avoid;
     }
 }
+
+/* ------------------------------------------------------------------ */
+/* text brightens under the cursor (all three pages; glow.js)          */
+/* ------------------------------------------------------------------ */
+/* glow.js wraps each word of the muted prose in a .w span and gives the
+   words near the pointer a share --w (0 to 1) of the lift, falling off
+   gently along the line and steeply across lines. a word's colour is fg3
+   mixed toward the lit tone by that share, one and a half steps up the
+   foreground ladder at the peak. words brighten after a short wait, so a
+   pointer passing through does nothing, then over --lift-in, and settle back
+   over --lift-out, so the warmth trails the pointer. colour only: nothing
+   moves or reflows, and bold words and links keep their own colours. without
+   the script, or on a device that cannot hover, the prose stays as it was */
+:root {
+    --lift-hover: #e0cfa9;  /* fg2 mixed half way to fg, in oklab */
+    --lift-delay: 0.2s;
+    --lift-in: 0.3s;
+    --lift-out: 0.7s;
+}
+
+.w {
+    color: color-mix(in srgb, var(--fg3), var(--lift-hover) calc(var(--w, 0) * 100%));
+    transition: color var(--lift-out) ease-in-out;
+}
