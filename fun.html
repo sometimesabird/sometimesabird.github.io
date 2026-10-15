@@ -161,6 +161,30 @@
                 if (event.target !== photo) view.close();
             });
         })();
+
+        // the page's one joke: rest the pointer on the red "Fun" and the heading
+        // asks "What is Research?", which the line below already answers. it
+        // waits 200 ms, as the text glow does, so a pointer passing over doesn't
+        // flash it, and holds until the pointer leaves the heading, so a narrow
+        // window that wraps the longer word onto a new line, out from under the
+        // pointer, can't flick it back and forth. hover-capable pointers only
+        (function () {
+            if (!window.matchMedia || !matchMedia('(hover: hover)').matches) return;
+            var heading = document.querySelector('.fun-heading');
+            var word = heading.querySelector('em');
+            var timer;
+            word.addEventListener('pointerenter', function () {
+                timer = setTimeout(function () {
+                    word.textContent = 'Research';
+                }, 200);
+            });
+            word.addEventListener('pointerleave', function () {
+                clearTimeout(timer);
+            });
+            heading.addEventListener('pointerleave', function () {
+                word.textContent = 'Fun';
+            });
+        })();
     </script>
     <script src="glow.js"></script>
 </body>
