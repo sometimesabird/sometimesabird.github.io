@@ -1,0 +1,626 @@
+/* Skeuomorphic Instrument theme (fun.html). Loaded in place of styles.css by
+   the head script on every page, so it styles the same markup styles.css
+   does and nothing here depends on it.
+
+   The page is the front panel of a warm old piece of lab equipment: a brushed
+   gunmetal faceplate screwed to a dark bench (theme.js adds the four screws),
+   engraved labels, bakelite push buttons with LEDs, a glass display window
+   whose amber readout is the one bright light on the panel, brass nameplates
+   for the journals. Every shade is a Gruvbox tone or a cream/black veil over
+   one. The one web font, IBM Plex Mono, for the readout and the small
+   engraved panel labels, is served from assets/fonts (SIL Open Font License,
+   alongside). Ported from _testing/skeu-instrument.html and its stylesheets,
+   which are kept there for comparison. */
+
+@font-face { font-family: "IBM Plex Mono"; font-style: normal; font-weight: 400; font-display: swap; src: url(assets/fonts/plex-mono-400.woff2) format("woff2"); }
+@font-face { font-family: "IBM Plex Mono"; font-style: normal; font-weight: 500; font-display: swap; src: url(assets/fonts/plex-mono-500.woff2) format("woff2"); }
+
+/* ------------------------------------------------------------------ */
+/* shared with the Desk theme: the Gruvbox palette, with its light tones */
+/* too so brass and cream can be drawn from it; type; hairline links;    */
+/* the live behaviours (copy key, photo dialog, word lift)               */
+/* ------------------------------------------------------------------ */
+:root {
+  color-scheme: dark;
+  /* dark tones */
+  --bg: #282828;
+  --deep: #1d2021;
+  --bg0s: #32302f;
+  --bg1: #3c3836;
+  --bg2: #504945;
+  --bg3: #665c54;
+  --bg4: #7c6f64;
+  /* light tones: text on dark, and paper */
+  --fg0: #fbf1c7;
+  --fg: #ebdbb2;
+  --fg2: #d5c4a1;
+  --fg3: #bdae93;
+  --fg4: #a89984;
+  --paper: #ebdbb2;
+  --paper-bright: #fbf1c7;
+  --paper-warm: #f2e5bc;
+  --paper-dim: #d5c4a1;
+  /* ink on paper */
+  --ink: #282828;
+  --ink2: #3c3836;
+  --ink3: #504945;
+  --ink4: #665c54;
+  /* accents */
+  --red: #cc241d;
+  --red-bright: #fb4934;
+  --red-deep: #9d0006;
+  --yellow: #d79921;
+  --yellow-bright: #fabd2f;
+  --yellow-deep: #b57614;
+  --orange: #d65d0e;
+  --orange-bright: #fe8019;
+  --green: #98971a;
+  --green-bright: #b8bb26;
+  --green-deep: #79740e;
+  --aqua: #689d6a;
+  --blue: #83a598;
+  --blue-deep: #458588;
+  --serif: Georgia, "Times New Roman", serif;
+  --sans: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  --mono: "Courier New", monospace;
+  --fade-in: 0.2s;
+  --fade-out: 0.5s;
+  /* a tile of monochrome grain, for layering at low opacity over any material */
+  --noise: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='240' height='240'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  /* text brightens under the cursor (glow.js) */
+  --lift-hover: #e0cfa9;
+  --lift-delay: 0.2s;
+  --lift-in: 0.3s;
+  --lift-out: 0.7s;
+}
+
+* { box-sizing: border-box; }
+html { scrollbar-color: var(--bg3) var(--bg); }
+body { margin: 0; background: var(--bg); color: var(--fg); font: 16px/1.55 var(--sans); -webkit-font-smoothing: antialiased; }
+h1, h2, h3, p { margin: 0; }
+svg { display: block; fill: currentColor; }
+img { display: block; }
+button { font: inherit; color: inherit; cursor: pointer; }
+::selection { background: var(--bg3); color: var(--fg0); }
+
+/* links: never thicker than a hairline, and the red arrives dim */
+a { color: inherit; text-decoration: underline; text-decoration-thickness: 1px; text-decoration-color: transparent; text-underline-offset: 0.12em; transition: color var(--fade-out), text-decoration-color var(--fade-out); }
+a:hover { text-decoration-color: rgb(204 36 29 / 0.9); transition-duration: var(--fade-in); }
+a:focus-visible, button:focus-visible, summary:focus-visible { outline: 2px solid var(--yellow-bright); outline-offset: 3px; }
+
+/* the copy-email key: hidden until the page script finds a clipboard; a
+   successful copy swaps the clipboard icon for a check that draws itself */
+.copy[hidden] { display: none; }
+.copy .icon-copy { fill: none; stroke: currentColor; stroke-width: 1.3; }
+.copy .icon-check { fill: none; stroke: currentColor; stroke-width: 1.5; stroke-linecap: round; stroke-linejoin: round; }
+.copy:not(.done) .icon-check, .copy.done .icon-copy { display: none; }
+@media (prefers-reduced-motion: no-preference) { .copy.done .icon-check path { stroke-dasharray: 1 2; animation: check-draw 0.25s ease-out both; } }
+@keyframes check-draw { from { stroke-dashoffset: 1.1; } to { stroke-dashoffset: 0; } }
+.email-row { position: relative; display: flex; align-items: center; gap: 0.6rem; }
+.copied { position: absolute; right: 0; bottom: calc(100% + 4px); font-size: 0.75rem; line-height: 1.5; white-space: nowrap; color: var(--yellow-bright); }
+.copy.done + .copied { width: 1px; height: 1px; padding: 0; overflow: hidden; clip-path: inset(50%); }
+
+/* the job-market dot, breathing; below it becomes an amber lamp */
+.dot { display: inline-block; width: 0.55rem; height: 0.55rem; border-radius: 50%; background: var(--yellow-bright); box-shadow: 0 0 0 4px rgba(250, 189, 47, 0.15); flex-shrink: 0; }
+@media (prefers-reduced-motion: no-preference) { .dot { animation: breathe 4s ease-in-out infinite; } }
+@keyframes breathe { 50% { box-shadow: 0 0 0 6px rgba(250, 189, 47, 0.1); } }
+
+/* enlarged photo: a modal over the dimmed page */
+.portrait { display: block; padding: 0; border: 0; background: none; font: inherit; cursor: zoom-in; }
+.photo-view[open] { box-sizing: border-box; display: grid; place-items: center; width: 100%; height: 100%; max-width: none; max-height: none; margin: 0; padding: 1.25rem; border: 0; background: none; cursor: zoom-out; animation: photo-fade 0.15s ease-out; }
+.photo-view::backdrop { background: rgba(29, 32, 33, 0.92); animation: photo-fade 0.15s ease-out; }
+.photo-view img { box-sizing: border-box; display: block; width: min(100%, 85vh * 2 / 3); width: min(100%, 85svh * 2 / 3); height: auto; border-radius: 4px; cursor: auto; animation: photo-grow 0.15s ease-out; background: url(assets/headshot.jpg) top / 100% no-repeat; box-shadow: 0 24px 60px rgba(0, 0, 0, 0.6); }
+.photo-close { position: absolute; top: 0.75rem; right: 0.75rem; width: 2.75rem; height: 2.75rem; padding: 0; border: 0; border-radius: 50%; background: none; color: var(--fg); font: 2rem/1 var(--serif); cursor: pointer; }
+.photo-close:hover { background: var(--bg1); }
+.photo-close:focus-visible { outline: 2px solid var(--yellow-bright); outline-offset: 1px; }
+html:has(.photo-view[open]) { overflow: hidden; scrollbar-gutter: stable; }
+@keyframes photo-fade { from { opacity: 0; } }
+@keyframes photo-grow { from { transform: scale(0.94); } }
+@media (prefers-reduced-motion: reduce) { .photo-view[open], .photo-view::backdrop, .photo-view img { animation: none; } }
+
+/* text brightens under the cursor (glow.js): each word of the muted prose
+   gets a share --w of the lift */
+.w { color: color-mix(in srgb, var(--fg3), var(--lift-hover) calc(var(--w, 0) * 100%)); transition: color var(--lift-out) ease-in-out; }
+
+.skip-link { position: absolute; top: 0.75rem; left: 0.75rem; z-index: 2; padding: 0.6rem 0.9rem; border-radius: 6px; background: var(--deep); color: var(--fg); transform: translateY(-200%); }
+.skip-link:focus { transform: translateY(0); outline: 2px solid var(--yellow-bright); }
+
+/* ------------------------------------------------------------------ */
+/* the instrument                                                       */
+/* ------------------------------------------------------------------ */
+.theme-instrument body {
+  --plate: color-mix(in srgb, var(--bg0s) 55%, var(--bg1));
+  --plate-lo: color-mix(in srgb, var(--bg0s) 72%, var(--deep));
+  --well: color-mix(in srgb, var(--bg0s) 70%, var(--deep));
+  --well-lo: color-mix(in srgb, var(--bg0s) 50%, var(--deep));
+  --bakelite: color-mix(in srgb, var(--deep) 82%, black);
+  --bakelite-hi: color-mix(in srgb, var(--deep) 62%, var(--bg2));
+  --glass: var(--deep);
+  --readout: "IBM Plex Mono", ui-monospace, "SF Mono", Menlo, Consolas, "DejaVu Sans Mono", monospace;
+  --engrave: 0 1px 0 rgba(0, 0, 0, 0.8), 0 -1px 0 rgba(235, 219, 178, 0.08);
+  /* fine horizontal brushing: three faint line patterns at unrelated periods */
+  --brush:
+    repeating-linear-gradient(180deg, rgba(235, 219, 178, 0.03) 0 1px, transparent 1px 3px),
+    repeating-linear-gradient(180deg, rgba(0, 0, 0, 0.07) 0 1px, transparent 1px 5px),
+    repeating-linear-gradient(180deg, transparent 0 2px, rgba(235, 219, 178, 0.016) 2px 3px, transparent 3px 7px);
+  /* a round bakelite push button, raised in a collared hole */
+  --cap-face:
+    radial-gradient(ellipse 64% 38% at 50% 20%, rgba(235, 219, 178, 0.17), transparent),
+    radial-gradient(circle at 50% 58%, var(--bakelite-hi), var(--bakelite) 72%);
+  --cap-up:
+    0 0 0 1px rgba(0, 0, 0, 0.75),
+    0 0 0 3px color-mix(in srgb, var(--deep) 55%, var(--well)),
+    0 0 0 4px rgba(0, 0, 0, 0.6),
+    0 1px 0 4px rgba(235, 219, 178, 0.07),
+    0 2px 3px 1px rgba(0, 0, 0, 0.55),
+    inset 0 1px 1px rgba(235, 219, 178, 0.1),
+    inset 0 -2px 3px rgba(0, 0, 0, 0.55);
+  --cap-down:
+    0 0 0 1px rgba(0, 0, 0, 0.75),
+    0 0 0 3px color-mix(in srgb, var(--deep) 55%, var(--well)),
+    0 0 0 4px rgba(0, 0, 0, 0.6),
+    0 1px 0 4px rgba(235, 219, 178, 0.07),
+    0 0 0 0 rgba(0, 0, 0, 0),
+    inset 0 2px 4px rgba(0, 0, 0, 0.7),
+    inset 0 -1px 1px rgba(235, 219, 178, 0.04);
+  /* an LED, dark and lit */
+  --led-off: radial-gradient(circle at 40% 32%, rgba(235, 219, 178, 0.28), transparent 48%), var(--bg1);
+  --led-off-shadow: 0 0 0 1px rgba(0, 0, 0, 0.6), 0 1px 0 1px rgba(235, 219, 178, 0.05), inset 0 1px 1px rgba(0, 0, 0, 0.5);
+  --led-on: radial-gradient(circle at 38% 30%, var(--fg0) 0, var(--red-bright) 28%, var(--red) 72%, var(--red-deep) 100%);
+  --led-on-shadow: 0 0 0 1px rgba(0, 0, 0, 0.6), 0 0 8px rgba(251, 73, 52, 0.5), 0 0 16px rgba(251, 73, 52, 0.25);
+  /* the display window's dark glass */
+  --glass-face: linear-gradient(180deg, color-mix(in srgb, var(--glass) 82%, black) 0%, var(--glass) 38%, color-mix(in srgb, var(--glass) 88%, var(--bg2)) 100%);
+  --glass-rim:
+    inset 0 0 0 1px rgba(235, 219, 178, 0.045),
+    inset 0 16px 30px -10px rgba(0, 0, 0, 0.8),
+    inset 0 -8px 18px -10px rgba(0, 0, 0, 0.4),
+    0 0 0 2px color-mix(in srgb, var(--plate-lo) 65%, black),
+    0 0 0 3px rgba(0, 0, 0, 0.6),
+    0 1px 0 3px rgba(235, 219, 178, 0.08);
+  position: relative;
+  isolation: isolate;
+  min-height: 100svh;
+  padding: 2.5rem 2rem 3.5rem;
+  background: var(--deep) radial-gradient(90% 70% at 50% 0%, var(--bg), var(--deep) 100%) no-repeat;
+}
+/* the bench: matte, faintly grained */
+.theme-instrument body::before { content: ""; position: fixed; inset: 0; z-index: -1; background: var(--noise); opacity: 0.045; pointer-events: none; }
+
+/* ---------- the faceplate ---------- */
+.theme-instrument .page {
+  position: relative;
+  isolation: isolate;
+  max-width: 68rem;
+  margin: 0 auto;
+  padding: 2.75rem 2.75rem 3rem;
+  display: grid;
+  grid-template-columns: 19rem minmax(0, 1fr);
+  gap: 3rem;
+  border-radius: 14px;
+  background:
+    linear-gradient(112deg, transparent 20%, rgba(235, 219, 178, 0.07) 44%, rgba(235, 219, 178, 0.03) 54%, transparent 76%),
+    radial-gradient(120% 60% at 50% -10%, rgba(235, 219, 178, 0.05), transparent 60%),
+    var(--brush),
+    linear-gradient(180deg, var(--plate), var(--plate-lo));
+  box-shadow:
+    inset 0 1px 0 rgba(235, 219, 178, 0.14),
+    inset 1px 0 0 rgba(235, 219, 178, 0.05),
+    inset -1px 0 0 rgba(0, 0, 0, 0.35),
+    inset 0 -1px 0 rgba(0, 0, 0, 0.65),
+    0 0 0 1px color-mix(in srgb, var(--deep) 75%, black),
+    0 2px 6px rgba(0, 0, 0, 0.5),
+    0 30px 60px -20px rgba(0, 0, 0, 0.85);
+}
+.theme-instrument .page::before { content: ""; position: absolute; inset: 0; z-index: -1; border-radius: inherit; background: var(--noise); opacity: 0.07; mix-blend-mode: overlay; pointer-events: none; }
+
+/* four slotted screws (theme.js adds them), each turned a little differently */
+.theme-instrument .screws { position: absolute; inset: 0; pointer-events: none; }
+.theme-instrument .screws span {
+  position: absolute; width: 13px; height: 13px; border-radius: 50%;
+  background: radial-gradient(circle at 38% 32%, var(--bg4) 0, var(--bg2) 36%, var(--bg1) 66%, var(--deep) 100%);
+  box-shadow:
+    0 0 0 1px rgba(0, 0, 0, 0.6),
+    0 0 0 2.5px rgba(0, 0, 0, 0.2),
+    0 1px 2px 1px rgba(0, 0, 0, 0.55),
+    inset 0 1px 1px rgba(235, 219, 178, 0.2),
+    inset 0 -1px 1px rgba(0, 0, 0, 0.55);
+}
+.theme-instrument .screws span::after {
+  content: ""; position: absolute; left: 2px; right: 2px; top: 50%; height: 2px; margin-top: -1px; border-radius: 1px;
+  background: linear-gradient(180deg, rgba(0, 0, 0, 0.9), rgba(0, 0, 0, 0.65));
+  box-shadow: 0 1px 0 rgba(235, 219, 178, 0.14);
+}
+.theme-instrument .screws span:nth-child(1) { top: 13px; left: 13px; }
+.theme-instrument .screws span:nth-child(2) { top: 13px; right: 13px; }
+.theme-instrument .screws span:nth-child(3) { bottom: 13px; left: 13px; }
+.theme-instrument .screws span:nth-child(4) { bottom: 13px; right: 13px; }
+.theme-instrument .screws span:nth-child(1)::after { transform: rotate(-28deg); }
+.theme-instrument .screws span:nth-child(2)::after { transform: rotate(19deg); }
+.theme-instrument .screws span:nth-child(3)::after { transform: rotate(64deg); }
+.theme-instrument .screws span:nth-child(4)::after { transform: rotate(-52deg); }
+
+/* ---------- sidebar: a recessed sub-panel ---------- */
+.theme-instrument .side {
+  position: sticky; top: 2rem; align-self: start;
+  display: flex; flex-direction: column;
+  padding: 1.6rem 1.5rem 1.6rem;
+  border-radius: 10px;
+  background: var(--brush), linear-gradient(180deg, var(--well), var(--well-lo));
+  box-shadow:
+    inset 0 2px 6px rgba(0, 0, 0, 0.55),
+    inset 0 1px 0 rgba(0, 0, 0, 0.75),
+    inset 1px 0 0 rgba(0, 0, 0, 0.35),
+    inset 0 -1px 0 rgba(235, 219, 178, 0.06),
+    0 1px 0 rgba(235, 219, 178, 0.09);
+}
+@media (min-width: 821px) and (max-height: 900px) { .theme-instrument .side { position: relative; top: auto; } }
+
+/* the photo behind a round machined bezel: a turned ring, an inner lip
+   shadowing the print, a touch of glass over it */
+.theme-instrument .portrait {
+  position: relative; width: 12rem; height: 12rem; margin: 0 auto 1.4rem; padding: 10px; border-radius: 50%;
+  background:
+    radial-gradient(circle closest-side, transparent 88%, rgba(0, 0, 0, 0.6) 89%, rgba(0, 0, 0, 0.12) 91%, rgba(235, 219, 178, 0.2) 94%, rgba(0, 0, 0, 0.04) 97%, rgba(0, 0, 0, 0.55) 100%),
+    linear-gradient(145deg, rgba(235, 219, 178, 0.18), transparent 42%, rgba(0, 0, 0, 0.3) 100%),
+    conic-gradient(from 200deg, var(--bg3), var(--bg2) 22%, var(--bg3) 50%, var(--bg2) 74%, var(--bg3));
+  box-shadow:
+    0 0 0 1px rgba(0, 0, 0, 0.7),
+    0 3px 8px rgba(0, 0, 0, 0.55),
+    inset 0 1px 1px rgba(235, 219, 178, 0.25),
+    inset 0 -1px 1px rgba(0, 0, 0, 0.6);
+}
+.theme-instrument .portrait img { width: 100%; height: 100%; border-radius: 50%; object-fit: cover; transition: filter 0.4s ease-out; }
+.theme-instrument .portrait::before {
+  content: ""; position: absolute; inset: 10px; border-radius: 50%; pointer-events: none;
+  box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.75), inset 0 6px 14px rgba(0, 0, 0, 0.6), inset 0 -2px 6px rgba(0, 0, 0, 0.3);
+  background: linear-gradient(155deg, rgba(251, 241, 199, 0.14) 0%, rgba(251, 241, 199, 0.045) 26%, transparent 44%);
+  transition: background 0.4s ease-out;
+}
+@media (hover: hover) {
+  .theme-instrument .portrait:hover img { filter: brightness(1.06); }
+  .theme-instrument .portrait:hover::before { background: linear-gradient(155deg, rgba(251, 241, 199, 0.2) 0%, rgba(251, 241, 199, 0.06) 28%, transparent 46%); }
+}
+
+/* engraved text links: a transparent underline still casts the engrave
+   shadow, so the line itself is switched off until hover */
+.theme-instrument :is(.email, .more a, .research-download) { text-decoration-line: none; }
+.theme-instrument :is(.email, .more a, .research-download):hover { text-decoration-line: underline; }
+
+/* engraved identity (an h1 on the homepage, a paragraph where the page has
+   its own h1) */
+.theme-instrument .identity :is(h1, .profile-name) { margin: 0; font: 700 1.3rem/1.15 var(--sans); letter-spacing: 0.005em; color: var(--fg2); text-shadow: var(--engrave); }
+.theme-instrument .identity :is(h1, .profile-name) a { text-decoration: none; }
+.theme-instrument .identity :is(h1, .profile-name) .last { display: block; white-space: nowrap; }
+.theme-instrument .nickname { margin-top: 0.45rem; font-size: 0.8125rem; color: var(--fg3); text-shadow: var(--engrave); }
+.theme-instrument .nickname strong { color: var(--fg2); font-weight: 500; }
+.theme-instrument .role { margin-top: 1.2rem; font-size: 0.9375rem; line-height: 1.55; color: var(--fg3); text-shadow: var(--engrave); }
+.theme-instrument .role strong { color: var(--fg); font-weight: normal; }
+.theme-instrument .edu { margin-top: 0.5rem; font-size: 0.75rem; color: var(--fg3); text-shadow: var(--engrave); }
+
+/* nav: a bank of three push buttons, an LED over each, the label engraved
+   beneath; the LED of the page you are on is lit. the LED and the cap are
+   the link's two pseudo-elements, ordered ahead of its text */
+.theme-instrument .site-nav {
+  margin: 1.5rem 0 0; padding: 0.85rem 0.25rem 0.75rem;
+  display: grid; grid-template-columns: repeat(3, 1fr);
+  border-radius: 8px;
+  border: 1px solid rgba(0, 0, 0, 0.5);
+  box-shadow: inset 0 1px 0 rgba(235, 219, 178, 0.05), 0 1px 0 rgba(235, 219, 178, 0.05);
+}
+.theme-instrument .site-nav a {
+  display: flex; flex-direction: column; align-items: center; gap: 0.6rem;
+  padding: 0.2rem 0; border-radius: 6px; text-decoration: none;
+  font: 500 0.66rem/1 var(--readout); letter-spacing: 0.14em; text-transform: uppercase;
+  color: var(--fg3); text-shadow: var(--engrave);
+  transition: color var(--fade-out);
+}
+.theme-instrument .site-nav a::before {
+  content: ""; order: -2; width: 8px; height: 8px; border-radius: 50%; margin-bottom: 0.1rem;
+  background: var(--led-off);
+  box-shadow: var(--led-off-shadow);
+}
+.theme-instrument .site-nav a[aria-current]::before { background: var(--led-on); box-shadow: var(--led-on-shadow); }
+.theme-instrument .site-nav a::after {
+  content: ""; order: -1; width: 30px; height: 30px; margin: 4px 0; border-radius: 50%;
+  background: var(--cap-face);
+  box-shadow: var(--cap-up);
+  transition: box-shadow 0.08s ease-out, transform 0.08s ease-out;
+}
+.theme-instrument .site-nav a:hover { color: var(--fg); transition-duration: var(--fade-in); }
+.theme-instrument .site-nav a[aria-current] { color: var(--fg); }
+.theme-instrument .site-nav a:active::after { transform: translateY(1px); box-shadow: var(--cap-down); }
+
+/* contact: an engraved email with a small black key, two round keys */
+.theme-instrument .links {
+  margin-top: 1.4rem; padding-top: 1.25rem;
+  border-top: 1px solid rgba(0, 0, 0, 0.5);
+  box-shadow: inset 0 1px 0 rgba(235, 219, 178, 0.06);
+  display: flex; flex-direction: column; align-items: flex-start;
+}
+.theme-instrument .email { font-size: 0.85rem; color: var(--fg2); text-shadow: var(--engrave); }
+.theme-instrument .copy, .theme-instrument .icon-links a {
+  display: grid; place-items: center; padding: 0; border: 0; border-radius: 50%;
+  color: var(--fg2); text-decoration: none;
+  background: var(--cap-face); box-shadow: var(--cap-up);
+  transition: color var(--fade-out), box-shadow 0.08s ease-out, transform 0.08s ease-out;
+}
+.theme-instrument .copy { width: 24px; height: 24px; margin-left: 0.3rem; color: var(--fg3); }
+.theme-instrument .copy svg { filter: drop-shadow(0 1px 0 rgba(0, 0, 0, 0.9)); }
+.theme-instrument .copy:hover { color: var(--fg); }
+.theme-instrument .copy.done { color: var(--yellow-bright); }
+.theme-instrument .copy.done svg { filter: drop-shadow(0 0 3px rgba(250, 189, 47, 0.8)); }
+.theme-instrument .copy:active, .theme-instrument .icon-links a:active { transform: translateY(1px); box-shadow: var(--cap-down); }
+.theme-instrument .icon-links { display: flex; gap: 0.9rem; margin: 1.1rem 0 0 0.3rem; }
+.theme-instrument .icon-links a { width: 42px; height: 42px; }
+.theme-instrument .icon-links svg { filter: drop-shadow(0 1px 0 rgba(0, 0, 0, 0.95)); }
+.theme-instrument .icon-links a:hover { color: var(--fg0); transition-duration: var(--fade-in); }
+
+/* ---------- main: the panel face ---------- */
+.theme-instrument main { min-width: 0; padding-top: 0.25rem; }
+
+/* the job-market lamp: an amber dome in a small bezel, glowing */
+.theme-instrument .market {
+  display: flex; align-items: center; gap: 0.85rem; padding-left: 0.25rem;
+  font: 500 0.72rem/1.5 var(--readout); letter-spacing: 0.14em; text-transform: uppercase;
+  color: var(--fg2); text-shadow: var(--engrave);
+}
+/* the Desk theme draws the line's span as a rubber stamp; here it is no box */
+.theme-instrument .stamp { display: contents; }
+.theme-instrument .dot {
+  width: 0.7rem; height: 0.7rem; margin: 0 0.3rem;
+  background: radial-gradient(circle at 36% 28%, var(--paper-bright) 0, var(--yellow-bright) 24%, var(--yellow) 66%, var(--yellow-deep) 100%);
+  box-shadow:
+    0 0 0 2px color-mix(in srgb, var(--deep) 70%, black),
+    0 0 0 3px var(--bg2),
+    0 0 0 4px rgba(0, 0, 0, 0.55),
+    0 1px 0 4px rgba(235, 219, 178, 0.07),
+    0 0 9px 2px rgba(250, 189, 47, 0.45),
+    0 0 22px 6px rgba(250, 189, 47, 0.16);
+}
+@media (prefers-reduced-motion: no-preference) { .theme-instrument .dot { animation: lamp 4s ease-in-out infinite; } }
+@keyframes lamp {
+  50% {
+    box-shadow:
+      0 0 0 2px color-mix(in srgb, var(--deep) 70%, black),
+      0 0 0 3px var(--bg2),
+      0 0 0 4px rgba(0, 0, 0, 0.55),
+      0 1px 0 4px rgba(235, 219, 178, 0.07),
+      0 0 7px 1px rgba(250, 189, 47, 0.3),
+      0 0 16px 4px rgba(250, 189, 47, 0.09);
+  }
+}
+
+/* silkscreened prose */
+.theme-instrument .lede { margin: 1.5rem 0 0.9rem; max-width: 36em; font-size: 1.15rem; line-height: 1.5; color: var(--fg2); --fg3: var(--fg2); --lift-hover: var(--fg0); }
+.theme-instrument .lede b { color: var(--fg); font-weight: 600; }
+.theme-instrument .fields { margin-bottom: 2.4rem; font-size: 0.85rem; color: var(--fg4); }
+
+.theme-instrument h2 { margin: 0 0 0.9rem 0.25rem; font: italic 400 1.2rem/1.3 var(--serif); color: var(--fg3); text-shadow: var(--engrave); }
+.theme-instrument section { margin-bottom: 2.6rem; }
+
+/* the display window: dark glass recessed into the plate, a bezel of its
+   own, a faint diagonal glare, and the amber readout warming it from within.
+   on the homepage it holds the job market paper's title, question, teaser
+   and coauthors; on the research page the title, coauthors and summary */
+.theme-instrument .glass {
+  position: relative; overflow: hidden;
+  padding: 1.9rem 2.1rem 1.8rem;
+  border-radius: 8px;
+  border: 1px solid color-mix(in srgb, var(--deep) 55%, black);
+  background: radial-gradient(70% 60% at 28% 52%, rgba(250, 189, 47, 0.05), transparent 70%), var(--glass-face);
+  box-shadow: var(--glass-rim);
+}
+.theme-instrument .glass::before {
+  content: ""; position: absolute; inset: 0; pointer-events: none;
+  background: linear-gradient(112deg, transparent 40%, rgba(235, 219, 178, 0.06) 47%, rgba(235, 219, 178, 0.05) 52%, transparent 60%);
+}
+.theme-instrument :is(.card, .research-jmp) h3 { font: 400 1.9rem/1.15 var(--serif); letter-spacing: -0.02em; color: var(--fg); text-wrap: balance; }
+.theme-instrument .question {
+  margin-top: 1.1rem; max-width: 34em;
+  font: 400 1.02rem/1.6 var(--readout); letter-spacing: 0.025em;
+  color: var(--yellow-bright);
+  text-shadow: 0 0 6px rgba(250, 189, 47, 0.5), 0 0 18px rgba(250, 189, 47, 0.22), 0 0 40px rgba(250, 189, 47, 0.1);
+}
+.theme-instrument .teaser { margin-top: 1.15rem; font-size: 0.875rem; line-height: 1.7; color: var(--fg3); }
+.theme-instrument .with { margin-top: 0.9rem; font-size: 0.75rem; line-height: 1.6; color: var(--fg3); }
+.theme-instrument .with a { color: var(--blue); }
+
+/* the paper key: a rectangular bakelite button under the window */
+.theme-instrument .text-link {
+  display: inline-flex; align-items: center; gap: 0.6em;
+  margin: 1.2rem 0 0 0.25rem; padding: 0.55rem 0.95rem 0.55rem 1.05rem;
+  border-radius: 6px; text-decoration: none;
+  font: 500 0.7rem/1 var(--readout); letter-spacing: 0.12em; text-transform: uppercase;
+  color: var(--fg2); text-shadow: var(--engrave);
+  background:
+    linear-gradient(180deg, rgba(235, 219, 178, 0.12), rgba(235, 219, 178, 0.02) 45%, transparent 55%),
+    linear-gradient(180deg, var(--bakelite-hi), var(--bakelite));
+  box-shadow: var(--cap-up);
+  transition: color var(--fade-out), box-shadow 0.08s ease-out, transform 0.08s ease-out;
+}
+.theme-instrument .text-link span { font-size: 1.1em; transition: transform 0.15s ease-out; }
+.theme-instrument .text-link:hover { color: var(--fg0); transition-duration: var(--fade-in); }
+.theme-instrument .text-link:active { transform: translateY(1px); box-shadow: var(--cap-down); }
+@media (hover: hover) and (prefers-reduced-motion: no-preference) {
+  .theme-instrument .text-link:hover span, .theme-instrument .research-download:hover span { transform: translate(0.1em, -0.1em); }
+}
+
+/* publications: rows between engraved lines, brass nameplates for the venues */
+.theme-instrument .papers { list-style: none; margin: 0; padding: 0; }
+.theme-instrument .papers li {
+  display: grid; grid-template-columns: 4.75rem minmax(0, 1fr); gap: 1.1rem; align-items: start;
+  padding: 1.25rem 0.25rem;
+  border-top: 1px solid rgba(0, 0, 0, 0.55);
+  box-shadow: inset 0 1px 0 rgba(235, 219, 178, 0.07);
+}
+.theme-instrument .papers li:last-child { border-bottom: 1px solid rgba(0, 0, 0, 0.55); box-shadow: inset 0 1px 0 rgba(235, 219, 178, 0.07), 0 1px 0 rgba(235, 219, 178, 0.07); }
+.theme-instrument .badge {
+  position: relative; display: inline-flex; justify-content: center; align-items: center;
+  width: 4.6rem; height: 1.5rem; margin-top: 0.1rem; border-radius: 3px;
+  font: 700 0.75rem/1 var(--sans); letter-spacing: 0.04em;
+  color: var(--ink2); text-shadow: 0 1px 0 rgba(251, 241, 199, 0.4);
+  background: linear-gradient(180deg, var(--yellow-bright), var(--yellow) 52%, var(--yellow-deep));
+  box-shadow:
+    inset 0 1px 0 rgba(251, 241, 199, 0.55),
+    inset 1px 0 0 rgba(251, 241, 199, 0.25),
+    inset -1px 0 0 rgba(0, 0, 0, 0.2),
+    inset 0 -1px 0 rgba(0, 0, 0, 0.35),
+    0 0 0 1px rgba(0, 0, 0, 0.55),
+    0 1px 2px rgba(0, 0, 0, 0.6);
+}
+.theme-instrument .badge::before, .theme-instrument .badge::after {
+  content: ""; position: absolute; top: 50%; width: 5px; height: 5px; margin-top: -2.5px; border-radius: 50%;
+  background:
+    linear-gradient(180deg, transparent 40%, rgba(0, 0, 0, 0.55) 40% 60%, transparent 60%),
+    radial-gradient(circle at 40% 35%, var(--paper-warm), var(--yellow-deep) 55%, var(--ink3));
+  box-shadow: inset 0 0 0 0.5px rgba(0, 0, 0, 0.55), 0 0.5px 0 rgba(251, 241, 199, 0.45);
+}
+.theme-instrument .badge::before { left: 5px; transform: rotate(35deg); }
+.theme-instrument .badge::after { right: 5px; transform: rotate(-20deg); }
+.theme-instrument .title { font-size: 1.05rem; font-weight: 500; line-height: 1.35; color: var(--fg); }
+.theme-instrument .venue { display: block; margin-top: 0.25rem; font-size: 0.9rem; color: var(--fg3); }
+.theme-instrument .venue em { color: var(--yellow-bright); font-weight: 400; }
+.theme-instrument .authors { display: block; margin-top: 0.1rem; font-size: 0.875rem; color: var(--fg4); }
+.theme-instrument .note { display: block; margin-top: 0.3rem; font-size: 0.78rem; color: var(--fg4); }
+.theme-instrument .more { margin: 1.2rem 0 0 0.25rem; font-size: 0.9rem; }
+.theme-instrument .more a { color: var(--fg3); text-shadow: var(--engrave); }
+.theme-instrument .more a:hover { color: var(--fg); text-decoration-color: rgb(204 36 29 / 0.9); }
+.theme-instrument .more span { display: inline-block; margin-left: 0.25em; transition: transform 0.15s ease-out; }
+@media (hover: hover) and (prefers-reduced-motion: no-preference) { .theme-instrument .more a:hover span { transform: translateX(0.2em); } }
+
+/* ---------- the research page: rows between engraved lines, the job market paper in its window ---------- */
+.theme-instrument .research-heading { margin: 0 0 2rem 0.25rem; font: 400 2.75rem/1.1 var(--serif); letter-spacing: -0.025em; color: var(--fg); text-shadow: var(--engrave); }
+.theme-instrument .research-section { margin-bottom: 2.6rem; }
+.theme-instrument .research-entry:not(.research-jmp) { padding: 1.35rem 0.25rem; border-top: 1px solid rgba(0, 0, 0, 0.55); box-shadow: inset 0 1px 0 rgba(235, 219, 178, 0.07); }
+.theme-instrument .research-entry:not(.research-jmp):last-of-type { border-bottom: 1px solid rgba(0, 0, 0, 0.55); box-shadow: inset 0 1px 0 rgba(235, 219, 178, 0.07), 0 1px 0 rgba(235, 219, 178, 0.07); }
+.theme-instrument .research-entry:not(.research-jmp) h3 { margin: 0; font-size: 1.1rem; font-weight: 500; line-height: 1.4; letter-spacing: -0.01em; text-wrap: pretty; color: var(--fg); }
+.theme-instrument .research-authors { margin: 0.5rem 0 0; font-size: 0.8125rem; line-height: 1.65; color: var(--fg4); }
+.theme-instrument .research-authors a { color: var(--blue); }
+.theme-instrument .research-venue { margin: 0.55rem 0 0; font-size: 0.875rem; line-height: 1.6; color: var(--fg3); }
+.theme-instrument .research-venue em { color: var(--fg0); font-weight: 600; }
+.theme-instrument .research-status { display: block; font-size: 0.8125rem; }
+.theme-instrument .research-summary { margin: 0.8rem 0 0; font-size: 0.9375rem; line-height: 1.7; color: var(--fg3); }
+.theme-instrument .research-note { margin: 0.6rem 0 0; font-size: 0.75rem; line-height: 1.65; color: var(--fg4); }
+/* the paper link and the abstract's toggle: small engraved panel labels */
+.theme-instrument .research-actions { display: flow-root; margin-top: 0.7rem; font: 500 0.68rem/1.5 var(--readout); letter-spacing: 0.12em; text-transform: uppercase; color: var(--fg3); text-shadow: var(--engrave); }
+.theme-instrument .research-download { float: left; margin-right: 1.5rem; padding: 0.6rem 0; }
+.theme-instrument .research-download:hover { color: var(--fg); }
+.theme-instrument .research-download span { display: inline-block; margin-left: 0.45em; font-size: 1.1em; transition: transform 0.15s ease-out; }
+.theme-instrument .research-abstract summary { width: fit-content; display: flex; align-items: center; gap: 0.6rem; padding: 0.6rem 0; list-style: none; cursor: pointer; }
+.theme-instrument .research-abstract summary::-webkit-details-marker { display: none; }
+.theme-instrument .research-abstract summary::before { content: ""; width: 0.35rem; height: 0.35rem; border-right: 1px solid currentColor; border-bottom: 1px solid currentColor; transform: translateY(-0.05rem) rotate(-45deg); }
+.theme-instrument .research-abstract[open] summary::before { transform: translateY(-0.15rem) rotate(45deg); }
+@media (prefers-reduced-motion: no-preference) { .theme-instrument .research-abstract summary::before { transition: transform 0.2s ease-out; } }
+.theme-instrument .research-abstract summary:hover, .theme-instrument .research-abstract[open] summary { color: var(--fg); }
+/* an open abstract shows in a smaller window of the same dark glass */
+.theme-instrument .abstract-text { clear: both; margin: 0.5rem 0 0.5rem; padding: 1rem 1.25rem; border-radius: 6px; border: 1px solid color-mix(in srgb, var(--deep) 55%, black); font: 0.875rem/1.8 var(--sans); letter-spacing: 0; text-transform: none; text-shadow: none; color: var(--fg3); background: var(--glass-face); box-shadow: var(--glass-rim); }
+.theme-instrument .abstract-text p { margin: 0; }
+.theme-instrument .research-jmp .research-authors { margin-top: 0.8rem; font-size: 0.75rem; color: var(--fg3); }
+.theme-instrument .research-jmp .research-summary { margin-top: 1.1rem; font-size: 0.875rem; }
+.theme-instrument .research-jmp .research-actions { margin: 1.1rem 0 0 0.25rem; }
+
+/* ---------- the fun page: the heading, then two sections of equal rank, research (the one line) and themes (the picker) ---------- */
+.theme-instrument .fun-heading { margin: 0 0 2rem; font: 400 2.75rem/1.1 var(--serif); letter-spacing: -0.025em; color: var(--fg); text-shadow: var(--engrave); }
+/* the one lit word */
+.theme-instrument .fun-heading em { color: var(--red-bright); text-shadow: 0 0 10px rgba(251, 73, 52, 0.35), 0 0 28px rgba(251, 73, 52, 0.15); }
+.theme-instrument :is(.fun-text, .themes-intro) { margin: 0 0 1.25rem 0.25rem; }
+/* the one prose link keeps a faint hairline at rest, so it reads as a link on the plate */
+.theme-instrument .fun-text a { text-decoration-color: rgba(235, 219, 178, 0.35); }
+/* one radio per theme in a bank of push buttons like the nav's, each with
+   its LED and its engraved label; the LED of the theme in use is lit. the
+   inputs stay in the page, unseen, so the keyboard and screen readers get
+   native radios */
+.theme-instrument .theme-picker { display: flex; flex-direction: column; gap: 0.25rem; width: fit-content; min-width: 20rem; max-width: 100%; margin: 0 0 0 0.25rem; padding: 0.75rem 1.5rem 0.75rem 0.9rem; border-radius: 8px; border: 1px solid rgba(0, 0, 0, 0.5); box-shadow: inset 0 1px 0 rgba(235, 219, 178, 0.05), 0 1px 0 rgba(235, 219, 178, 0.05); }
+.theme-instrument .theme-picker label { position: relative; display: grid; grid-template-columns: 8px 30px minmax(0, 1fr); column-gap: 1rem; align-items: center; padding: 0.35rem 0.4rem; border-radius: 6px; cursor: pointer; color: var(--fg3); text-shadow: var(--engrave); transition: color var(--fade-out); }
+.theme-instrument .theme-picker input { position: absolute; width: 1px; height: 1px; margin: 0; opacity: 0; pointer-events: none; }
+.theme-instrument .theme-picker label::before { content: ""; grid-column: 1; width: 8px; height: 8px; border-radius: 50%; background: var(--led-off); box-shadow: var(--led-off-shadow); }
+.theme-instrument .theme-picker label::after { content: ""; grid-column: 2; grid-row: 1; width: 30px; height: 30px; border-radius: 50%; background: var(--cap-face); box-shadow: var(--cap-up); transition: box-shadow 0.08s ease-out, transform 0.08s ease-out; }
+.theme-instrument .theme-picker .theme-name { grid-column: 3; grid-row: 1; font: 500 0.7rem/1.4 var(--readout); letter-spacing: 0.14em; text-transform: uppercase; }
+.theme-instrument .theme-picker label:hover { color: var(--fg); transition-duration: var(--fade-in); }
+.theme-instrument .theme-picker label:active::after { transform: translateY(1px); box-shadow: var(--cap-down); }
+.theme-instrument .theme-picker label:has(input:checked) { color: var(--fg); }
+.theme-instrument .theme-picker label:has(input:checked)::before { background: var(--led-on); box-shadow: var(--led-on-shadow); }
+.theme-instrument .theme-picker label:has(input:focus-visible) { outline: 2px solid var(--yellow-bright); outline-offset: 2px; }
+.theme-instrument .themes-note { margin: 1rem 0 0 0.25rem; font-size: 0.85rem; color: var(--fg4); text-shadow: var(--engrave); }
+
+/* ---------- narrower panels ---------- */
+@media (max-width: 1000px) { .theme-instrument :is(.card, .research-jmp) h3 { font-size: 1.7rem; } }
+@media (max-width: 820px) {
+  .theme-instrument body { padding: 1rem 0.75rem 2.5rem; }
+  .theme-instrument .page { grid-template-columns: 1fr; gap: 1.75rem; padding: 1.75rem 1.25rem 2.25rem; border-radius: 10px; }
+  .theme-instrument .screws span { width: 10px; height: 10px; }
+  .theme-instrument .screws span:nth-child(1) { top: 9px; left: 9px; }
+  .theme-instrument .screws span:nth-child(2) { top: 9px; right: 9px; }
+  .theme-instrument .screws span:nth-child(3) { bottom: 9px; left: 9px; }
+  .theme-instrument .screws span:nth-child(4) { bottom: 9px; right: 9px; }
+  .theme-instrument .side { position: relative; top: auto; display: grid; grid-template-columns: 6rem minmax(0, 1fr); column-gap: 1rem; align-items: start; padding: 1.1rem 1.1rem 1.2rem; }
+  .theme-instrument .portrait { width: 6rem; height: 6rem; padding: 6px; margin: 0; grid-row: span 3; }
+  .theme-instrument .portrait::before { inset: 6px; }
+  .theme-instrument .identity :is(h1, .profile-name) { font-size: 1.2rem; }
+  .theme-instrument .identity :is(h1, .profile-name) .last { white-space: normal; }
+  .theme-instrument .role { margin-top: 0.8rem; font-size: 0.85rem; }
+  .theme-instrument .edu { font-size: 0.72rem; }
+  .theme-instrument .site-nav, .theme-instrument .links { grid-column: 1 / -1; }
+  .theme-instrument .site-nav { margin-top: 1.25rem; }
+  .theme-instrument .links { margin-top: 1.2rem; padding-top: 1.1rem; }
+  .theme-instrument main { padding-top: 0; }
+  .theme-instrument .lede { font-size: 1.08rem; }
+  .theme-instrument .fields { margin-bottom: 2rem; }
+  .theme-instrument .glass { padding: 1.4rem 1.2rem 1.3rem; }
+  .theme-instrument :is(.card, .research-jmp) h3 { font-size: 1.5rem; }
+  .theme-instrument .question { font-size: 0.9rem; }
+  .theme-instrument .papers li { grid-template-columns: 4.6rem minmax(0, 1fr); gap: 0.8rem; padding: 1.1rem 0.1rem; }
+  .theme-instrument .research-entry:not(.research-jmp) { padding: 1.1rem 0.1rem; }
+  .theme-instrument .research-heading, .theme-instrument .fun-heading { margin-bottom: 1.5rem; font-size: 2.25rem; }
+  .theme-instrument .abstract-text { padding: 0.85rem 1rem; }
+  .theme-instrument .theme-picker { min-width: 0; padding: 0.7rem 1rem 0.7rem 0.6rem; }
+  .theme-instrument .theme-picker label { column-gap: 0.8rem; }
+}
+
+/* ------------------------------------------------------------------ */
+/* print / save as pdf: a white page, dark text, the panel put away;    */
+/* structure comes back as hairlines. research.html opens every         */
+/* abstract before printing                                             */
+/* ------------------------------------------------------------------ */
+@media print {
+  @page { margin: 1.5cm; }
+  :root { --bg: #fff; --fg: #000; --fg0: #000; --fg2: #1d2021; --fg3: #282828; --fg4: #3c3836; --bg1: #d5c4a1; --bg2: #bdae93; --bg3: #a89984; --blue: #076678; --yellow-bright: #3c3836; --red-bright: #9d0006; }
+  .theme-instrument body { min-height: 0; padding: 0; background: #fff; color: #000; -webkit-font-smoothing: auto; }
+  .theme-instrument body::before, .theme-instrument .page::before, .theme-instrument .screws, .theme-instrument .portrait::before, .theme-instrument .glass::before,
+  .theme-instrument .badge::before, .theme-instrument .badge::after,
+  .theme-instrument :is(.site-nav, .copy, .copied, .dot, .more, .photo-view, .skip-link, .theme-toggle) { display: none; }
+  .theme-instrument :is(.page, .side, .portrait, .glass, .copy, .icon-links a, .text-link, .papers li, .research-entry, .abstract-text, .theme-picker, .theme-picker label) { background: none !important; box-shadow: none !important; border: 0; transform: none !important; }
+  .theme-instrument * { text-shadow: none !important; }
+  .w { color: inherit; transition: none; }
+  /* the profile stacks above the main column: a small photo beside the text */
+  .theme-instrument .page { display: block; max-width: none; padding: 0; border-radius: 0; }
+  .theme-instrument .side { position: static; display: grid; grid-template-columns: 5rem minmax(0, 1fr); column-gap: 1rem; align-items: start; padding: 0 0 1.25rem; border-radius: 0; border-bottom: 1px solid var(--bg1); }
+  .theme-instrument .portrait { width: 5rem; height: 5rem; padding: 0; margin: 0; grid-row: span 3; border-radius: 4px; }
+  .theme-instrument .portrait img { border-radius: 4px; }
+  .theme-instrument .identity :is(h1, .profile-name) { color: #000; }
+  .theme-instrument .role { margin-top: 0.5rem; }
+  .theme-instrument .links { grid-column: 1 / -1; margin-top: 0; padding-top: 0.75rem; }
+  .theme-instrument .email { color: #000; }
+  .theme-instrument .icon-links { margin: 0.5rem 0 0; }
+  .theme-instrument .icon-links a { color: #000; }
+  .theme-instrument main { padding-top: 1.25rem; }
+  .theme-instrument .market { padding: 0; font: inherit; letter-spacing: 0; text-transform: none; color: var(--fg2); }
+  /* the window keeps a hairline frame; the readout keeps a bar */
+  .theme-instrument .glass { padding: 1.25rem 1.5rem; border: 1px solid var(--bg1); border-radius: 8px; overflow: visible; }
+  .theme-instrument .question { padding: 0.4rem 0 0.4rem 1rem; border-left: 2px solid var(--fg4); color: var(--fg2); font: inherit; font-size: 0.9375rem; letter-spacing: 0; }
+  .theme-instrument .text-link { margin-left: 0; padding: 0; font: inherit; font-size: 0.875rem; letter-spacing: 0; text-transform: none; color: #000; }
+  .theme-instrument h2 { margin-left: 1.5rem; break-after: avoid; color: #000; }
+  .theme-instrument .papers li, .theme-instrument .research-entry:not(.research-jmp) { padding: 1rem 1.5rem; border-top: 1px solid var(--bg1); }
+  .theme-instrument .papers li:last-child, .theme-instrument .research-entry:not(.research-jmp):last-of-type { border-bottom: 1px solid var(--bg1); }
+  .theme-instrument .badge { width: auto; height: auto; margin-top: 0.2rem; padding: 0.15rem 0.4rem; border: 1px solid #000; color: #000; }
+  .theme-instrument :is(.card, .research-jmp), .theme-instrument .papers li, .theme-instrument .research-entry { break-inside: avoid; }
+  .theme-instrument .research-heading { margin: 0 0 1.25rem 1.5rem; }
+  .theme-instrument .research-actions { font: inherit; font-size: 0.8125rem; letter-spacing: 0; text-transform: none; color: #000; }
+  .theme-instrument .research-abstract summary::before { display: none; }
+  .theme-instrument .research-abstract summary { padding: 0.3rem 0; }
+  .theme-instrument .abstract-text { margin: 0.25rem 0 0; padding: 0.2rem 0 0.2rem 1rem; border-left: 2px solid var(--bg2); border-radius: 0; }
+  .theme-instrument .theme-picker { margin: 0; padding: 0; }
+  .theme-instrument .theme-picker label::before, .theme-instrument .theme-picker label::after { display: none; }
+  .theme-instrument .theme-picker label { grid-template-columns: minmax(0, 1fr); padding: 0.35rem 0; color: #000; }
+  .theme-instrument .theme-picker .theme-name { grid-column: 1; }
+}

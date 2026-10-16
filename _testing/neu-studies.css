@@ -1,0 +1,618 @@
+/* Neumorphic homepage studies (neu-*.html). Independent of styles.css.
+   Gruvbox dark throughout: every surface is the page's own #282828, shaped
+   only by two shadows, a lamp up and to the left. Raised surfaces get a
+   lighter top-left and a darker bottom-right; pressed ones the reverse. */
+:root {
+  color-scheme: dark;
+  --bg: #282828;
+  --deep: #1d2021;
+  --bg1: #3c3836;
+  --bg2: #504945;
+  --bg3: #665c54;
+  --fg: #ebdbb2;
+  --fg2: #d5c4a1;
+  --fg3: #bdae93;
+  --fg4: #a89984;
+  --red: #cc241d;
+  --red-bright: #fb4934;
+  --yellow: #d79921;
+  --yellow-bright: #fabd2f;
+  --blue: #83a598;
+  --green-bright: #b8bb26;
+  --fg0: #fbf1c7;
+  --serif: Georgia, "Times New Roman", serif;
+  --sans: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  --mono: "Courier New", monospace;
+  /* the two lights */
+  --hi: #353331;
+  --lo: #191919;
+  --edge: inset 1px 1px 0 rgba(235, 219, 178, 0.05);
+  --raise: 9px 9px 20px var(--lo), -9px -9px 20px var(--hi);
+  --raise-sm: 4px 4px 10px var(--lo), -4px -4px 10px var(--hi);
+  --raise-lg: 14px 14px 34px var(--lo), -14px -14px 34px var(--hi);
+  --press: inset 5px 5px 12px var(--lo), inset -5px -5px 12px var(--hi);
+  --press-sm: inset 3px 3px 7px var(--lo), inset -3px -3px 7px var(--hi);
+  --convex: linear-gradient(145deg, #2c2b2a, #252424);
+  --concave: linear-gradient(145deg, #242323, #2c2b2a);
+  --fade-in: 0.2s;
+  --fade-out: 0.5s;
+}
+
+* { box-sizing: border-box; }
+html { scrollbar-color: var(--bg3) var(--bg); }
+body { margin: 0; background: var(--bg); color: var(--fg); font: 16px/1.55 var(--sans); -webkit-font-smoothing: antialiased; }
+a { color: inherit; text-decoration: underline; text-decoration-color: transparent; text-underline-offset: 0.18em; transition: color var(--fade-out), text-decoration-color var(--fade-out), box-shadow var(--fade-out); }
+a:hover { color: var(--fg); text-decoration-color: var(--red); transition-duration: var(--fade-in); }
+a:focus-visible, button:focus-visible, summary:focus-visible { outline: 2px solid var(--yellow-bright); outline-offset: 3px; }
+button { font: inherit; color: inherit; cursor: pointer; }
+::selection { background: var(--bg3); color: var(--fg0); }
+h1, h2, h3, p { margin: 0; }
+svg { display: block; fill: currentColor; }
+img { display: block; }
+.with a, .authors a, .note a { color: var(--blue); }
+.venue em { color: var(--fg); font-weight: 600; font-style: italic; }
+
+/* surfaces */
+.slab { background: var(--convex); border-radius: 28px; box-shadow: var(--raise), var(--edge); }
+.well { background: var(--concave); border-radius: 16px; box-shadow: var(--press); }
+.groove { height: 2px; border: 0; margin: 0; border-radius: 1px; background: linear-gradient(to bottom, var(--lo), var(--hi)); }
+
+/* keys: raised buttons that press in under the pointer */
+.key { display: inline-flex; align-items: center; justify-content: center; gap: 0.6em; padding: 0; border: 0; border-radius: 999px; background: var(--convex); color: var(--fg); box-shadow: var(--raise-sm), var(--edge); text-decoration: none; transition: box-shadow var(--fade-out), color var(--fade-out); }
+.key:hover { color: var(--fg); text-decoration-color: transparent; box-shadow: 6px 6px 14px var(--lo), -6px -6px 14px var(--hi), var(--edge); transition-duration: var(--fade-in); }
+.key:active { box-shadow: var(--press-sm); background: var(--concave); transition-duration: 0.05s; }
+.key.round { width: 2.75rem; height: 2.75rem; }
+.key.tiny { width: 2rem; height: 2rem; color: var(--fg4); }
+.key.tiny:hover { color: var(--fg); }
+.key.pill { padding: 0.65rem 1.25rem; font-size: 0.875rem; }
+.key.pill span { display: inline-block; transition: transform 0.15s ease-out; }
+.key .icon-copy { fill: none; stroke: currentColor; stroke-width: 1.3; }
+@media (hover: hover) and (prefers-reduced-motion: no-preference) {
+  .key.pill:hover span { transform: translate(0.12em, -0.12em); }
+  .key.pill.along:hover span { transform: translateX(0.2em); }
+}
+
+/* the job-market dot, breathing */
+.dot { width: 0.55rem; height: 0.55rem; border-radius: 50%; background: var(--yellow-bright); box-shadow: 0 0 0 4px color-mix(in srgb, var(--yellow-bright) 15%, transparent); flex-shrink: 0; }
+@media (prefers-reduced-motion: no-preference) { .dot { animation: breathe 4s ease-in-out infinite; } }
+@keyframes breathe { 50% { box-shadow: 0 0 0 6px color-mix(in srgb, var(--yellow-bright) 10%, transparent); } }
+
+/* journal badges: the venue is the signal, so it keeps its yellow fill, now a
+   raised chip rather than a flat tag */
+.badge { display: inline-block; padding: 0.3rem 0.75rem; border-radius: 999px; font-size: 0.72rem; font-weight: 700; letter-spacing: 0.06em; line-height: 1.4; text-align: center; color: #1d2021; background: linear-gradient(145deg, #f3b82f, #d49a1c); box-shadow: 3px 3px 8px var(--lo), -2px -2px 6px var(--hi), inset 1px 1px 0 rgba(255, 240, 200, 0.35); }
+
+/* floating menu to hop between the studies; ?clean hides it for screenshots */
+.proposal-menu { position: fixed; z-index: 5; right: 18px; bottom: 14px; font-size: 12px; }
+.proposal-menu summary { cursor: pointer; list-style: none; padding: 9px 14px; border-radius: 999px; color: var(--fg3); background: var(--convex); box-shadow: var(--raise-sm), var(--edge); }
+.proposal-menu summary::-webkit-details-marker { display: none; }
+.proposal-menu summary::after { content: " +"; color: var(--red-bright); }
+.proposal-menu[open] summary::after { content: " −"; }
+.proposal-menu nav { position: absolute; bottom: calc(100% + 10px); right: 0; width: 230px; padding: 10px; border-radius: 18px; background: var(--convex); box-shadow: var(--raise), var(--edge); }
+.proposal-menu nav a { display: block; padding: 8px 10px; border-radius: 10px; color: var(--fg3); text-decoration: none; }
+.proposal-menu nav a:hover { color: var(--fg); }
+.proposal-menu nav a[aria-current] { color: var(--yellow-bright); }
+html.clean-preview .proposal-menu { display: none; }
+
+/* ------------------------------------------------------------------ */
+/* 01 — Soft split: today's sidebar layout, every surface given depth   */
+/* ------------------------------------------------------------------ */
+.neu-split .layout { max-width: 68rem; margin: 0 auto; padding: 3rem 2rem 4rem; display: grid; grid-template-columns: 19rem minmax(0, 1fr); gap: 4rem; }
+.neu-split .side { position: sticky; top: 3rem; align-self: start; padding: 2.25rem 1.75rem 2rem; display: flex; flex-direction: column; }
+.neu-split .portrait { width: 10rem; height: 10rem; padding: 10px; border-radius: 50%; background: var(--concave); box-shadow: var(--press); margin-bottom: 1.5rem; }
+.neu-split .portrait img { width: 100%; height: 100%; border-radius: 50%; object-fit: cover; box-shadow: 3px 3px 8px var(--lo), -2px -2px 6px var(--hi); }
+.neu-split h1 { font-size: 1.3rem; line-height: 1.15; font-weight: 700; letter-spacing: -0.01em; }
+.neu-split h1 .last { display: block; white-space: nowrap; }
+.neu-split .nickname { margin-top: 0.5rem; color: var(--fg3); font-size: 0.8125rem; }
+.neu-split .nickname strong { color: var(--fg2); font-weight: 500; }
+.neu-split .role { margin-top: 1.4rem; color: var(--fg3); font-size: 0.9375rem; line-height: 1.6; }
+.neu-split .role strong { color: var(--fg); font-weight: normal; }
+.neu-split .edu { margin-top: 0.6rem; color: var(--fg3); font-size: 0.75rem; }
+.neu-split .site-nav { margin: 1.75rem -0.25rem 0; display: flex; flex-direction: column; gap: 0.45rem; }
+.neu-split .site-nav a { display: flex; align-items: center; gap: 0.7rem; padding: 0.55rem 0.95rem; border-radius: 999px; color: var(--fg3); text-decoration: none; transition: box-shadow var(--fade-out), color var(--fade-out); }
+.neu-split .site-nav a::before { content: ""; width: 0.4rem; height: 0.4rem; border-radius: 50%; background: var(--bg3); transition: background var(--fade-out); }
+.neu-split .site-nav a:hover { color: var(--fg); box-shadow: var(--raise-sm), var(--edge); transition-duration: var(--fade-in); }
+.neu-split .site-nav a:hover::before { background: var(--fg); }
+.neu-split .site-nav a[aria-current] { color: var(--fg); background: var(--concave); box-shadow: var(--press-sm); }
+.neu-split .site-nav a[aria-current]::before { background: var(--red-bright); }
+.neu-split .side .groove { margin: 1.75rem 0 1.5rem; }
+.neu-split .email-row { display: flex; align-items: center; gap: 0.6rem; }
+.neu-split .email { font-size: 0.875rem; }
+.neu-split .icon-links { display: flex; gap: 0.75rem; margin-top: 1.1rem; }
+.neu-split main { min-width: 0; padding-top: 0.25rem; }
+.neu-split .market { display: inline-flex; align-items: center; gap: 0.75rem; padding: 0.55rem 1.1rem 0.55rem 0.95rem; border-radius: 999px; font-size: 0.9rem; color: var(--fg2); background: var(--concave); box-shadow: var(--press-sm); }
+.neu-split .lede { margin: 1.6rem 0 1rem; max-width: 38em; font-size: 1.15rem; line-height: 1.5; color: var(--fg3); }
+.neu-split .lede b { color: var(--fg); font-weight: 500; }
+.neu-split .fields { margin-bottom: 2.75rem; font-size: 0.9rem; color: var(--fg4); }
+.neu-split h2 { margin: 0 0 1.1rem 0.5rem; font: italic 400 1.25rem/1.3 var(--serif); color: var(--fg3); }
+.neu-split section { margin-bottom: 3rem; }
+.neu-split .card { padding: 2rem 2.25rem 2.1rem; }
+.neu-split .card h3 { font: 400 2rem/1.15 var(--serif); letter-spacing: -0.025em; text-wrap: balance; }
+.neu-split .question { margin-top: 1.2rem; padding: 0.9rem 1.2rem; max-width: 550px; border-radius: 16px; color: var(--yellow-bright); font-size: 0.9375rem; line-height: 1.6; background: var(--concave); box-shadow: var(--press), inset 0 0 26px color-mix(in srgb, var(--yellow-bright) 5%, transparent); }
+.neu-split .teaser { margin-top: 1.2rem; color: var(--fg3); font-size: 0.875rem; line-height: 1.7; }
+.neu-split .with { margin-top: 1rem; color: var(--fg3); font-size: 0.75rem; line-height: 1.6; }
+.neu-split .card .key { margin-top: 1.5rem; }
+.neu-split .papers { list-style: none; margin: 0; padding: 0.5rem 2rem; }
+.neu-split .papers li { position: relative; padding: 1.35rem 0; display: grid; grid-template-columns: 4.5rem minmax(0, 1fr); gap: 1.1rem; align-items: start; }
+.neu-split .papers li + li::before { content: ""; position: absolute; left: 0; right: 0; top: 0; height: 2px; border-radius: 1px; background: linear-gradient(to bottom, var(--lo), var(--hi)); }
+.neu-split .papers .badge { display: block; margin-top: 0.15rem; padding-left: 0; padding-right: 0; }
+.neu-split .title { font-size: 1.07rem; font-weight: 500; line-height: 1.35; }
+.neu-split .venue { display: block; margin-top: 0.25rem; color: var(--fg4); font-size: 0.9rem; }
+.neu-split .authors { display: block; margin-top: 0.1rem; color: var(--fg4); font-size: 0.875rem; }
+.neu-split .note { display: block; margin-top: 0.3rem; color: var(--fg4); font-size: 0.78rem; }
+.neu-split .more { margin: 1.5rem 0 0 0.5rem; }
+@media (max-width: 1000px) { .neu-split .card h3 { font-size: 1.75rem; } }
+@media (max-width: 820px) {
+  .neu-split .layout { grid-template-columns: 1fr; gap: 2rem; padding: 1.5rem 1.25rem 3rem; }
+  .neu-split .side { position: static; display: grid; grid-template-columns: 7rem minmax(0, 1fr); column-gap: 1.25rem; padding: 1.5rem; }
+  .neu-split .portrait { width: 7rem; height: 7rem; padding: 7px; margin: 0; grid-row: span 4; }
+  .neu-split h1 .last { white-space: normal; }
+  .neu-split .site-nav, .neu-split .side .groove, .neu-split .email-row, .neu-split .icon-links { grid-column: 1 / -1; }
+  .neu-split .site-nav { flex-direction: row; flex-wrap: wrap; }
+  .neu-split .papers { padding: 0.25rem 1.25rem; }
+  .neu-split .card { padding: 1.5rem 1.4rem 1.6rem; }
+}
+
+/* ------------------------------------------------------------------ */
+/* 02 — Console: a nameplate with a segmented nav, then a deck of tiles */
+/* ------------------------------------------------------------------ */
+.neu-console .wrap { max-width: 66rem; margin: 0 auto; padding: 2.5rem 2rem 4rem; }
+.neu-console .plate { display: flex; align-items: center; gap: 1.5rem; padding: 1rem 1.1rem 1rem 1rem; border-radius: 999px; }
+.neu-console .puck { width: 4.5rem; height: 4.5rem; padding: 6px; border-radius: 50%; background: var(--concave); box-shadow: var(--press-sm); flex-shrink: 0; }
+.neu-console .puck img { width: 100%; height: 100%; border-radius: 50%; object-fit: cover; }
+.neu-console .who { flex: 1; min-width: 0; }
+.neu-console h1 { font-size: 1.25rem; font-weight: 700; letter-spacing: -0.01em; line-height: 1.2; }
+.neu-console .who p { margin-top: 0.2rem; color: var(--fg3); font-size: 0.8125rem; line-height: 1.5; }
+.neu-console .who p strong { color: var(--fg2); font-weight: 500; }
+.neu-console .seg { display: flex; gap: 0.25rem; padding: 0.3rem; border-radius: 999px; background: var(--concave); box-shadow: var(--press-sm); }
+.neu-console .seg a { padding: 0.55rem 1.1rem; border-radius: 999px; font-size: 0.875rem; color: var(--fg3); text-decoration: none; transition: color var(--fade-out), box-shadow var(--fade-out); }
+.neu-console .seg a:hover { color: var(--fg); }
+.neu-console .seg a[aria-current] { color: var(--red-bright); background: var(--convex); box-shadow: var(--raise-sm), var(--edge); }
+.neu-console .intro { margin: 3rem 0 2.5rem; padding: 0 1rem; }
+.neu-console .lede { font-size: 1.3rem; line-height: 1.45; color: var(--fg3); max-width: 34em; }
+.neu-console .lede b { color: var(--fg); font-weight: 500; }
+.neu-console .fields { margin-top: 0.9rem; font-size: 0.9rem; color: var(--fg4); }
+/* the status tile is a display rather than a key: pressed into the deck, lit faintly from within */
+.neu-console .status { grid-column: 3; grid-row: 1; justify-content: center; align-items: flex-start; gap: 1.25rem; border-radius: 28px; background: var(--concave); box-shadow: var(--press), inset 0 0 36px rgba(250, 189, 47, 0.035); }
+.neu-console .market { display: flex; align-items: center; gap: 0.75rem; font-size: 0.9rem; line-height: 1.5; color: var(--fg2); }
+.neu-console .deck { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 2rem; }
+.neu-console .tile { padding: 1.75rem 1.9rem 1.9rem; display: flex; flex-direction: column; min-width: 0; }
+.neu-console .label { font: italic 400 1rem/1.3 var(--serif); color: var(--fg3); margin-bottom: 0.9rem; }
+.neu-console .jmp { grid-column: 1 / 3; grid-row: 1 / 3; }
+.neu-console .jmp h2 { font: 400 2.1rem/1.15 var(--serif); letter-spacing: -0.025em; text-wrap: balance; }
+.neu-console .question { margin-top: 1.25rem; padding: 1rem 1.25rem; border-radius: 18px; color: var(--yellow-bright); font-size: 0.95rem; line-height: 1.6; background: var(--concave); box-shadow: var(--press), inset 0 0 28px rgba(250, 189, 47, 0.05); }
+.neu-console .teaser { margin-top: 1.2rem; color: var(--fg3); font-size: 0.875rem; line-height: 1.7; }
+.neu-console .with { margin-top: 1rem; color: var(--fg3); font-size: 0.75rem; line-height: 1.6; }
+.neu-console .foot { margin-top: auto; padding-top: 1.5rem; display: flex; gap: 0.75rem; flex-wrap: wrap; }
+.neu-console .pub .badge { align-self: flex-start; padding: 0.45rem 1rem; font-size: 0.95rem; letter-spacing: 0.08em; margin-bottom: 1.1rem; }
+.neu-console .pub h2 { font-size: 1.07rem; font-weight: 500; line-height: 1.35; }
+.neu-console .venue { margin-top: 0.5rem; color: var(--fg4); font-size: 0.875rem; }
+.neu-console .authors { margin-top: 0.2rem; color: var(--fg4); font-size: 0.8125rem; }
+.neu-console .note { margin-top: 0.4rem; color: var(--fg4); font-size: 0.78rem; }
+.neu-console .contact { grid-column: 3; grid-row: 2; justify-content: center; }
+.neu-console .contact .label { margin-bottom: 0.5rem; }
+.neu-console .contact .email { font-size: 0.95rem; overflow-wrap: anywhere; }
+.neu-console .contact .keys { display: flex; gap: 0.75rem; margin-top: 1.1rem; }
+.neu-console .more-tile { display: flex; align-items: center; justify-content: center; gap: 0.5rem; min-height: 5rem; border-radius: 28px; font-size: 1.05rem; color: var(--fg2); text-decoration: none; }
+.neu-console .more-tile span { display: inline-block; transition: transform 0.15s ease-out; }
+.neu-console .more-tile:hover { color: var(--fg); text-decoration-color: transparent; box-shadow: var(--raise-lg), var(--edge); transition-duration: var(--fade-in); }
+.neu-console .more-tile:active { box-shadow: var(--press); background: var(--concave); }
+@media (hover: hover) and (prefers-reduced-motion: no-preference) { .neu-console .more-tile:hover span { transform: translateX(0.25em); } }
+@media (max-width: 960px) {
+  .neu-console .wrap { padding: 1.5rem 1.25rem 3rem; }
+  .neu-console .plate { flex-wrap: wrap; border-radius: 32px; padding: 1.25rem; }
+  .neu-console .seg { width: 100%; justify-content: stretch; }
+  .neu-console .seg a { flex: 1; text-align: center; }
+  .neu-console .intro { margin: 2rem 0; padding: 0 0.5rem; }
+  .neu-console .deck { grid-template-columns: 1fr; gap: 1.5rem; }
+  .neu-console .jmp, .neu-console .status, .neu-console .contact { grid-column: auto; grid-row: auto; }
+  .neu-console .jmp h2 { font-size: 1.75rem; }
+  .neu-console .more-tile { padding: 1.1rem; min-height: 0; }
+}
+
+/* ------------------------------------------------------------------ */
+/* 03 — Letterpress: one sheet; depth from pressed type and grooves      */
+/* ------------------------------------------------------------------ */
+.neu-press .sheet { max-width: 44rem; margin: 0 auto; padding: 4rem 2rem 5rem; }
+.neu-press .masthead { display: grid; grid-template-columns: 8.5rem minmax(0, 1fr); gap: 2.25rem; align-items: center; }
+.neu-press .porthole { width: 8.5rem; height: 8.5rem; padding: 9px; border-radius: 50%; background: var(--concave); box-shadow: var(--press); }
+.neu-press .porthole img { width: 100%; height: 100%; border-radius: 50%; object-fit: cover; }
+.neu-press h1 { font: 400 2.75rem/1.05 var(--serif); letter-spacing: -0.02em; color: var(--fg2); text-shadow: 1px 1px 0 rgba(235, 219, 178, 0.1), -1px -1px 0 rgba(0, 0, 0, 0.7); }
+.neu-press h1 .last { display: block; }
+.neu-press h1 a, .neu-press h1 a:hover { text-decoration: none; }
+.neu-press h1 a:hover { color: var(--fg); }
+.neu-press .nickname { margin-top: 0.55rem; color: var(--fg3); font-size: 0.8125rem; }
+.neu-press .nickname strong { color: var(--fg2); font-weight: 500; }
+.neu-press .role { margin-top: 0.9rem; color: var(--fg3); font-size: 0.9375rem; line-height: 1.55; }
+.neu-press .role strong { color: var(--fg); font-weight: normal; }
+.neu-press .edu { margin-top: 0.35rem; color: var(--fg4); font-size: 0.8rem; }
+.neu-press .sheet > .groove { margin: 2.5rem 0 0; }
+.neu-press .toprow { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 0.75rem 1.5rem; padding: 1rem 0.25rem; }
+.neu-press .site-nav { display: flex; gap: 1.75rem; font-size: 0.9rem; }
+.neu-press .site-nav a { display: flex; align-items: center; gap: 0.55rem; color: var(--fg3); text-decoration: none; }
+.neu-press .site-nav a::before { content: ""; width: 0.7rem; height: 0.7rem; border-radius: 50%; background: var(--concave); box-shadow: var(--press-sm); transition: background var(--fade-out); }
+.neu-press .site-nav a:hover::before { background: var(--bg3); }
+.neu-press .site-nav a[aria-current] { color: var(--fg); }
+.neu-press .site-nav a[aria-current]::before { background: var(--red-bright); box-shadow: inset 1px 1px 2px rgba(0, 0, 0, 0.5), 0 0 0 3px rgba(251, 73, 52, 0.12); }
+.neu-press .market { display: flex; align-items: center; gap: 0.7rem; font-size: 0.875rem; color: var(--fg2); }
+.neu-press .lede { margin-top: 2.75rem; font: 400 1.5rem/1.45 var(--serif); color: var(--fg2); }
+.neu-press .lede b { color: var(--fg); font-weight: 500; }
+.neu-press .fields { margin-top: 0.9rem; font-size: 0.9rem; color: var(--fg4); }
+.neu-press section { margin-top: 3.25rem; }
+.neu-press h2 { font: 700 0.78rem/1.4 var(--sans); letter-spacing: 0.14em; text-transform: uppercase; color: var(--fg4); text-shadow: 1px 1px 0 rgba(235, 219, 178, 0.08), -1px -1px 0 rgba(0, 0, 0, 0.6); margin-bottom: 1.5rem; }
+.neu-press .jmp h3 { font: 400 2.25rem/1.15 var(--serif); letter-spacing: -0.025em; text-wrap: balance; }
+/* the question is the page's one raised thing: a pillow under the lamp */
+.neu-press .question { margin-top: 1.5rem; padding: 1.1rem 1.4rem; border-radius: 22px; color: var(--yellow-bright); font: italic 400 1.1rem/1.5 var(--serif); background: var(--convex); box-shadow: var(--raise), var(--edge), 0 0 44px rgba(250, 189, 47, 0.04); }
+.neu-press .teaser { margin-top: 1.5rem; color: var(--fg3); font-size: 0.95rem; line-height: 1.7; }
+.neu-press .with { margin-top: 1rem; color: var(--fg3); font-size: 0.8rem; line-height: 1.6; }
+.neu-press .text-link { display: inline-block; margin-top: 1.4rem; padding-bottom: 5px; font-size: 0.875rem; background: linear-gradient(to bottom, var(--lo), var(--hi)) bottom / 100% 2px no-repeat; }
+.neu-press .text-link span { display: inline-block; margin-left: 0.45em; transition: transform 0.15s ease-out; }
+.neu-press .text-link:hover { text-decoration-color: transparent; }
+@media (hover: hover) and (prefers-reduced-motion: no-preference) {
+  .neu-press .text-link:hover span { transform: translate(0.12em, -0.12em); }
+  .neu-press .more a:hover span { transform: translateX(0.2em); }
+}
+.neu-press .papers { list-style: none; margin: 0; padding: 0; }
+.neu-press .papers li { padding: 1.5rem 0; display: grid; grid-template-columns: 5rem minmax(0, 1fr); gap: 1.25rem; }
+.neu-press .papers li + li { background: linear-gradient(to bottom, var(--lo), var(--hi)) top / 100% 2px no-repeat; }
+/* venue as pressed yellow type, a step below the question's bright yellow */
+.neu-press .papers .badge { display: block; padding: 0.15rem 0 0; background: none; box-shadow: none; text-align: left; font-size: 1.05rem; letter-spacing: 0.06em; color: var(--yellow); text-shadow: -1px -1px 0 rgba(0, 0, 0, 0.6), 1px 1px 0 rgba(255, 230, 160, 0.14); }
+.neu-press .title { font-size: 1.1rem; font-weight: 500; line-height: 1.4; }
+.neu-press .venue { display: block; margin-top: 0.3rem; color: var(--fg4); font-size: 0.9rem; }
+.neu-press .authors { display: block; margin-top: 0.1rem; color: var(--fg4); font-size: 0.875rem; }
+.neu-press .note { display: block; margin-top: 0.3rem; color: var(--fg4); font-size: 0.78rem; }
+.neu-press .more { margin-top: 1.5rem; font-size: 0.95rem; }
+.neu-press .more a { color: var(--fg3); }
+.neu-press .more span { display: inline-block; margin-left: 0.25em; transition: transform 0.15s ease-out; }
+.neu-press .footrow { display: flex; flex-wrap: wrap; align-items: center; gap: 1rem 1.25rem; padding: 1.5rem 0.25rem 0; font-size: 0.875rem; color: var(--fg3); }
+.neu-press .footrow .email { color: var(--fg); }
+.neu-press .footrow .copy { width: 1.9rem; height: 1.9rem; border-radius: 50%; border: 0; display: inline-flex; align-items: center; justify-content: center; color: var(--fg4); background: var(--concave); box-shadow: var(--press-sm); }
+.neu-press .footrow .copy svg { fill: none; stroke: currentColor; stroke-width: 1.3; }
+.neu-press .footrow .copy:hover { color: var(--fg); }
+.neu-press .footrow .icon-links { display: flex; gap: 0.6rem; margin-left: auto; }
+.neu-press .footrow .icon-links a { width: 2.6rem; height: 2.6rem; border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; color: var(--fg3); background: var(--concave); box-shadow: var(--press-sm); text-decoration: none; }
+.neu-press .footrow .icon-links a:hover { color: var(--fg); }
+@media (max-width: 640px) {
+  .neu-press .sheet { padding: 2.5rem 1.25rem 4rem; }
+  .neu-press .masthead { grid-template-columns: 1fr; gap: 1.5rem; }
+  .neu-press .porthole { width: 6.5rem; height: 6.5rem; }
+  .neu-press h1 { font-size: 2.25rem; }
+  .neu-press .lede { font-size: 1.3rem; }
+  .neu-press .jmp h3 { font-size: 1.85rem; }
+  .neu-press .papers li { grid-template-columns: 1fr; gap: 0.5rem; }
+}
+
+/* ------------------------------------------------------------------ */
+/* 04 — Bento: a grid of tiles with mixed depth                         */
+/* ------------------------------------------------------------------ */
+.neu-bento .grid { max-width: 72rem; margin: 0 auto; padding: 2.5rem 2rem 4rem; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 1.75rem; grid-template-areas: "id status status" "id jmp jmp" "aer jpube contact"; }
+.neu-bento .tile { padding: 1.75rem; border-radius: 26px; display: flex; flex-direction: column; min-width: 0; transition: box-shadow var(--fade-out); }
+@media (hover: hover) { .neu-bento .tile:hover { box-shadow: var(--raise-lg), var(--edge); transition-duration: var(--fade-in); } }
+.neu-bento .id { grid-area: id; }
+.neu-bento .status { grid-area: status; }
+.neu-bento .jmp { grid-area: jmp; }
+.neu-bento .aer { grid-area: aer; }
+.neu-bento .jpube { grid-area: jpube; }
+.neu-bento .contact { grid-area: contact; }
+.neu-bento .frame { width: 11.5rem; max-width: 100%; padding: 10px; border-radius: 20px; background: var(--concave); box-shadow: var(--press); margin-bottom: 1.5rem; }
+.neu-bento .frame img { width: 100%; height: auto; aspect-ratio: 1; border-radius: 12px; object-fit: cover; }
+.neu-bento h1 { font-size: 1.4rem; line-height: 1.15; font-weight: 700; letter-spacing: -0.01em; }
+.neu-bento h1 .last { display: block; }
+.neu-bento .nickname { margin-top: 0.5rem; color: var(--fg3); font-size: 0.8125rem; }
+.neu-bento .nickname strong { color: var(--fg2); font-weight: 500; }
+.neu-bento .role { margin-top: 1.4rem; color: var(--fg3); font-size: 0.9375rem; line-height: 1.6; }
+.neu-bento .role strong { color: var(--fg); font-weight: normal; }
+.neu-bento .edu { margin-top: 0.6rem; color: var(--fg3); font-size: 0.75rem; }
+.neu-bento .label { font: italic 400 1rem/1.3 var(--serif); color: var(--fg3); margin-bottom: 0.9rem; }
+.neu-bento .market { display: flex; align-items: center; gap: 0.75rem; font-size: 0.875rem; color: var(--fg2); }
+.neu-bento .lede { margin-top: 1rem; font-size: 1.2rem; line-height: 1.45; color: var(--fg3); }
+.neu-bento .lede b { color: var(--fg); font-weight: 500; }
+.neu-bento .fields { margin-top: 0.9rem; font-size: 0.875rem; color: var(--fg4); }
+.neu-bento .site-nav { display: flex; flex-direction: column; gap: 0.7rem; margin-top: auto; padding-top: 1.75rem; }
+.neu-bento .site-nav a { display: flex; align-items: center; justify-content: space-between; padding: 0.75rem 1.15rem; border-radius: 999px; color: var(--fg3); text-decoration: none; background: var(--convex); box-shadow: var(--raise-sm), var(--edge); transition: color var(--fade-out), box-shadow var(--fade-out); }
+.neu-bento .site-nav a::after { content: "→"; color: var(--fg4); }
+.neu-bento .site-nav a:hover { color: var(--fg); box-shadow: 6px 6px 14px var(--lo), -6px -6px 14px var(--hi), var(--edge); transition-duration: var(--fade-in); }
+.neu-bento .site-nav a:active { box-shadow: var(--press-sm); background: var(--concave); }
+.neu-bento .site-nav a[aria-current] { color: var(--fg); background: var(--concave); box-shadow: var(--press-sm); }
+.neu-bento .site-nav a[aria-current]::after { content: "●"; color: var(--red-bright); font-size: 0.6em; }
+.neu-bento .jmp h2 { font: 400 2.1rem/1.15 var(--serif); letter-spacing: -0.025em; text-wrap: balance; }
+.neu-bento .question { margin-top: 1.25rem; padding: 1rem 1.25rem; max-width: 560px; border-radius: 18px; color: var(--yellow-bright); font-size: 0.95rem; line-height: 1.6; background: var(--concave); box-shadow: var(--press), inset 0 0 28px rgba(250, 189, 47, 0.05); }
+.neu-bento .teaser { margin-top: 1.2rem; color: var(--fg3); font-size: 0.875rem; line-height: 1.7; }
+.neu-bento .with { margin-top: 1rem; color: var(--fg3); font-size: 0.75rem; line-height: 1.6; }
+.neu-bento .foot { margin-top: auto; padding-top: 1.5rem; display: flex; gap: 0.75rem; flex-wrap: wrap; align-items: center; }
+.neu-bento .pub .badge { align-self: flex-start; margin-bottom: 1rem; }
+.neu-bento .pub h2 { font-size: 1.05rem; font-weight: 500; line-height: 1.4; }
+.neu-bento .venue { margin-top: 0.5rem; color: var(--fg4); font-size: 0.875rem; }
+.neu-bento .authors { margin-top: 0.2rem; color: var(--fg4); font-size: 0.8125rem; }
+.neu-bento .note { margin-top: 0.4rem; color: var(--fg4); font-size: 0.78rem; }
+.neu-bento .email-row { display: flex; align-items: center; gap: 0.6rem; flex-wrap: wrap; }
+.neu-bento .email { font-size: 0.9rem; }
+.neu-bento .icon-links { display: flex; gap: 0.75rem; margin-top: 1.1rem; }
+@media (max-width: 1000px) {
+  .neu-bento .grid { grid-template-columns: repeat(2, minmax(0, 1fr)); grid-template-areas: "id status" "id contact" "jmp jmp" "aer jpube"; }
+}
+@media (max-width: 680px) {
+  .neu-bento .grid { grid-template-columns: 1fr; gap: 1.25rem; padding: 1.25rem 1rem 3rem; grid-template-areas: "id" "status" "jmp" "aer" "jpube" "contact"; }
+  .neu-bento .tile { padding: 1.4rem; }
+  .neu-bento .id { display: grid; grid-template-columns: 6rem minmax(0, 1fr); column-gap: 1.1rem; align-items: start; }
+  .neu-bento .frame { grid-row: span 4; margin: 0; padding: 6px; border-radius: 14px; }
+  .neu-bento .site-nav { grid-column: 1 / -1; flex-direction: row; flex-wrap: wrap; padding-top: 1.25rem; }
+  .neu-bento .site-nav a { flex: 1; gap: 0.5rem; }
+  .neu-bento .frame img { border-radius: 9px; }
+  .neu-bento .role { margin-top: 0.6rem; }
+  .neu-bento .jmp h2 { font-size: 1.7rem; }
+}
+
+/* ------------------------------------------------------------------ */
+/* the comparison page                                                  */
+/* ------------------------------------------------------------------ */
+.neu-gallery .page { max-width: 72rem; margin: 0 auto; padding: 3rem 2rem 4rem; }
+.neu-gallery .eyebrow { font: 12px/1.5 var(--mono); letter-spacing: 0.11em; text-transform: uppercase; color: var(--fg4); }
+.neu-gallery h1 { margin-top: 0.75rem; font: 400 2.5rem/1.1 var(--serif); letter-spacing: -0.02em; }
+.neu-gallery .intro { margin: 1rem 0 2.5rem; max-width: 60ch; color: var(--fg3); }
+.neu-gallery .design-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 2.5rem; }
+.neu-gallery .design { padding: 1.25rem 1.25rem 1.5rem; display: flex; flex-direction: column; gap: 0.9rem; }
+.neu-gallery .preview-image { display: block; padding: 8px; border-radius: 20px; background: var(--concave); box-shadow: var(--press); }
+.neu-gallery .preview-image img { width: 100%; height: auto; border-radius: 13px; }
+.neu-gallery .design-heading { display: flex; align-items: baseline; gap: 0.75rem; flex-wrap: wrap; margin-top: 0.5rem; }
+.neu-gallery h2 { font: 400 1.5rem/1.2 var(--serif); }
+.neu-gallery .design-number { font: 13px var(--mono); color: var(--red-bright); margin-right: 0.6rem; }
+.neu-gallery .recommended { font: 11px/1.4 var(--mono); letter-spacing: 0.08em; text-transform: uppercase; color: var(--yellow-bright); }
+.neu-gallery .design p { color: var(--fg3); font-size: 0.95rem; }
+.neu-gallery .tradeoff strong { color: var(--fg); font-weight: 600; }
+.neu-gallery .design-keys { display: flex; flex-wrap: wrap; gap: 0.75rem; margin-top: 0.25rem; }
+@media (max-width: 800px) { .neu-gallery .design-grid { grid-template-columns: 1fr; } .neu-gallery .page { padding: 2rem 1.25rem 3rem; } }
+
+/* ------------------------------------------------------------------ */
+/* 01b — Soft split, revised: three changes layered over 01             */
+/* ------------------------------------------------------------------ */
+/* 1. depth hierarchy: the job market card is the tallest object on the page,
+      the publications lie flat between grooves, keys stay low */
+.neu-split-v2 .card { position: relative; padding-top: 2.4rem; box-shadow: var(--raise-lg), var(--edge); }
+.neu-split-v2 .papers { padding: 0 0.5rem; }
+.neu-split-v2 .papers li { padding: 1.25rem 0; }
+.neu-split-v2 .papers li::before,
+.neu-split-v2 .papers li:last-child::after { content: ""; position: absolute; left: 0; right: 0; height: 2px; border-radius: 1px; background: linear-gradient(to bottom, var(--lo), var(--hi)); }
+.neu-split-v2 .papers li::before { top: 0; }
+.neu-split-v2 .papers li:last-child::after { bottom: 0; }
+
+/* 2. a muted red rule, set into the card's surface just below its top edge
+      and aligned with the text inset: the dim Gruvbox red at part opacity, its
+      ends fading out so nothing cuts the soft surface. on hover it brightens to
+      the live site's reflective gradient and a trace of red bleeds a few pixels
+      down into the card */
+.neu-split-v2 .card { --jmp-border-opacity: 0; --jmp-border-fade: 0.6s; }
+.neu-split-v2 .card::before,
+.neu-split-v2 .card::after { content: ""; position: absolute; pointer-events: none; left: 2.25rem; right: 2.25rem; top: 0.875rem; -webkit-mask-image: linear-gradient(90deg, transparent, #000 12%, #000 88%, transparent); mask-image: linear-gradient(90deg, transparent, #000 12%, #000 88%, transparent); }
+.neu-split-v2 .card::before { height: 2px; background: rgba(204, 36, 29, 0.65); }
+.neu-split-v2 .card::after { height: 10px; opacity: var(--jmp-border-opacity); transition: opacity var(--jmp-border-fade) ease;
+  background:
+    linear-gradient(100deg, #ce3829 0%, #ed5038 18%, #fa895b 38%, #f36242 54%, #d43b2b 80%, #c93125 100%) top / 100% 2px no-repeat,
+    linear-gradient(to bottom, rgb(251 73 52 / 0.19), rgb(251 73 52 / 0.05) 45%, rgb(251 73 52 / 0)) 0 2px / 100% 8px no-repeat; }
+.neu-split-v2 .card:focus-within, html.preview-hover .neu-split-v2 .card { --jmp-border-opacity: 1; --jmp-border-fade: 0.35s; }
+@media (hover: hover) { .neu-split-v2 .card:hover { --jmp-border-opacity: 1; --jmp-border-fade: 0.35s; } }
+@media (prefers-reduced-motion: reduce) { .neu-split-v2 .card::after { transition: none; } }
+
+/* the sidebar keeps 01's compact height; the contact block is grouped but
+      spaced as there */
+.neu-split-v2 .side .contact { padding-top: 1.75rem; display: flex; flex-direction: column; align-items: flex-start; }
+.neu-split-v2 .side .groove { width: 100%; margin: 0 0 1.5rem; }
+
+/* 3. "all research" as a quiet text link; the paper key is the one button */
+.neu-split-v2 .more { margin: 1.25rem 0 0 0.5rem; font-size: 0.95rem; }
+.neu-split-v2 .more a { color: var(--fg3); }
+.neu-split-v2 .more span { display: inline-block; margin-left: 0.25em; transition: transform 0.15s ease-out; }
+@media (hover: hover) and (prefers-reduced-motion: no-preference) { .neu-split-v2 .more a:hover span { transform: translateX(0.2em); } }
+
+@media (max-width: 820px) {
+  .neu-split-v2 .side .contact { grid-column: 1 / -1; padding-top: 1.5rem; }
+  .neu-split-v2 .side .groove { margin-bottom: 1.25rem; }
+  .neu-split-v2 .card { padding-top: 2rem; }
+  .neu-split-v2 .card::before, .neu-split-v2 .card::after { left: 1.4rem; right: 1.4rem; top: 0.75rem; }
+}
+
+/* ------------------------------------------------------------------ */
+/* 01c — Soft split, ported: 01b plus the rest of the proposals         */
+/* ------------------------------------------------------------------ */
+/* the light: the top-left highlight a step brighter, the edge catch a
+   little stronger, raised surfaces a shade lighter where the lamp hits
+   them, and a faint vignette on the page toward the lamp */
+.neu-split-v3 { --hi: #3c3836; --edge: inset 1px 1px 0 rgba(235, 219, 178, 0.08); --convex: linear-gradient(145deg, #2d2c2b, #252424); --concave: linear-gradient(145deg, #242323, #2d2c2b); background: var(--bg) radial-gradient(1200px 800px at 0 0, #2e2d2c, rgba(46, 45, 44, 0) 70%) no-repeat; }
+
+/* section labels and the flat rows share the card's text inset, so the
+   column has two alignments: page things at the edge, card things inset */
+.neu-split-v3 h2 { margin-left: 2.25rem; }
+.neu-split-v3 .papers { padding: 0; }
+.neu-split-v3 .papers li { padding: 1.25rem 2.25rem; }
+.neu-split-v3 .more { margin-left: 2.25rem; }
+
+/* the portrait is a button that opens the larger photo: larger than in 01,
+   centred in the panel, a little short of its inner width so the ring has
+   room to read as pressed. the photo leans in a hair and lifts off its ring
+   under the pointer */
+.neu-split-v3 .portrait { display: block; width: 13.5rem; height: 13.5rem; padding: 12px; margin: 0 auto 1.6rem; border: 0; font: inherit; cursor: zoom-in; isolation: isolate; }
+/* the taller panel outgrows a laptop window: there it scrolls with the page
+   rather than sticking with its foot clipped, as on the live site */
+@media (min-width: 821px) and (max-height: 900px) { .neu-split-v3 .side { position: relative; top: auto; } }
+.neu-split-v3 .portrait img { transition: transform 0.4s ease-out, box-shadow 0.4s ease-out; }
+@media (hover: hover) and (prefers-reduced-motion: no-preference) {
+  .neu-split-v3 .portrait:hover img { transform: scale(1.04); box-shadow: 6px 6px 14px var(--lo), -5px -5px 12px var(--hi); }
+}
+.neu-split-v3 .portrait:focus-visible { outline: 2px solid var(--yellow-bright); outline-offset: 3px; }
+.neu-split-v3 .profile-name { margin: 0; font-size: 1.3rem; line-height: 1.15; font-weight: 700; letter-spacing: -0.01em; }
+.neu-split-v3 .profile-name .last { display: block; white-space: nowrap; }
+
+/* copy-email key, revealed by the page script. a successful copy presses
+   the key in and swaps the clipboard for a check that draws itself */
+.neu-split-v3 .email-row { position: relative; }
+.neu-split-v3 .copy[hidden] { display: none; }
+.neu-split-v3 .copy .icon-check { fill: none; stroke: currentColor; stroke-width: 1.5; stroke-linecap: round; stroke-linejoin: round; }
+.neu-split-v3 .copy:not(.done) .icon-check, .neu-split-v3 .copy.done .icon-copy { display: none; }
+.neu-split-v3 .copy.done { color: var(--yellow-bright); background: var(--concave); box-shadow: var(--press-sm); }
+@media (prefers-reduced-motion: no-preference) { .neu-split-v3 .copy.done .icon-check path { stroke-dasharray: 1 2; animation: check-draw 0.25s ease-out both; } }
+@keyframes check-draw { from { stroke-dashoffset: 1.1; } to { stroke-dashoffset: 0; } }
+.neu-split-v3 .copied { position: absolute; right: 0; bottom: calc(100% + 4px); font-size: 0.75rem; line-height: 1.5; white-space: nowrap; color: var(--yellow-bright); }
+.neu-split-v3 .copied:not(:empty) { padding: 0.1rem 0.55rem; border-radius: 999px; background: var(--convex); box-shadow: var(--raise-sm), var(--edge); }
+.neu-split-v3 .copy.done + .copied { width: 1px; height: 1px; padding: 0; overflow: hidden; clip-path: inset(50%); }
+
+/* text links: the hover underline used to be the browser's default, which
+   under the 2rem title came out two to three pixels thick, well below the
+   baseline, split around descenders, in the red at full strength. now
+   every link is a hairline at most, and the text links are engraved:
+   titles carry a faint groove at rest (a dark cut, the lamp catching its
+   lower lip; the same two-tone line that divides the publications), so a
+   title says it is a link before anyone hovers, and under the pointer the
+   dim red seeps into the groove as ink. the lines are backgrounds painted
+   behind the glyphs, so descenders sit over the cut rather than breaking
+   it. prose links are not engraved at rest; groove and ink arrive together
+   on hover. the colours are registered properties so they can fade; where
+   @property is unknown they still switch, just at once */
+@property --ink { syntax: "<color>"; inherits: false; initial-value: transparent; }
+@property --cut { syntax: "<color>"; inherits: false; initial-value: transparent; }
+@property --lit { syntax: "<color>"; inherits: false; initial-value: transparent; }
+.neu-split-v3 a { text-decoration-thickness: 1px; text-underline-offset: 0.12em; }
+.neu-split-v3 :is(.card h3, .research-entry h3) a,
+.neu-split-v3 :is(.title, .email, .more a, .with a, .authors a, .note a, .research-authors a, .research-note a, .research-download) {
+  text-decoration: none; --ink: transparent; --cut: transparent; --lit: transparent;
+  background-image: linear-gradient(var(--ink), var(--ink)), linear-gradient(var(--cut), var(--cut)), linear-gradient(var(--lit), var(--lit));
+  background-repeat: no-repeat; background-origin: content-box; background-size: 100% 1px;
+  background-position: 0 calc(100% - 0.1em), 0 calc(100% - 0.1em), 0 calc(100% - 0.1em + 1px);
+  transition: --ink var(--fade-out), --cut var(--fade-out), --lit var(--fade-out), color var(--fade-out); }
+/* engraved at rest: the titles, and the one prose link whose text is too
+   muted to read as a link on its own */
+.neu-split-v3 :is(.card h3, .research-entry h3) a, .neu-split-v3 a.title, .neu-split-v3 .research-note a { --cut: var(--lo); --lit: var(--hi); }
+.neu-split-v3 :is(.card h3, .research-entry h3) a:hover,
+.neu-split-v3 :is(.title, .email, .more a, .with a, .authors a, .note a, .research-authors a, .research-note a, .research-download):hover,
+html.preview-hover .neu-split-v3 :is(.card h3, .research-entry h3) a,
+html.preview-hover .neu-split-v3 :is(.title, .email, .more a, .with a, .authors a, .note a, .research-authors a, .research-note a, .research-download) {
+  --ink: var(--link-ink, rgb(204 36 29 / 0.9)); --cut: var(--lo); --lit: var(--hi); transition-duration: var(--fade-in); }
+/* the title also lifts a step brighter, so the line is not doing the whole job */
+.neu-split-v3 :is(.card h3, .research-entry h3) a:hover, .neu-split-v3 .title:hover,
+html.preview-hover .neu-split-v3 :is(.card h3, .research-entry h3) a, html.preview-hover .neu-split-v3 .title { color: var(--fg0); }
+
+/* enlarged photo: a modal over the dimmed page, as on the live site */
+.photo-view[open] { box-sizing: border-box; display: grid; place-items: center; width: 100%; height: 100%; max-width: none; max-height: none; margin: 0; padding: 1.25rem; border: 0; background: none; cursor: zoom-out; animation: photo-fade 0.15s ease-out; }
+.photo-view::backdrop { background: rgba(29, 32, 33, 0.92); animation: photo-fade 0.15s ease-out; }
+.photo-view img { box-sizing: border-box; display: block; width: min(100%, 85vh * 2 / 3); width: min(100%, 85svh * 2 / 3); height: auto; border-radius: 14px; cursor: auto; animation: photo-grow 0.15s ease-out; background: url(../assets/headshot.jpg) top / 100% no-repeat; box-shadow: 0 24px 60px rgba(0, 0, 0, 0.6); }
+.photo-close { position: absolute; top: 0.75rem; right: 0.75rem; width: 2.75rem; height: 2.75rem; padding: 0; border: 0; border-radius: 50%; background: none; color: #ebdbb2; font: 2rem/1 var(--serif); cursor: pointer; }
+.photo-close:hover { background: rgba(235, 219, 178, 0.15); }
+.photo-close:focus-visible { outline: 2px solid var(--yellow-bright); outline-offset: 1px; }
+html:has(.photo-view[open]) { overflow: hidden; scrollbar-gutter: stable; }
+@keyframes photo-fade { from { opacity: 0; } }
+@keyframes photo-grow { from { transform: scale(0.94); } }
+@media (prefers-reduced-motion: reduce) { .photo-view[open], .photo-view::backdrop, .photo-view img { animation: none; } }
+
+/* text brightens under the cursor (glow.js, unchanged from the live site):
+   each word of the muted prose gets a share --w of the lift */
+:root { --lift-hover: #e0cfa9; --lift-delay: 0.2s; --lift-in: 0.3s; --lift-out: 0.7s; }
+.w { color: color-mix(in srgb, var(--fg3), var(--lift-hover) calc(var(--w, 0) * 100%)); transition: color var(--lift-out) ease-in-out; }
+
+.skip-link { position: absolute; top: 0.75rem; left: 0.75rem; z-index: 2; padding: 0.6rem 0.9rem; border-radius: 999px; background: var(--convex); box-shadow: var(--raise-sm), var(--edge); color: var(--fg); transform: translateY(-200%); }
+.skip-link:focus { transform: translateY(0); outline: 2px solid var(--yellow-bright); }
+
+/* The key shows the next theme: sun for light, moon for dark. On narrow
+   screens it drops to the panel's foot beside the round keys. */
+.neu-split-v3 .theme-toggle { position: absolute; top: 1.1rem; right: 1.1rem; z-index: 1; }
+.neu-split-v3 .theme-toggle svg { display: none; fill: none; stroke: currentColor; stroke-width: 1.3; stroke-linecap: round; stroke-linejoin: round; }
+html:not(.theme-light) .theme-toggle .icon-sun,
+html.theme-light .theme-toggle .icon-moon { display: block; }
+
+@media (max-width: 820px) {
+  .neu-split-v3 .side { position: relative; top: auto; }
+  .neu-split-v3 .theme-toggle { top: auto; bottom: 1.875rem; right: 1.5rem; }
+  .neu-split-v3 .portrait { width: 7rem; height: 7rem; padding: 7px; margin: 0; }
+  .neu-split-v3 h2, .neu-split-v3 .more { margin-left: 1.4rem; }
+  .neu-split-v3 .papers li { padding: 1.1rem 1.4rem; }
+  .neu-split-v3 .profile-name .last { white-space: normal; }
+}
+
+/* Light theme: warm porcelain, charcoal type, and a single slate-blue
+   accent. Neutral shadows preserve the raised and pressed surfaces without
+   the yellow cast of the dark palette's inverse. ?light previews it. */
+html.theme-light, html.theme-light .neu-split-v3 {
+  color-scheme: light;
+  --bg: #f2f1ee; --deep: #e7e7e3; --bg1: #e2e3df; --bg2: #d2d5d3; --bg3: #a3aaa9;
+  --fg0: #20272d; --fg: #2a3137; --fg2: #434d55; --fg3: #525c63; --fg4: #626a70;
+  --accent: #365f77; --accent-hover: #274b61;
+  --red: var(--accent); --red-bright: var(--accent);
+  --yellow: var(--accent); --yellow-bright: var(--accent); --blue: var(--accent); --green-bright: #427165;
+  --hi: #ffffff; --lo: #d6d5d1;
+  --edge: inset 1px 1px 0 rgba(255, 255, 255, 0.8);
+  --convex: linear-gradient(145deg, #faf9f6, #eeede9);
+  --concave: linear-gradient(145deg, #e9e9e5, #f7f6f3);
+  --lift-hover: var(--fg0);
+  --link-ink: var(--accent);
+}
+html.theme-light .neu-split-v3 {
+  background: var(--bg) radial-gradient(1200px 800px at 0 0, #fcfbf8, rgba(252, 251, 248, 0) 70%) no-repeat;
+}
+
+/* Component accents also change with the palette; no gold chips or red
+   hover reflections leak through from the dark theme. :where keeps the
+   print stylesheet's component rules authoritative. */
+:where(html.theme-light) ::selection { background: #d5e2e9; color: var(--fg0); }
+:where(html.theme-light) .neu-split-v3 .dot { --yellow-bright: var(--green-bright); }
+:where(html.theme-light) .neu-split-v3 .site-nav a[aria-current] { color: var(--accent); }
+:where(html.theme-light) .neu-split-v3 .site-nav a:hover::before { background: var(--accent); }
+:where(html.theme-light) .neu-split-v3 .question {
+  color: var(--accent-hover);
+  background: linear-gradient(145deg, #e5ebee, #f0f4f5);
+  box-shadow: inset 3px 3px 8px #d2dade, inset -3px -3px 8px #ffffff;
+}
+:where(html.theme-light) .neu-split-v3 .badge {
+  color: var(--accent-hover);
+  background: linear-gradient(145deg, #edf2f5, #dae4ea);
+  box-shadow: 3px 3px 8px var(--lo), -2px -2px 6px var(--hi), var(--edge);
+}
+:where(html.theme-light) .neu-split-v3 :is(.key.pill, .more a) { color: var(--accent); }
+:where(html.theme-light) .neu-split-v3 :is(.key.pill, .more a, .with a, .research-authors a):hover { color: var(--accent-hover); }
+:where(html.theme-light) .neu-split-v3 .card::before { background: #96acb8; }
+:where(html.theme-light) .neu-split-v3 .card::after {
+  background:
+    linear-gradient(100deg, #365f77, #7093a7 38%, #527a91 62%, #365f77) top / 100% 2px no-repeat,
+    linear-gradient(to bottom, rgb(54 95 119 / 0.12), rgb(54 95 119 / 0)) 0 2px / 100% 8px no-repeat;
+}
+:where(html.theme-light) .neu-split-v3 .photo-close { color: #f2f1ee; }
+:where(html.theme-light) .neu-split-v3 .photo-close:focus-visible { outline-color: #b8cdd9; }
+
+/* ------------------------------------------------------------------ */
+/* the research page in the same treatment (neu-research.html)         */
+/* ------------------------------------------------------------------ */
+.neu-research .research-heading { margin: 0 0 2rem 2.25rem; font: 400 2.75rem/1.1 var(--serif); letter-spacing: -0.025em; }
+/* entries lie flat between grooves, their text at the card inset */
+.neu-research .research-entry { position: relative; padding: 1.5rem 2.25rem; }
+.neu-research .research-entry::before,
+.neu-research .research-entry:last-of-type::after { content: ""; position: absolute; left: 0; right: 0; height: 2px; border-radius: 1px; background: linear-gradient(to bottom, var(--lo), var(--hi)); }
+.neu-research .research-entry::before { top: 0; }
+.neu-research .research-entry:last-of-type::after { bottom: 0; }
+.neu-research .research-entry h3 { margin: 0; font-size: 1.1875rem; font-weight: 600; line-height: 1.4; letter-spacing: -0.01em; text-wrap: pretty; }
+.neu-research .research-authors { margin: 0.5rem 0 0; color: var(--fg4); font-size: 0.8125rem; line-height: 1.65; }
+.neu-research .research-authors a { color: var(--blue); }
+.neu-research .research-venue { margin: 0.55rem 0 0; color: var(--fg3); font-size: 0.875rem; line-height: 1.6; }
+.neu-research .research-venue em { color: var(--green-bright); font-weight: 400; }
+.neu-research .research-status { display: block; font-size: 0.8125rem; }
+.neu-research .research-summary { margin: 0.8rem 0 0; color: var(--fg3); font-size: 0.9375rem; line-height: 1.7; }
+.neu-research .research-note { margin: 0.6rem 0 0; color: var(--fg4); font-size: 0.75rem; line-height: 1.65; }
+.neu-research .research-actions { display: flow-root; margin-top: 0.65rem; font-size: 0.8125rem; line-height: 1.5; }
+.neu-research .research-download { float: left; margin-right: 1.5rem; padding: 0.6rem 0; }
+.neu-research .research-download span { display: inline-block; margin-left: 0.45em; color: var(--fg4); transition: transform 0.15s ease-out; }
+@media (hover: hover) and (prefers-reduced-motion: no-preference) { .neu-research .research-download:hover span { transform: translate(0.12em, -0.12em); } }
+.neu-research .research-abstract summary { width: fit-content; display: flex; align-items: center; gap: 0.5rem; padding: 0.6rem 0; list-style: none; cursor: pointer; color: var(--fg3); }
+.neu-research .research-abstract summary::-webkit-details-marker { display: none; }
+.neu-research .research-abstract summary::before { content: ""; width: 0.35rem; height: 0.35rem; border-right: 1px solid currentColor; border-bottom: 1px solid currentColor; transform: rotate(-45deg); }
+.neu-research .research-abstract[open] summary::before { transform: translateY(-0.1rem) rotate(45deg); }
+@media (prefers-reduced-motion: no-preference) { .neu-research .research-abstract summary::before { transition: transform 0.2s ease-out; } }
+.neu-research .research-abstract summary:hover, .neu-research .research-abstract[open] summary { color: var(--fg); }
+.neu-research .research-abstract summary:focus-visible { outline: 2px solid var(--yellow-bright); outline-offset: 3px; }
+/* an open abstract rests in a pressed well */
+.neu-research .abstract-text { clear: both; margin: 0.5rem 0 0.5rem; padding: 1rem 1.25rem; border-radius: 16px; color: var(--fg3); font-size: 0.875rem; line-height: 1.8; background: var(--concave); box-shadow: var(--press); }
+.neu-research .abstract-text p { margin: 0; }
+/* the job market entry is the homepage card */
+.neu-research .card h3 { margin: 0; font: 400 2rem/1.2 var(--serif); letter-spacing: -0.02em; text-wrap: balance; }
+.neu-research .card .research-authors { margin-top: 0.7rem; }
+.neu-research .card .research-actions { margin-top: 1rem; }
+@media (max-width: 820px) {
+  .neu-research .research-heading { margin: 0 0 1.5rem 1.4rem; font-size: 2.25rem; }
+  .neu-research .research-entry { padding: 1.25rem 1.4rem; }
+  .neu-research .card h3 { font-size: 1.75rem; }
+  .neu-research .abstract-text { padding: 0.85rem 1rem; }
+}

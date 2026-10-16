@@ -960,6 +960,13 @@ html:has(.photo-view[open]) {
     }
 }
 
+/* the line's dot and words are wrapped in a span that the Desk theme draws
+   as a rubber stamp; here it is no box at all, so they stay the line's own
+   flex items */
+.stamp {
+    display: contents;
+}
+
 .lede {
     margin: 0 0 1.1rem;
     max-width: 38em;
@@ -1205,8 +1212,8 @@ html:has(.photo-view[open]) {
 }
 
 .page .venue em {
-    color: var(--fg);
-    font-weight: 600;
+    color: var(--yellow-bright);
+    font-weight: 400;
 }
 
 .page .authors {
@@ -1590,6 +1597,386 @@ html:has(.photo-view[open]) {
 
     .page .accordion .accordion-item {
         break-inside: avoid;
+    }
+}
+
+/* ------------------------------------------------------------------ */
+/* research page (research.html): entries as flat rows between         */
+/* hairlines, the job market paper in its card. these lived in the      */
+/* page's own style block until the themes (fun.html) arrived: every    */
+/* theme's stylesheet now draws the same markup its own way, so the     */
+/* flat drawing belongs here with the rest of the flat theme            */
+/* ------------------------------------------------------------------ */
+
+/* the name in the sidebar where the page has its own h1 (research, fun) */
+.profile-name {
+    margin: 0;
+    font-size: 1.5rem;
+    line-height: 1.15;
+    font-weight: 700;
+    letter-spacing: -0.01em;
+}
+
+.profile-name .last {
+    display: block;
+    white-space: nowrap;
+}
+
+.page .research-heading {
+    margin: 0 0 2.25rem;
+    font: 400 2.75rem/1.1 var(--serif);
+    letter-spacing: -0.025em;
+}
+
+.page .research-section {
+    margin-bottom: 3rem;
+}
+
+.research-entry {
+    padding: 1.5rem 0;
+    border-top: 1px solid var(--bg1);
+    transition: border-color var(--fade-out);
+}
+
+.research-entry:last-child {
+    border-bottom: 1px solid var(--bg1);
+}
+
+/* the hairline above an entry lightens to bg3, the tone of the resting nav
+   dash, while the pointer rests in it, on the links' hover fades (one step,
+   to bg2, could not be seen on a 1px line). still quiet enough that moving
+   down the list never reads as selecting rows. hover-capable pointers only,
+   so a tap can't leave a rule lit. the job market entry's red rule has its
+   own reflection and glow above */
+@media (hover: hover) {
+    .research-entry:not(.research-jmp):hover {
+        border-top-color: var(--bg3);
+        transition-duration: var(--fade-in);
+    }
+}
+
+.research-entry h3 {
+    margin: 0;
+    font-size: 1.1875rem;
+    font-weight: 600;
+    line-height: 1.4;
+    letter-spacing: -0.01em;
+    text-wrap: pretty;
+}
+
+.research-authors {
+    margin: 0.5rem 0 0;
+    color: var(--fg4);
+    font-size: 0.8125rem;
+    line-height: 1.65;
+}
+
+.research-authors a {
+    color: var(--blue-bright);
+}
+
+.research-venue {
+    margin: 0.55rem 0 0;
+    color: var(--fg3);
+    font-size: 0.875rem;
+    line-height: 1.6;
+}
+
+.research-venue em {
+    color: #b8bb26; /* Journal green from index-split.css. */
+    font-weight: 400;
+}
+
+.research-status {
+    display: block;
+    font-size: 0.8125rem;
+}
+
+.research-summary {
+    margin: 0.8rem 0 0;
+    color: var(--fg3);
+    font-size: 0.9375rem;
+    line-height: 1.7;
+}
+
+.research-note {
+    margin: 0.6rem 0 0;
+    color: var(--fg4);
+    font-size: 0.75rem;
+    line-height: 1.65;
+}
+
+.research-note a {
+    text-decoration: underline;
+    text-decoration-color: var(--bg3);
+    text-underline-offset: 0.2em;
+}
+
+.research-actions {
+    display: flow-root;
+    margin-top: 0.65rem;
+    font-size: 0.8125rem;
+    line-height: 1.5;
+}
+
+.research-download {
+    float: left;
+    margin-right: 1.5rem;
+    padding: 0.6rem 0;
+}
+
+/* the arrow leans on hover (above); its gap is all margin, the same 0.45em
+   as the homepage card's "paper (PDF)" arrow */
+.research-download span {
+    margin-left: 0.45em;
+    color: var(--fg4);
+}
+
+.research-abstract summary {
+    width: fit-content;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.6rem 0;
+    list-style: none;
+    cursor: pointer;
+    color: var(--fg3);
+}
+
+.research-abstract summary::-webkit-details-marker {
+    display: none;
+}
+
+.research-abstract summary::before {
+    content: '';
+    width: 0.35rem;
+    height: 0.35rem;
+    border-right: 1px solid currentColor;
+    border-bottom: 1px solid currentColor;
+    transform: rotate(-45deg);
+}
+
+.research-abstract[open] summary::before {
+    transform: translateY(-0.1rem) rotate(45deg);
+}
+
+/* the chevron turns its quarter from right to down over 0.2s, easing out so
+   it settles straight into place; the abstract itself appears at once */
+@media (prefers-reduced-motion: no-preference) {
+    .research-abstract summary::before {
+        transition: transform 0.2s ease-out;
+    }
+}
+
+.research-abstract summary:hover,
+.research-abstract[open] summary {
+    color: var(--fg);
+}
+
+.research-abstract summary:focus-visible {
+    outline: 2px solid var(--yellow-bright);
+    outline-offset: 3px;
+}
+
+.abstract-text {
+    clear: both;
+    margin-top: 0.5rem;
+    padding: 0.2rem 0 0.2rem 1rem;
+    border-left: 2px solid var(--bg2);
+    color: var(--fg3);
+    font-size: 0.875rem;
+    line-height: 1.8;
+}
+
+.abstract-text p {
+    margin: 0;
+}
+
+.research-entry.research-jmp {
+    padding: 1.4rem 1.5rem 1rem;
+    border: 0;
+    border-top: 2px solid var(--red-bright);
+    background: var(--bg0s);
+}
+
+.research-jmp h3 {
+    font: 400 2rem/1.2 var(--serif);
+    letter-spacing: -0.02em;
+}
+
+.research-jmp .research-authors {
+    margin-top: 0.7rem;
+}
+
+.skip-link {
+    position: absolute;
+    top: 0.75rem;
+    left: 0.75rem;
+    z-index: 2;
+    padding: 0.6rem 0.9rem;
+    background: var(--deep);
+    color: var(--fg);
+    transform: translateY(-200%);
+}
+
+.skip-link:focus {
+    transform: translateY(0);
+    outline: 2px solid var(--yellow-bright);
+}
+
+@media (max-width: 760px) {
+    .profile-name {
+        font-size: 1.375rem;
+    }
+
+    .profile-name .last {
+        white-space: normal;
+    }
+
+    .page .research-heading {
+        margin-bottom: 1.75rem;
+        font-size: 2.25rem;
+    }
+
+    .research-entry.research-jmp {
+        padding: 1.25rem 1.125rem 0.85rem;
+    }
+
+    .research-jmp h3 {
+        font-size: 1.75rem;
+    }
+}
+
+@media print {
+    .skip-link {
+        display: none;
+    }
+
+    .research-venue em {
+        color: var(--fg);
+    }
+
+    .page .research-heading {
+        margin-bottom: 1.25rem;
+    }
+
+    .research-entry {
+        break-inside: avoid;
+    }
+
+    .research-entry.research-jmp {
+        border: 1px solid var(--bg1);
+        border-top: 2px solid var(--red-bright);
+    }
+}
+
+/* ------------------------------------------------------------------ */
+/* fun page (fun.html): the heading, then two sections of equal rank,  */
+/* research (the one line) and themes (the picker)                     */
+/* ------------------------------------------------------------------ */
+.page .fun-heading {
+    margin: 0 0 2.25rem;
+    font: 400 2.75rem/1.1 var(--serif);
+    letter-spacing: -0.025em;
+}
+
+.fun-heading em {
+    color: var(--red-bright);
+}
+
+/* the sections' lines share the homepage lede's size (.lede), set closer
+   under their labels */
+.page :is(.fun-text, .themes-intro) {
+    margin: 0 0 1.25rem;
+}
+
+.page .fun-text a {
+    color: var(--fg);
+    text-decoration: underline;
+    text-decoration-color: var(--red);
+    text-underline-offset: 0.18em;
+}
+
+.page .fun-text a:hover {
+    text-decoration-color: currentColor;
+}
+
+/* one radio per theme, drawn like the nav: a short dash that lengthens and
+   turns red for the theme in use. the inputs stay in the page, unseen, so
+   the keyboard and screen readers get native radios; theme.js listens to
+   them. each theme's stylesheet draws this picker in its own material */
+.theme-picker {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.3rem;
+    margin: 0;
+    padding: 0;
+}
+
+.theme-picker label {
+    position: relative;
+    padding-left: 1.1rem;
+    cursor: pointer;
+    color: var(--fg3);
+    transition: color var(--fade-out);
+}
+
+.theme-picker input {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    margin: 0;
+    opacity: 0;
+    pointer-events: none;
+}
+
+.theme-picker label::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 0.6em;
+    width: 0.5rem;
+    height: 2px;
+    background: var(--bg3);
+    transition: width var(--fade-out), background var(--fade-out);
+}
+
+.theme-picker label:hover {
+    color: var(--fg);
+    transition-duration: var(--fade-in);
+}
+
+.theme-picker label:hover::before {
+    width: 0.7rem;
+    background: var(--fg);
+    transition-duration: var(--fade-in);
+}
+
+.theme-picker label:has(input:checked) {
+    color: var(--fg);
+}
+
+.theme-picker label:has(input:checked)::before {
+    width: 0.7rem;
+    background: var(--red);
+}
+
+.theme-picker label:has(input:focus-visible) {
+    outline: 2px solid var(--yellow-bright);
+    outline-offset: 3px;
+}
+
+.themes-note {
+    margin: 1rem 0 0;
+    color: var(--fg4);
+    font-size: 0.85rem;
+}
+
+@media (max-width: 760px) {
+    .page .fun-heading {
+        margin-bottom: 1.75rem;
+        font-size: 2.25rem;
     }
 }
 

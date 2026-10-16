@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex">
+  <meta name="color-scheme" content="dark">
+  <title>Four underlines for the title link — George Beknazar-Yuzbashev</title>
+  <link rel="icon" href="../favicon.ico">
+  <link rel="stylesheet" href="neu-studies.css">
+  <script>var q = new URLSearchParams(location.search); if (q.has('clean')) document.documentElement.classList.add('clean-preview');</script>
+  <style>
+    /* ---- the gallery itself ------------------------------------------ */
+    .ul-page { max-width: 72rem; margin: 0 auto; padding: 3rem 2rem 5rem; }
+    .ul-page .eyebrow { margin: 0 0 1rem; font: 0.75rem/1.4 var(--mono); letter-spacing: 0.12em; text-transform: uppercase; color: var(--fg4); }
+    .ul-page h1 { font: 400 2.4rem/1.1 var(--serif); letter-spacing: -0.02em; margin: 0 0 1rem; }
+    .ul-page .intro { max-width: 46em; color: var(--fg3); font-size: 1.05rem; line-height: 1.6; }
+    .ul-page .intro + .intro { margin-top: 0.75rem; }
+    .ul-page .intro b { color: var(--fg); font-weight: 500; }
+    .proposal { margin: 4.5rem 0 0; }
+    .proposal header { max-width: 46em; margin: 0 0 1.6rem 2.25rem; }
+    .proposal header h2 { margin: 0 0 0.6rem; }
+    .proposal header h2 .num { display: inline-block; min-width: 2.2rem; color: var(--red-bright); font-style: normal; }
+    .proposal header p { color: var(--fg3); font-size: 0.95rem; line-height: 1.6; }
+    .proposal header p + p { margin-top: 0.5rem; }
+    .proposal header p strong { color: var(--fg2); font-weight: 500; }
+    .pair { display: grid; grid-template-columns: 1fr 1fr; gap: 2.5rem; }
+    .demo .state { margin: 0 0 0.8rem 2.25rem; font: 0.72rem/1.4 var(--mono); letter-spacing: 0.12em; text-transform: uppercase; color: var(--fg4); }
+    .demo .state b { color: var(--yellow-bright); font-weight: 400; }
+    .demo .papers { margin-top: 1.5rem; }
+    .demo .more { margin-top: 1rem; }
+    .demo .card .with { margin-top: 1.2rem; }
+    /* the frozen hover column also brightens the card rule, as the real card
+       does when the pointer is anywhere on it: that is the honest combination */
+    .demo.hover .card { --jmp-border-opacity: 1; }
+    @media (max-width: 900px) { .pair { grid-template-columns: 1fr; } .ul-page { padding: 2rem 1.25rem 4rem; } .proposal header { margin-left: 1.4rem; } .demo .state { margin-left: 1.4rem; } }
+
+    /* B was chosen and lives in neu-studies.css now; the page rules below sit
+       one class higher so A, C and D still render as drafted */
+    .ul-page .chosen { margin-left: 0.75rem; font: 11px/1.4 var(--mono); letter-spacing: 0.08em; text-transform: uppercase; color: var(--yellow-bright); font-style: normal; }
+
+    /* ---- shared by all four: the title lifts a step brighter under the
+       pointer, so the line no longer has to do the whole job ------------ */
+    .ul-page .proposal :is(.card h3 a, .title):hover, .demo.hover :is(.card h3 a, .title) { color: #fbf1c7; }
+
+    /* ---- A · Hairline --------------------------------------------------
+       the underline stays an underline, set like a typographer would: one
+       pixel, tucked close to the baseline, in the bright red at part
+       strength so a thin line still registers on the dark ground.
+       skip-ink stays on; at 1px the gap around a descender is a detail,
+       not a break. same rule for every link, so the system has one
+       underline ---------------------------------------------------------- */
+    .ul-page .p1 a:not(.key) { text-decoration: underline transparent; text-decoration-thickness: 1px; text-underline-offset: 0.12em; background-image: none; }
+    .ul-page .p1 a:not(.key):hover, .ul-page .p1 .hover a:not(.key) { text-decoration-color: rgb(251 73 52 / 0.7); }
+
+    /* ---- B · Engraved --------------------------------------------------
+       the underline becomes part of the surface. titles carry a faint
+       groove at rest (a dark cut with the lamp catching its lower lip,
+       the same two-tone line that divides the publications), so the title
+       announces it is a link before anyone hovers. under the pointer, red
+       ink seeps into the groove. the lines are backgrounds, painted behind
+       the glyphs, so descenders sit over the cut rather than breaking it.
+       small links are not engraved at rest; groove and ink arrive together
+       on hover ----------------------------------------------------------- */
+    @property --ink { syntax: "<color>"; inherits: false; initial-value: transparent; }
+    @property --cut { syntax: "<color>"; inherits: false; initial-value: transparent; }
+    @property --lit { syntax: "<color>"; inherits: false; initial-value: transparent; }
+    .ul-page .p2 a:not(.key) { text-decoration: none; --ink: transparent; --cut: transparent; --lit: transparent;
+      background-image: linear-gradient(var(--ink), var(--ink)), linear-gradient(var(--cut), var(--cut)), linear-gradient(var(--lit), var(--lit));
+      background-repeat: no-repeat; background-size: 100% 1px;
+      background-position: 0 calc(100% - 0.1em), 0 calc(100% - 0.1em), 0 calc(100% - 0.1em + 1px);
+      transition: --ink var(--fade-out), --cut var(--fade-out), --lit var(--fade-out), color var(--fade-out); }
+    .ul-page .p2 .card h3 a, .ul-page .p2 .title { --cut: var(--lo); --lit: var(--hi); }
+    .ul-page .p2 a:not(.key):hover, .ul-page .p2 .hover a:not(.key) { --ink: rgb(204 36 29 / 0.9); --cut: var(--lo); --lit: var(--hi); transition-duration: var(--fade-in); }
+
+    /* ---- C · Underglow -------------------------------------------------
+       no line at all. the red is light, not ink: a soft pool of it gathers
+       under each line of the title, brightest at the centre and fading out
+       toward the ends and downward, the way the card's rule reflects down
+       into the card on hover. it is a background painted behind the
+       glyphs, cloned per wrapped line and allowed to spill a little below
+       the text, so the letters sit over it. each link glows in its own hue:
+       red for the cream titles, blue under the blue coauthor names -------- */
+    @property --glow { syntax: "<color>"; inherits: false; initial-value: transparent; }
+    .ul-page .p3 a:not(.key) { text-decoration: none; --glow: transparent; --glow-on: rgb(251 73 52 / 0.5); padding-bottom: 0.45em; -webkit-box-decoration-break: clone; box-decoration-break: clone;
+      background: radial-gradient(ellipse 55% 100% at 50% 0, var(--glow), transparent 72%) 0 100% / 100% 0.6em no-repeat;
+      transition: --glow var(--fade-out), color var(--fade-out); }
+    .ul-page .p3 :is(.with, .authors, .note) a { --glow-on: rgb(131 165 152 / 0.55); }
+    .ul-page .p3 a:not(.key):hover, .ul-page .p3 .hover a:not(.key) { --glow: var(--glow-on); transition-duration: var(--fade-in); }
+
+    /* ---- D · Dot -------------------------------------------------------
+       the title drops the underline and borrows the nav's marker: the
+       small dot that sits grey beside every nav item and turns red beside
+       the current page. here it trails the last word of a title, grey at
+       rest, red and lit under the pointer. it is a text glyph after a
+       no-break space, so it can never wrap onto a line of its own. the
+       only line left on the page is a hairline under prose links, where a
+       trailing dot would read as punctuation ----------------------------- */
+    .ul-page .p4 a:not(.key) { text-decoration: underline transparent; text-decoration-thickness: 1px; text-underline-offset: 0.12em; background-image: none; }
+    .ul-page .p4 a:not(.key):hover, .ul-page .p4 .hover a:not(.key) { text-decoration-color: rgb(251 73 52 / 0.7); }
+    .ul-page .p4 .card h3 a, .ul-page .p4 .title, .ul-page .p4 .card h3 a:hover, .ul-page .p4 .title:hover, .ul-page .p4 .hover :is(.card h3 a, .title) { text-decoration: none; }
+    .ul-page .p4 :is(.card h3 a, .title)::after { content: "\00a0\2022"; font-size: 0.75em; color: var(--bg3); text-shadow: 0 0 0 transparent; transition: color var(--fade-out), text-shadow var(--fade-out); }
+    .ul-page .p4 :is(.card h3 a, .title):hover::after, .ul-page .p4 .hover :is(.card h3 a, .title)::after { color: var(--red-bright); text-shadow: 0 0 0.5em rgb(251 73 52 / 0.65); transition-duration: var(--fade-in); }
+  </style>
+</head>
+<body class="neu-split neu-split-v2 neu-split-v3">
+  <main class="ul-page">
+    <p class="eyebrow">01c · Soft split, ported / the title link</p>
+    <h1>Four underlines for the title link.</h1>
+    <p class="intro">Today every link shares one hover rule: the browser's default underline, which at the title's two-rem serif comes out two to three pixels thick, sits well below the baseline, and splits around the descender of <i>Toxicity</i>, all in the red at full strength. The same rule gives the small links a line that is heavy for their size.</p>
+    <p class="intro"><b>B was chosen</b> on 16 October 2026 and is now the stylesheet's rule for every text link on the homepage and the research page. Four answers below, each a complete system for the page. The <b>left copy is live</b>, so hover it; the <b>right copy is frozen in its hover state</b>, with the card rule brightened as it would be with the pointer on the card.</p>
+
+    <section class="proposal p1" aria-labelledby="p1-h">
+      <header>
+        <h2 id="p1-h"><span class="num">A</span>Hairline</h2>
+        <p>The underline stays an underline, set the way a typographer would set it: <strong>one pixel</strong>, tucked close to the baseline, in the bright red at part strength so a thin line still reads on the dark ground. Skip-ink stays on; at one pixel the gap around a descender is a detail rather than a break.</p>
+        <p><strong>Small links:</strong> the same rule, so the whole page has one underline. <strong>Trade-off:</strong> the least change, and still a line in a design that otherwise has none.</p>
+      </header>
+      <div class="pair">
+        <div class="demo">
+          <p class="state">rest · live, hover me</p>
+          <article class="card slab">
+            <h3><a href="../assets/jmp.pdf">Social Media Toxicity and Mental Health</a></h3>
+            <p class="question">What happens to mental health when toxic content is removed from social media?</p>
+            <p class="with">with <a href="https://sites.google.com/view/francescocapozza/">Francesco Capozza</a>, <a href="https://www.kylanrutherford.me/">Kylan Rutherford</a>, and <a href="https://www.mstalinski.net/">Mateusz Stalinski</a></p>
+          </article>
+          <ul class="papers">
+            <li><span class="badge" aria-hidden="true">AER</span><div><a class="title" href="https://papers.ssrn.com/sol3/papers.cfm?abstract_id=4307346">Toxic Content and User Engagement on Social Media: Evidence from a Field Experiment</a><span class="venue"><em>American Economic Review</em>, conditionally accepted</span><span class="authors">with Jiménez-Durán, Stalinski, and McCrosky</span></div></li>
+          </ul>
+          <p class="more"><a href="neu-research.html">all research<span aria-hidden="true">→</span></a></p>
+        </div>
+        <div class="demo hover">
+          <p class="state"><b>hover</b> · frozen</p>
+          <article class="card slab">
+            <h3><a href="../assets/jmp.pdf">Social Media Toxicity and Mental Health</a></h3>
+            <p class="question">What happens to mental health when toxic content is removed from social media?</p>
+            <p class="with">with <a href="https://sites.google.com/view/francescocapozza/">Francesco Capozza</a>, <a href="https://www.kylanrutherford.me/">Kylan Rutherford</a>, and <a href="https://www.mstalinski.net/">Mateusz Stalinski</a></p>
+          </article>
+          <ul class="papers">
+            <li><span class="badge" aria-hidden="true">AER</span><div><a class="title" href="https://papers.ssrn.com/sol3/papers.cfm?abstract_id=4307346">Toxic Content and User Engagement on Social Media: Evidence from a Field Experiment</a><span class="venue"><em>American Economic Review</em>, conditionally accepted</span><span class="authors">with Jiménez-Durán, Stalinski, and McCrosky</span></div></li>
+          </ul>
+          <p class="more"><a href="neu-research.html">all research<span aria-hidden="true">→</span></a></p>
+        </div>
+      </div>
+    </section>
+
+    <section class="proposal p2" aria-labelledby="p2-h">
+      <header>
+        <h2 id="p2-h"><span class="num">B</span>Engraved<span class="chosen">Chosen · in neu-studies.css</span></h2>
+        <p>The underline becomes part of the surface. Titles carry a <strong>faint groove at rest</strong>: a dark cut with the lamp catching its lower lip, the same two-tone line that already divides the publications. So the title says it is a link before anyone hovers. Under the pointer, <strong>the dim red seeps into the groove as ink</strong>, matte rather than bright. The lines are painted behind the glyphs, so descenders sit over the cut instead of breaking it.</p>
+        <p><strong>Small links:</strong> not engraved at rest; groove and ink arrive together on hover. <strong>Trade-off:</strong> the only proposal that changes the resting page, by one very quiet line under each title.</p>
+      </header>
+      <div class="pair">
+        <div class="demo">
+          <p class="state">rest · live, hover me</p>
+          <article class="card slab">
+            <h3><a href="../assets/jmp.pdf">Social Media Toxicity and Mental Health</a></h3>
+            <p class="question">What happens to mental health when toxic content is removed from social media?</p>
+            <p class="with">with <a href="https://sites.google.com/view/francescocapozza/">Francesco Capozza</a>, <a href="https://www.kylanrutherford.me/">Kylan Rutherford</a>, and <a href="https://www.mstalinski.net/">Mateusz Stalinski</a></p>
+          </article>
+          <ul class="papers">
+            <li><span class="badge" aria-hidden="true">AER</span><div><a class="title" href="https://papers.ssrn.com/sol3/papers.cfm?abstract_id=4307346">Toxic Content and User Engagement on Social Media: Evidence from a Field Experiment</a><span class="venue"><em>American Economic Review</em>, conditionally accepted</span><span class="authors">with Jiménez-Durán, Stalinski, and McCrosky</span></div></li>
+          </ul>
+          <p class="more"><a href="neu-research.html">all research<span aria-hidden="true">→</span></a></p>
+        </div>
+        <div class="demo hover">
+          <p class="state"><b>hover</b> · frozen</p>
+          <article class="card slab">
+            <h3><a href="../assets/jmp.pdf">Social Media Toxicity and Mental Health</a></h3>
+            <p class="question">What happens to mental health when toxic content is removed from social media?</p>
+            <p class="with">with <a href="https://sites.google.com/view/francescocapozza/">Francesco Capozza</a>, <a href="https://www.kylanrutherford.me/">Kylan Rutherford</a>, and <a href="https://www.mstalinski.net/">Mateusz Stalinski</a></p>
+          </article>
+          <ul class="papers">
+            <li><span class="badge" aria-hidden="true">AER</span><div><a class="title" href="https://papers.ssrn.com/sol3/papers.cfm?abstract_id=4307346">Toxic Content and User Engagement on Social Media: Evidence from a Field Experiment</a><span class="venue"><em>American Economic Review</em>, conditionally accepted</span><span class="authors">with Jiménez-Durán, Stalinski, and McCrosky</span></div></li>
+          </ul>
+          <p class="more"><a href="neu-research.html">all research<span aria-hidden="true">→</span></a></p>
+        </div>
+      </div>
+    </section>
+
+    <section class="proposal p3" aria-labelledby="p3-h">
+      <header>
+        <h2 id="p3-h"><span class="num">C</span>Underglow</h2>
+        <p>No line at all. The red is <strong>light, not ink</strong>: a soft pool of it gathers under each line of the title, brightest at the centre and fading toward the ends, the way the card's rule reflects down into the card on hover. It is painted behind the glyphs, so the letters sit over it. Each link glows in its own hue: red under the cream titles, <strong>blue under the blue coauthor names</strong>.</p>
+        <p><strong>Small links:</strong> the same glow, scaled to their size. <strong>Trade-off:</strong> the softest of the four and the most on-theme, but a glow is a vaguer signal than a line, and it needs a modern browser to fade in (it still appears, just instantly, in older ones).</p>
+      </header>
+      <div class="pair">
+        <div class="demo">
+          <p class="state">rest · live, hover me</p>
+          <article class="card slab">
+            <h3><a href="../assets/jmp.pdf">Social Media Toxicity and Mental Health</a></h3>
+            <p class="question">What happens to mental health when toxic content is removed from social media?</p>
+            <p class="with">with <a href="https://sites.google.com/view/francescocapozza/">Francesco Capozza</a>, <a href="https://www.kylanrutherford.me/">Kylan Rutherford</a>, and <a href="https://www.mstalinski.net/">Mateusz Stalinski</a></p>
+          </article>
+          <ul class="papers">
+            <li><span class="badge" aria-hidden="true">AER</span><div><a class="title" href="https://papers.ssrn.com/sol3/papers.cfm?abstract_id=4307346">Toxic Content and User Engagement on Social Media: Evidence from a Field Experiment</a><span class="venue"><em>American Economic Review</em>, conditionally accepted</span><span class="authors">with Jiménez-Durán, Stalinski, and McCrosky</span></div></li>
+          </ul>
+          <p class="more"><a href="neu-research.html">all research<span aria-hidden="true">→</span></a></p>
+        </div>
+        <div class="demo hover">
+          <p class="state"><b>hover</b> · frozen</p>
+          <article class="card slab">
+            <h3><a href="../assets/jmp.pdf">Social Media Toxicity and Mental Health</a></h3>
+            <p class="question">What happens to mental health when toxic content is removed from social media?</p>
+            <p class="with">with <a href="https://sites.google.com/view/francescocapozza/">Francesco Capozza</a>, <a href="https://www.kylanrutherford.me/">Kylan Rutherford</a>, and <a href="https://www.mstalinski.net/">Mateusz Stalinski</a></p>
+          </article>
+          <ul class="papers">
+            <li><span class="badge" aria-hidden="true">AER</span><div><a class="title" href="https://papers.ssrn.com/sol3/papers.cfm?abstract_id=4307346">Toxic Content and User Engagement on Social Media: Evidence from a Field Experiment</a><span class="venue"><em>American Economic Review</em>, conditionally accepted</span><span class="authors">with Jiménez-Durán, Stalinski, and McCrosky</span></div></li>
+          </ul>
+          <p class="more"><a href="neu-research.html">all research<span aria-hidden="true">→</span></a></p>
+        </div>
+      </div>
+    </section>
+
+    <section class="proposal p4" aria-labelledby="p4-h">
+      <header>
+        <h2 id="p4-h"><span class="num">D</span>Dot</h2>
+        <p>The title drops the underline and borrows the <strong>nav's marker</strong>: the small dot that sits grey beside every nav item and turns red beside the current page. Here it trails the last word of a title, grey at rest, <strong>red and lit under the pointer</strong>. It is a glyph after a no-break space, so it can never wrap onto a line of its own.</p>
+        <p><strong>Small links:</strong> paper titles get the same dot, smaller; prose links keep a hairline, because a trailing dot in a sentence reads as punctuation. <strong>Trade-off:</strong> ties the whole page to one indicator vocabulary, at the cost of one extra mark after each title.</p>
+      </header>
+      <div class="pair">
+        <div class="demo">
+          <p class="state">rest · live, hover me</p>
+          <article class="card slab">
+            <h3><a href="../assets/jmp.pdf">Social Media Toxicity and Mental Health</a></h3>
+            <p class="question">What happens to mental health when toxic content is removed from social media?</p>
+            <p class="with">with <a href="https://sites.google.com/view/francescocapozza/">Francesco Capozza</a>, <a href="https://www.kylanrutherford.me/">Kylan Rutherford</a>, and <a href="https://www.mstalinski.net/">Mateusz Stalinski</a></p>
+          </article>
+          <ul class="papers">
+            <li><span class="badge" aria-hidden="true">AER</span><div><a class="title" href="https://papers.ssrn.com/sol3/papers.cfm?abstract_id=4307346">Toxic Content and User Engagement on Social Media: Evidence from a Field Experiment</a><span class="venue"><em>American Economic Review</em>, conditionally accepted</span><span class="authors">with Jiménez-Durán, Stalinski, and McCrosky</span></div></li>
+          </ul>
+          <p class="more"><a href="neu-research.html">all research<span aria-hidden="true">→</span></a></p>
+        </div>
+        <div class="demo hover">
+          <p class="state"><b>hover</b> · frozen</p>
+          <article class="card slab">
+            <h3><a href="../assets/jmp.pdf">Social Media Toxicity and Mental Health</a></h3>
+            <p class="question">What happens to mental health when toxic content is removed from social media?</p>
+            <p class="with">with <a href="https://sites.google.com/view/francescocapozza/">Francesco Capozza</a>, <a href="https://www.kylanrutherford.me/">Kylan Rutherford</a>, and <a href="https://www.mstalinski.net/">Mateusz Stalinski</a></p>
+          </article>
+          <ul class="papers">
+            <li><span class="badge" aria-hidden="true">AER</span><div><a class="title" href="https://papers.ssrn.com/sol3/papers.cfm?abstract_id=4307346">Toxic Content and User Engagement on Social Media: Evidence from a Field Experiment</a><span class="venue"><em>American Economic Review</em>, conditionally accepted</span><span class="authors">with Jiménez-Durán, Stalinski, and McCrosky</span></div></li>
+          </ul>
+          <p class="more"><a href="neu-research.html">all research<span aria-hidden="true">→</span></a></p>
+        </div>
+      </div>
+    </section>
+  </main>
+  <details class="proposal-menu"><summary>Title link · four proposals</summary><nav aria-label="Design studies"><a href="neu-proposals.html">Compare all four studies</a><a href="neu-soft-split-v3.html">01c · Soft split, ported</a><a href="neu-research.html">01c · Research page, ported</a><a href="neu-underline-proposals.html" aria-current="page">Title link · four proposals</a></nav></details>
+</body>
+</html>

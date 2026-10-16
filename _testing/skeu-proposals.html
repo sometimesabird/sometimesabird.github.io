@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex">
+  <meta name="color-scheme" content="dark">
+  <title>Four skeuomorphic studies — George Beknazar-Yuzbashev</title>
+  <link rel="icon" href="../favicon.ico">
+  <link rel="stylesheet" href="skeu-studies.css">
+  <style>
+    .gallery { max-width: 72rem; margin: 0 auto; padding: 3rem 2rem 4rem; }
+    .gallery .eyebrow { font: 12px/1.5 var(--mono); letter-spacing: 0.11em; text-transform: uppercase; color: var(--fg4); }
+    .gallery h1 { margin-top: 0.75rem; font: 400 2.5rem/1.1 var(--serif); letter-spacing: -0.02em; }
+    .gallery .intro { margin: 1rem 0 0.75rem; max-width: 62ch; color: var(--fg3); }
+    .gallery .intro a, .gallery .design p a { color: var(--fg); text-decoration-color: var(--bg3); }
+    .gallery .shared { margin: 0 0 2.5rem; max-width: 62ch; color: var(--fg4); font-size: 0.9rem; }
+    .design-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 2.5rem; }
+    .design { display: flex; flex-direction: column; gap: 0.9rem; padding: 1.25rem; border-radius: 14px; background: var(--deep); border: 1px solid var(--bg1); box-shadow: 0 18px 40px rgba(0, 0, 0, 0.35); }
+    .preview-image { display: block; border-radius: 8px; overflow: hidden; border: 1px solid var(--bg1); background: var(--bg); }
+    .preview-image img { width: 100%; height: auto; transition: transform 0.4s ease-out; }
+    @media (hover: hover) and (prefers-reduced-motion: no-preference) { .preview-image:hover img { transform: scale(1.015); } }
+    .design-heading { display: flex; align-items: baseline; gap: 0.75rem; flex-wrap: wrap; margin-top: 0.4rem; }
+    .design h2 { font: 400 1.5rem/1.2 var(--serif); }
+    .design-number { font: 13px var(--mono); color: var(--red-bright); margin-right: 0.6rem; }
+    .material { font: 11px/1.4 var(--mono); letter-spacing: 0.08em; text-transform: uppercase; color: var(--yellow-bright); }
+    .design p { color: var(--fg3); font-size: 0.95rem; }
+    .tradeoff strong { color: var(--fg); font-weight: 600; }
+    .design-keys { display: flex; flex-wrap: wrap; gap: 0.75rem; margin-top: 0.25rem; }
+    .design-keys a { display: inline-flex; align-items: center; gap: 0.5em; padding: 0.6rem 1.1rem; border-radius: 999px; font-size: 0.875rem; color: var(--fg); text-decoration: none; background: var(--bg); border: 1px solid var(--bg2); }
+    .design-keys a:hover { border-color: var(--fg4); }
+    .design-keys a span { display: inline-block; transition: transform 0.15s ease-out; }
+    @media (hover: hover) and (prefers-reduced-motion: no-preference) { .design-keys a:hover span { transform: translate(0.12em, -0.12em); } }
+    .back { margin-top: 3rem; color: var(--fg4); font-size: 0.9rem; }
+    .back a { color: var(--fg3); }
+    @media (max-width: 800px) { .design-grid { grid-template-columns: 1fr; } .gallery { padding: 2rem 1.25rem 3rem; } }
+  </style>
+</head>
+<body>
+  <main class="gallery">
+    <p class="eyebrow">George Beknazar-Yuzbashev / Skeuomorphic homepage studies</p>
+    <h1>Same page, real materials.</h1>
+    <p class="intro">Four readings of the homepage in skeuomorphism, all drawn from the Gruvbox palette. Where the <a href="neu-proposals.html">neumorphic studies</a> shape one grey material with light alone, these borrow objects from a desk, an instrument panel, a library, and a seminar room. Each keeps the same content and reading order as <a href="neu-soft-split-v3.html">01c · Soft split, ported</a>, the compact sidebar, the live behaviours (copy key, click-to-enlarge photo, the word lift), and the two fixed signals: the job market question is the loudest object on every page, and the AER and JPubE placements are immediately visible.</p>
+    <p class="shared">Every texture is CSS or inline SVG; no image files beyond the headshot. Screenshots are 1440 wide; open a study to see hover states, the phone layout, and the full page.</p>
+    <div class="design-grid" id="grid">
+
+      <article class="design" id="desk">
+        <a class="preview-image" href="skeu-desk.html" aria-label="Open the Desk study"><img src="skeu-desk.png" width="1440" height="1000" alt="Desk homepage: a dark leather blotter with a stitched border; a leather portfolio holding a tilted photo print in photo corners, a brass nameplate, and a cream business card; on the blotter a red rubber stamp, a cream sheet for the job market paper with a yellow sticky note carrying the question, and index cards with gold foil seals for the publications."></a>
+        <div class="design-heading"><h2><span class="design-number">01</span>Desk</h2><span class="material">leather · paper · brass · ink</span></div>
+        <p>A writing desk. The page is a dark leather blotter with a stitched border and a lamp-lit centre. The sidebar is a leather portfolio: the photo is a paper print held by four photo corners, the name is an engraved brass nameplate, the role is debossed into the leather, the nav is three riveted labels with the current page on a muted red ribbon, and the email sits on a cream business card tucked into two leather slots, with brass buttons for the copy key, Scholar, and the CV. On the blotter, the job market line is a red rubber stamp. The job market paper is a cream sheet lying on a second one, and the question is a yellow sticky note overhanging its edge, the loudest object on the page. The publications are two index cards, each with a serrated gold foil seal for the venue.</p>
+        <p class="tradeoff"><strong>Choose this for:</strong> the most literal and the most legible reading: the dense text sits as dark ink on cream paper, and the sticky note is the most recognisable version of “the question is the hook”. It is also the only study that puts large light surfaces on the dark page. The typewriter face (Courier Prime, from Google Fonts) is the one outside dependency.</p>
+        <div class="design-keys"><a href="skeu-desk.html">Open Desk <span aria-hidden="true">↗</span></a></div>
+      </article>
+      <article class="design" id="instrument">
+        <a class="preview-image" href="skeu-instrument.html" aria-label="Open the Instrument study"><img src="skeu-instrument.png" width="1440" height="1000" alt="Instrument homepage: a brushed gunmetal faceplate with corner screws; the photo in a turned metal bezel, a bank of three black push buttons with a lit red LED for the current page, and the job market paper in a recessed glass window with the question glowing amber."></a>
+        <div class="design-heading"><h2><span class="design-number">02</span>Instrument</h2><span class="material">brushed metal · glass · lamps · brass</span></div>
+        <p>A warm piece of old laboratory equipment. The whole page is one brushed gunmetal faceplate with slotted screws in its corners. The photo sits in a turned bezel, the name and labels are engraved into the metal, and the nav is a bank of bakelite push buttons with an LED above each; the current page’s LED is lit. The job market line is an amber indicator lamp beside an engraved label. The job market paper is a recessed glass display, and the question is its amber readout, the brightest light on the panel; the paper link is a physical key beneath the window. AER and JPubE are engraved brass nameplates with tiny screws, and the publications are rows between engraved lines.</p>
+        <p class="tradeoff"><strong>Choose this for:</strong> the most precise and technical reading. Everything is a control or a display, the signals are literal lights, and it stays entirely dark. The readout font (IBM Plex Mono, from Google Fonts) is the one outside dependency.</p>
+        <div class="design-keys"><a href="skeu-instrument.html">Open Instrument <span aria-hidden="true">↗</span></a></div>
+      </article>
+      <article class="design" id="library">
+        <a class="preview-image" href="skeu-library.html" aria-label="Open the Reading room study"><img src="skeu-library.png" width="1440" height="1000" alt="Reading room homepage: dark walnut panelling; the photo in a wooden frame with a cream mat above a brass nameplate, the nav as three card-catalogue drawers with brass pulls, and the job market paper as a claret clothbound book with a gilt title and a yellow typewritten call slip lying on its cover."></a>
+        <div class="design-heading"><h2><span class="design-number">03</span>Reading room</h2><span class="material">walnut · cloth · gilt · brass · card stock</span></div>
+        <p>A library. The page is dark walnut panelling. The photo hangs in a wooden frame with a cream mat over an engraved brass nameplate; the nav is a small card-catalogue cabinet whose three drawers carry typed labels in brass holders, the current drawer standing proud with a red ink dot; the email is a ruled library card with a brass stud for the copy key, and Scholar and the CV are brass medallions. The job market line is an engraved brass strip. The job market paper is a claret clothbound book seen from above, its title stamped in gilt, with the question on a yellow typewritten call slip lying across the cover and a red ribbon bookmark as the paper link. The publications are two dark cloth books on a wooden shelf, their venues gilt-stamped on red and green spine labels.</p>
+        <p class="tradeoff"><strong>Choose this for:</strong> the most classical reading, and the richest set of objects. It is also the one with the most red on the page: the cloth colour is a single variable, so a brown or green binding is a one-line change if the claret feels sharp. The typewriter face on the cards (Special Elite, from Google Fonts) is the one outside dependency.</p>
+        <div class="design-keys"><a href="skeu-library.html">Open Reading room <span aria-hidden="true">↗</span></a></div>
+      </article>
+      <article class="design" id="seminar">
+        <a class="preview-image" href="skeu-seminar.html" aria-label="Open the Seminar room study"><img src="skeu-seminar.png" width="1440" height="1000" alt="Seminar room homepage: a slate chalkboard in a wooden frame with a cork strip on the left holding a pinned polaroid, typed paper tags, and a torn notebook strip; on the board, chalk headings, the job market question in yellow chalk inside a hand-drawn box, and a cream reprint taped beneath it."></a>
+        <div class="design-heading"><h2><span class="design-number">04</span>Seminar room</h2><span class="material">slate · chalk · cork · paper · tape</span></div>
+        <p>An economics seminar room. The page is a chalkboard in a wooden frame, dusted and half-erased, with a chalk tray along the bottom at desktop. The sidebar is a cork strip: a pinned polaroid, a typed name tag, three paper tags for the nav (the current one highlighted in yellow marker), a torn notebook strip for the email, and two round stickers for Scholar and the CV. Headings, the job market line, and “all research” are written in chalk with wobbly underlines. The question is written in yellow chalk inside a hand-drawn box with an arrow down to the job market paper, a cream reprint taped to the board. The publications are two taped slips stamped in red ink with the venue.</p>
+        <p class="tradeoff"><strong>Choose this for:</strong> the warmest and most personal reading, and the one that says “economist” on sight. The chalk hand (Patrick Hand, from Google Fonts) is the one outside dependency; the dense text stays on paper in ordinary type, so charm never costs legibility.</p>
+        <div class="design-keys"><a href="skeu-seminar.html">Open Seminar room <span aria-hidden="true">↗</span></a></div>
+      </article>
+    </div>
+    <p class="back"><a href="neu-proposals.html">← the neumorphic studies</a></p>
+  </main>
+</body>
+</html>

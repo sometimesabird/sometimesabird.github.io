@@ -1,0 +1,108 @@
+/* The pointer as a second lamp (neu-light-*.html). Layered over neu-studies.css,
+   which is left untouched, so each study is 01c plus one more light. The fixed
+   lamp up and to the left stays the main light; the pointer is a weak second
+   source, and the three files differ only in how it is read:
+     sway  — the room's lamp tilts a few degrees toward the pointer; every
+             shadow on the page turns together, nothing reacts on its own
+     lamp  — a small lamp hangs over the desk; each surface's shadow leans
+             away from it and shortens as it comes near, so things react
+             one by one as the pointer passes
+     lamp, full — the same lamp, now the only one: shadows fall straight
+             away from the pointer, long when it is far and gone when it is
+             overhead, where the surface sits flat in its own soft halo
+     glow  — no shadow moves; a faint warm pool follows the pointer over the
+             surfaces, and the rim nearest it catches a hairline glint
+   neu-light.js reads the pointer, smooths it, and writes the variables. the
+   dial at the foot of the page scales the effect from off to twice the
+   default; everything here returns to 01c exactly when the pointer leaves */
+
+/* ------------------------------------------------------------------ */
+/* geometry (sway, lamp): the lamp vector                              */
+/* ------------------------------------------------------------------ */
+/* every shadow offset in 01c is its rest offset times the lamp vector
+   (--lx, --ly), which is (1, 1) at rest: the shadow falls toward the bottom
+   right. --lm scales its length, --la turns the surface gradients with it.
+   in sway the vector lives on the root and is inherited; in lamp each
+   surface carries its own, set inline by the script. --lc is the contrast
+   of the surface gradient, 1 at rest; the full lamp takes it to 0 under the
+   pointer, where the vector passes through zero, so the tint flattens
+   rather than flipping as the pointer crosses a centre. the shadow variables
+   are redeclared on the surfaces themselves so var() resolves against the
+   surface's own vector rather than the root's */
+.neu-light { --lx: 1; --ly: 1; --lm: 1; --la: 145; --lc: 1; --hi-shadow: #353331; }
+/* --hi-shadow is the highlight colour 01c actually renders in these shadows:
+   its variables are substituted on the root, where --hi is #353331, before
+   the body's brighter --hi (#3c3836) is declared, so that one only reaches the
+   shadows written out by hand below. the same colour is kept here so the rest
+   state is 01c pixel for pixel */
+.neu-light-geo .slab, .neu-light-geo .key, .neu-light-geo .portrait, .neu-light-geo .market, .neu-light-geo .question,
+.neu-light-geo .badge, .neu-light-geo .site-nav a, .neu-light-geo .proposal-menu summary, .neu-light-geo .proposal-menu nav,
+.neu-light-geo .copied, .neu-light-geo .light-dial {
+  --sx: calc(var(--lx) * var(--lm));
+  --sy: calc(var(--ly) * var(--lm));
+  --raise: calc(var(--sx) * 9px) calc(var(--sy) * 9px) 20px var(--lo), calc(var(--sx) * -9px) calc(var(--sy) * -9px) 20px var(--hi-shadow);
+  --raise-sm: calc(var(--sx) * 4px) calc(var(--sy) * 4px) 10px var(--lo), calc(var(--sx) * -4px) calc(var(--sy) * -4px) 10px var(--hi-shadow);
+  --raise-lg: calc(var(--sx) * 14px) calc(var(--sy) * 14px) 34px var(--lo), calc(var(--sx) * -14px) calc(var(--sy) * -14px) 34px var(--hi-shadow);
+  --press: inset calc(var(--sx) * 5px) calc(var(--sy) * 5px) 12px var(--lo), inset calc(var(--sx) * -5px) calc(var(--sy) * -5px) 12px var(--hi-shadow);
+  --press-sm: inset calc(var(--sx) * 3px) calc(var(--sy) * 3px) 7px var(--lo), inset calc(var(--sx) * -3px) calc(var(--sy) * -3px) 7px var(--hi-shadow);
+  --edge: inset calc(var(--lx) * 1px) calc(var(--ly) * 1px) 0 rgba(235, 219, 178, 0.08);
+  --convex: linear-gradient(calc(var(--la) * 1deg), color-mix(in srgb, #2d2c2b calc(var(--lc) * 100%), #292828), color-mix(in srgb, #252424 calc(var(--lc) * 100%), #292828));
+  --concave: linear-gradient(calc(var(--la) * 1deg), color-mix(in srgb, #242323 calc(var(--lc) * 100%), #292828), color-mix(in srgb, #2d2c2b calc(var(--lc) * 100%), #292828));
+}
+/* the few shadows 01c writes out by hand rather than through the variables */
+.neu-light-geo .key:hover { box-shadow: calc(var(--sx) * 6px) calc(var(--sy) * 6px) 14px var(--lo), calc(var(--sx) * -6px) calc(var(--sy) * -6px) 14px var(--hi), var(--edge); }
+.neu-light-geo .portrait img { box-shadow: calc(var(--sx) * 3px) calc(var(--sy) * 3px) 8px var(--lo), calc(var(--sx) * -2px) calc(var(--sy) * -2px) 6px var(--hi); }
+@media (hover: hover) and (prefers-reduced-motion: no-preference) {
+  .neu-light-geo .portrait:hover img { box-shadow: calc(var(--sx) * 6px) calc(var(--sy) * 6px) 14px var(--lo), calc(var(--sx) * -5px) calc(var(--sy) * -5px) 12px var(--hi); }
+}
+.neu-light-geo .badge { box-shadow: calc(var(--sx) * 3px) calc(var(--sy) * 3px) 8px var(--lo), calc(var(--sx) * -2px) calc(var(--sy) * -2px) 6px var(--hi), inset calc(var(--lx) * 1px) calc(var(--ly) * 1px) 0 rgba(255, 240, 200, 0.35); }
+
+/* ------------------------------------------------------------------ */
+/* glow: the pool and the glint                                        */
+/* ------------------------------------------------------------------ */
+/* the pool is a wide, faint radial lift painted under each surface's own
+   gradient, centred on the pointer in that surface's coordinates (--px,
+   --py), and on the page itself, so it runs across edges unbroken: raised
+   surfaces, wells and page are one material. --pool is the lamp's presence,
+   0 when the pointer is away. the glint is a second hairline inside the rim,
+   on the side facing the pointer (--gx, --gy, the unit vector away from it),
+   fading in as the pointer comes within reach (--g); wells light the far
+   wall instead, as their fixed highlight already does */
+.neu-light-glow { --pool: 0; --pool-r: 620px; --pool-a: 0.04; --glint-a: 0.1; --px: -9999; --py: -9999; --gx: 1; --gy: 1; --g: 0; }
+.neu-light-glow .slab, .neu-light-glow .key, .neu-light-glow .proposal-menu summary, .neu-light-glow .proposal-menu nav, .neu-light-glow .copied:not(:empty), .neu-light-glow .light-dial {
+  background-image: radial-gradient(var(--pool-r) circle at calc(var(--px) * 1px) calc(var(--py) * 1px), rgba(235, 219, 178, calc(var(--pool) * var(--pool-a))), rgba(235, 219, 178, 0) 70%), var(--convex);
+}
+.neu-light-glow .portrait, .neu-light-glow .question, .neu-light-glow .market, .neu-light-glow .site-nav a[aria-current], .neu-light-glow .copy.done {
+  background-image: radial-gradient(var(--pool-r) circle at calc(var(--px) * 1px) calc(var(--py) * 1px), rgba(235, 219, 178, calc(var(--pool) * var(--pool-a))), rgba(235, 219, 178, 0) 70%), var(--concave);
+}
+/* the page: the pool in document coordinates under the fixed vignette */
+.neu-light-glow {
+  background-image: radial-gradient(var(--pool-r) circle at calc(var(--px) * 1px) calc(var(--py) * 1px), rgba(235, 219, 178, calc(var(--pool) * var(--pool-a))), rgba(235, 219, 178, 0) 70%), radial-gradient(1200px 800px at 0 0, #2e2d2c, rgba(46, 45, 44, 0) 70%);
+  background-repeat: no-repeat;
+}
+/* the glint joins the edge catch on raised surfaces */
+.neu-light-glow .slab, .neu-light-glow .key, .neu-light-glow .proposal-menu summary, .neu-light-glow .proposal-menu nav, .neu-light-glow .copied, .neu-light-glow .light-dial, .neu-light-glow .site-nav a {
+  --edge: inset 1px 1px 0 rgba(235, 219, 178, 0.08), inset calc(var(--gx) * 1px) calc(var(--gy) * 1px) 0 rgba(235, 219, 178, calc(var(--g) * var(--glint-a)));
+}
+/* and lights the far wall of the wells */
+.neu-light-glow { --glint-in: inset calc(var(--gx) * -1px) calc(var(--gy) * -1px) 0 rgba(235, 219, 178, calc(var(--g) * var(--glint-a) * 0.8)); }
+.neu-light-glow .portrait { box-shadow: var(--press), var(--glint-in); }
+.neu-light-glow .question { box-shadow: var(--press), inset 0 0 26px rgba(250, 189, 47, 0.05), var(--glint-in); }
+.neu-light-glow .market, .neu-light-glow .site-nav a[aria-current] { box-shadow: var(--press-sm), var(--glint-in); }
+
+/* ------------------------------------------------------------------ */
+/* the dial: a small pill at the foot of the page, 0 to twice the default */
+/* ------------------------------------------------------------------ */
+.light-dial { position: fixed; z-index: 5; left: 18px; bottom: 14px; display: flex; align-items: center; gap: 0.6rem; padding: 7px 14px 7px 16px; border-radius: 999px; font-size: 12px; color: var(--fg3); background: var(--convex); box-shadow: var(--raise-sm), var(--edge); cursor: default; }
+.light-dial input { width: 110px; height: 2px; margin: 0; accent-color: var(--fg3); cursor: pointer; }
+.light-dial output { min-width: 2.6em; font: 12px var(--mono); color: var(--fg4); text-align: right; }
+.light-dial b { font-weight: 500; color: var(--fg3); }
+html.clean-preview .light-dial { display: none; }
+@media (max-width: 820px), (hover: none) { .light-dial { display: none; } }
+
+/* the floating menu carries a line on each study */
+.neu-light .proposal-menu nav { width: 290px; }
+.neu-light .proposal-menu nav small { display: block; font-size: 11px; color: var(--fg4); }
+
+/* print: the dial goes, and the page keeps neu-print.css's white sheet */
+@media print { .light-dial { display: none; } .neu-light-glow { background-image: none; } }

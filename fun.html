@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="theme-neu">
 
 <head>
     <title>Fun | George Beknazar-Yuzbashev</title>
@@ -7,65 +7,52 @@
     <meta charset="UTF-8">
     <!-- the site is dark, said before any CSS loads: the browser then fills any
          moment with nothing painted yet, as between two pages, with dark rather
-         than white. it also darkens browser-drawn parts such as scrollbars -->
+         than white. it also darkens browser-drawn parts such as scrollbars. the
+         theme script below turns it light for the light neumorphic theme -->
     <meta name="color-scheme" content="dark">
-    <!-- the sidebar's deep shade for the mobile toolbar (Chrome on Android;
-         Safari 26 ignores this and tints from the body background instead) -->
-    <meta name="theme-color" content="#1d2021">
+    <!-- the page's shade for the mobile toolbar (Chrome on Android; Safari 26
+         ignores this and tints from the body background instead); the theme
+         script below resets it for the theme in use -->
+    <meta name="theme-color" content="#282828">
     <meta name="description" content="What is fun? According to George Beknazar-Yuzbashev, research.">
     <link rel="icon" href="favicon.ico">
-    <link rel="stylesheet" href="styles.css">
-    <style>
-        /* Page-specific styles, as on the research page. */
-        .profile-name {
-            margin: 0;
-            font-size: 1.5rem;
-            line-height: 1.15;
-            font-weight: 700;
-            letter-spacing: -0.01em;
-        }
-
-        .profile-name .last {
-            display: block;
-            white-space: nowrap;
-        }
-
-        .page .fun-heading {
-            margin: 0 0 1.5rem;
-            font: 400 2.75rem/1.1 var(--serif);
-            letter-spacing: -0.025em;
-        }
-
-        .fun-heading em {
-            color: var(--red-bright);
-        }
-
-        .page .fun-text a {
-            color: var(--fg);
-            text-decoration: underline;
-            text-decoration-color: var(--red);
-            text-underline-offset: 0.18em;
-        }
-
-        .page .fun-text a:hover {
-            text-decoration-color: currentColor;
-        }
-
-        @media (max-width: 760px) {
-            .profile-name {
-                font-size: 1.375rem;
+    <!-- the theme (chosen on fun.html, kept in this browser; Neumorphic by
+         default): this writes one stylesheet before anything paints, so no
+         other theme shows first and no page is styled twice, and sets the
+         html class and the two metas above to match. without JavaScript the
+         default loads from the noscript link, under the class the html tag
+         already carries. the same script sits in index.html, research.html
+         and fun.html; theme.js at the foot of each page does the rest.
+         ?theme=desk or ?theme=neu&light previews a theme without saving it -->
+    <script>
+        (function () {
+            var SHEETS = { flat: 'styles.css', neu: 'theme-neu.css', 'neu-reactive': 'theme-neu.css', desk: 'theme-desk.css', instrument: 'theme-instrument.css' };
+            var query = new URLSearchParams(location.search);
+            var theme = 'neu', light = false;
+            try {
+                theme = localStorage.getItem('theme') || theme;
+                light = localStorage.getItem('theme-light') === '1';
+            } catch (e) {}
+            if (query.has('theme')) theme = query.get('theme');
+            if (query.has('light')) light = true;
+            if (query.has('dark')) light = false;
+            if (!SHEETS[theme]) theme = 'neu';
+            // the html classes the stylesheets key on, and the browser's own chrome
+            function mark(theme, light) {
+                var root = document.documentElement, neu = theme.indexOf('neu') === 0;
+                light = light && neu;
+                for (var name in SHEETS) root.classList.toggle('theme-' + name, name === theme);
+                root.classList.toggle('theme-neu', neu);
+                root.classList.toggle('theme-light', light);
+                document.querySelector('meta[name="color-scheme"]').content = light ? 'light' : 'dark';
+                document.querySelector('meta[name="theme-color"]').content = light ? '#f2f1ee' : neu ? '#282828' : '#1d2021';
             }
-
-            .profile-name .last {
-                white-space: normal;
-            }
-
-            .page .fun-heading {
-                margin-bottom: 1.25rem;
-                font-size: 2.25rem;
-            }
-        }
-    </style>
+            mark(theme, light);
+            document.write('<link rel="stylesheet" href="' + SHEETS[theme] + '" data-theme-sheet>');
+            window.siteTheme = { theme: theme, light: light, sheets: SHEETS, mark: mark };
+        })();
+    </script>
+    <noscript><link rel="stylesheet" href="theme-neu.css"></noscript>
 </head>
 
 <body class="split">
@@ -103,7 +90,26 @@
 
         <main>
             <h1 class="fun-heading">What is <em>Fun</em>?</h1>
-            <p class="lede fun-text">Research is a lot of fun. It can be found <a href="research.html">here</a>.</p>
+
+            <section aria-labelledby="fun-research-heading">
+                <h2 id="fun-research-heading">Research</h2>
+                <p class="lede fun-text">Research is a lot of fun. It can be found <a href="research.html">here</a>.</p>
+            </section>
+
+            <section class="themes" aria-labelledby="themes-heading">
+                <h2 id="themes-heading">Themes</h2>
+                <p class="lede themes-intro">If you are tired of the default website theme, pick another one.</p>
+                <!-- theme.js listens to these radios and swaps the stylesheet; the head
+                     script on every page then loads the chosen theme before paint -->
+                <div class="theme-picker" role="radiogroup" aria-labelledby="themes-heading">
+                    <label><input type="radio" name="theme" value="neu" checked><span class="theme-name">Neumorphic</span></label>
+                    <label><input type="radio" name="theme" value="neu-reactive"><span class="theme-name">Neumorphic Reactive</span></label>
+                    <label><input type="radio" name="theme" value="flat"><span class="theme-name">Flat</span></label>
+                    <label><input type="radio" name="theme" value="desk"><span class="theme-name">Skeuomorphic Desk</span></label>
+                    <label><input type="radio" name="theme" value="instrument"><span class="theme-name">Skeuomorphic Instrument</span></label>
+                </div>
+                <noscript><p class="themes-note">Switching themes needs JavaScript.</p></noscript>
+            </section>
         </main>
     </div>
 
@@ -187,6 +193,7 @@
         })();
     </script>
     <script src="glow.js"></script>
+    <script src="theme.js"></script>
 </body>
 
 </html>

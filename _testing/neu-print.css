@@ -1,0 +1,54 @@
+/* print / save as pdf for the ported studies (neu-soft-split-v3.html and
+   neu-research.html): a white page, dark text, every surface flattened.
+   shadows and gradients go; structure comes back as hairlines, as on the
+   live site's print rules. linked with media="print"; ?print previews it */
+@page { margin: 1.5cm; }
+
+.neu-split-v3, html.theme-light .neu-split-v3 {
+  --bg: #fff; --fg: #000; --fg2: #1d2021; --fg3: #282828; --fg4: #3c3836;
+  --bg1: #d5c4a1; --bg2: #bdae93; --bg3: #a89984;
+  --red-bright: #9d0006; --yellow-bright: #3c3836; --blue: #076678;
+  background: #fff; color: #000; -webkit-font-smoothing: auto;
+}
+
+/* every surface flat */
+.neu-split-v3 .slab, .neu-split-v3 .key, .neu-split-v3 .portrait, .neu-split-v3 .portrait img,
+.neu-split-v3 .question, .neu-split-v3 .market, .neu-split-v3 .badge, .neu-split-v3 .site-nav a,
+.neu-split-v3 .abstract-text, .neu-split-v3 .copied, .neu-split-v3 .skip-link { box-shadow: none !important; background: none !important; }
+.neu-split-v3 .card::after { display: none; }
+.neu-split-v3 .w { color: inherit; transition: none; }
+
+/* screen-only controls dropped */
+.neu-split-v3 .site-nav, .neu-split-v3 .copy, .neu-split-v3 .copied, .neu-split-v3 .dot, .neu-split-v3 .more,
+.neu-split-v3 .proposal-menu, .neu-split-v3 .photo-view, .neu-split-v3 .skip-link, .neu-split-v3 .side .groove, .neu-split-v3 .theme-toggle { display: none; }
+
+/* the profile stacks above the main column: a small photo beside the text */
+.neu-split-v3 .layout { display: block; max-width: none; padding: 0; }
+.neu-split-v3 .side { position: static; display: grid; grid-template-columns: 5rem minmax(0, 1fr); column-gap: 1rem; align-items: start; padding: 0 0 1.25rem; border-radius: 0; border-bottom: 1px solid var(--bg1); }
+.neu-split-v3 .portrait { width: 5rem; height: 5rem; padding: 0; margin: 0; grid-row: span 4; border-radius: 4px; }
+.neu-split-v3 .portrait img { border-radius: 4px; }
+.neu-split-v3 .role { margin-top: 0.5rem; }
+.neu-split-v3 .contact { grid-column: 1 / -1; padding-top: 0.75rem; }
+.neu-split-v3 .icon-links { margin-top: 0.5rem; }
+.neu-split-v3 main { padding-top: 1.25rem; }
+.neu-split-v3 .market { padding: 0; }
+
+/* the card keeps a hairline frame and its red rule; the question keeps a bar */
+.neu-split-v3 .card { padding: 1.25rem 1.5rem; border: 1px solid var(--bg1); border-radius: 8px; }
+.neu-split-v3 .card::before { left: 1.5rem; right: 1.5rem; top: 0.6rem; background: #9d0006; -webkit-mask-image: none; mask-image: none; }
+.neu-split-v3 .question { padding: 0.4rem 0 0.4rem 1rem; border-left: 2px solid var(--fg4); border-radius: 0; color: var(--fg2); }
+.neu-split-v3 .key.pill { padding: 0; }
+.neu-split-v3 h2 { margin-left: 1.5rem; break-after: avoid; }
+.neu-split-v3 .papers li { padding: 1rem 1.5rem; }
+.neu-split-v3 .papers li::before, .neu-split-v3 .papers li:last-child::after, .neu-split-v3 .groove { height: 1px; background: var(--bg1); }
+.neu-split-v3 .badge { border: 1px solid #000; color: #000; }
+.neu-split-v3 .card, .neu-split-v3 .papers li { break-inside: avoid; }
+
+/* research page: every abstract is opened by the page script before printing */
+.neu-research .research-heading { margin: 0 0 1.25rem 1.5rem; }
+.neu-research .research-entry { padding: 1rem 1.5rem; break-inside: avoid; }
+.neu-research .research-entry::before, .neu-research .research-entry:last-of-type::after { height: 1px; background: var(--bg1); }
+.neu-research .research-venue em { color: #000; }
+.neu-research .research-abstract summary::before { display: none; }
+.neu-research .research-abstract summary { padding: 0.3rem 0; }
+.neu-research .abstract-text { margin: 0.25rem 0 0; padding: 0.2rem 0 0.2rem 1rem; border-left: 2px solid var(--bg2); border-radius: 0; }

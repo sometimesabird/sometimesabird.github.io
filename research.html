@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="theme-neu">
 
 <head>
     <title>Research | George Beknazar-Yuzbashev</title>
@@ -7,279 +7,52 @@
     <meta charset="UTF-8">
     <!-- the site is dark, said before any CSS loads: the browser then fills any
          moment with nothing painted yet, as between two pages, with dark rather
-         than white. it also darkens browser-drawn parts such as scrollbars -->
+         than white. it also darkens browser-drawn parts such as scrollbars. the
+         theme script below turns it light for the light neumorphic theme -->
     <meta name="color-scheme" content="dark">
-    <!-- the sidebar's deep shade for the mobile toolbar (Chrome on Android;
-         Safari 26 ignores this and tints from the body background instead) -->
-    <meta name="theme-color" content="#1d2021">
+    <!-- the page's shade for the mobile toolbar (Chrome on Android; Safari 26
+         ignores this and tints from the body background instead); the theme
+         script below resets it for the theme in use -->
+    <meta name="theme-color" content="#282828">
     <meta name="description" content="Research by George Beknazar-Yuzbashev: field experiments on social media, political behavior, and mental health. Job market paper, publications, and working papers.">
     <link rel="icon" href="favicon.ico">
-    <link rel="stylesheet" href="styles.css">
-    <style>
-        /* Preview-specific styles; the homepage stylesheet stays shared. */
-        .profile-name {
-            margin: 0;
-            font-size: 1.5rem;
-            line-height: 1.15;
-            font-weight: 700;
-            letter-spacing: -0.01em;
-        }
-
-        .profile-name .last {
-            display: block;
-            white-space: nowrap;
-        }
-
-        .page .research-heading {
-            margin: 0 0 2.25rem;
-            font: 400 2.75rem/1.1 var(--serif);
-            letter-spacing: -0.025em;
-        }
-
-        .page .research-section {
-            margin-bottom: 3rem;
-        }
-
-        .research-entry {
-            padding: 1.5rem 0;
-            border-top: 1px solid var(--bg1);
-            transition: border-color var(--fade-out);
-        }
-
-        .research-entry:last-child {
-            border-bottom: 1px solid var(--bg1);
-        }
-
-        /* the hairline above an entry lightens to bg3, the tone of the
-           resting nav dash, while the pointer rests in
-           it, on the links' hover fades (one step, to bg2, could not be seen
-           on a 1px line). still quiet enough that moving down the list never
-           reads as selecting rows. hover-capable pointers only, so a tap
-           can't leave a rule lit. the job market entry's red rule has its
-           own reflection and glow in styles.css */
-        @media (hover: hover) {
-            .research-entry:not(.research-jmp):hover {
-                border-top-color: var(--bg3);
-                transition-duration: var(--fade-in);
+    <!-- the theme (chosen on fun.html, kept in this browser; Neumorphic by
+         default): this writes one stylesheet before anything paints, so no
+         other theme shows first and no page is styled twice, and sets the
+         html class and the two metas above to match. without JavaScript the
+         default loads from the noscript link, under the class the html tag
+         already carries. the same script sits in index.html, research.html
+         and fun.html; theme.js at the foot of each page does the rest.
+         ?theme=desk or ?theme=neu&light previews a theme without saving it -->
+    <script>
+        (function () {
+            var SHEETS = { flat: 'styles.css', neu: 'theme-neu.css', 'neu-reactive': 'theme-neu.css', desk: 'theme-desk.css', instrument: 'theme-instrument.css' };
+            var query = new URLSearchParams(location.search);
+            var theme = 'neu', light = false;
+            try {
+                theme = localStorage.getItem('theme') || theme;
+                light = localStorage.getItem('theme-light') === '1';
+            } catch (e) {}
+            if (query.has('theme')) theme = query.get('theme');
+            if (query.has('light')) light = true;
+            if (query.has('dark')) light = false;
+            if (!SHEETS[theme]) theme = 'neu';
+            // the html classes the stylesheets key on, and the browser's own chrome
+            function mark(theme, light) {
+                var root = document.documentElement, neu = theme.indexOf('neu') === 0;
+                light = light && neu;
+                for (var name in SHEETS) root.classList.toggle('theme-' + name, name === theme);
+                root.classList.toggle('theme-neu', neu);
+                root.classList.toggle('theme-light', light);
+                document.querySelector('meta[name="color-scheme"]').content = light ? 'light' : 'dark';
+                document.querySelector('meta[name="theme-color"]').content = light ? '#f2f1ee' : neu ? '#282828' : '#1d2021';
             }
-        }
-
-        .research-entry h3 {
-            margin: 0;
-            font-size: 1.1875rem;
-            font-weight: 600;
-            line-height: 1.4;
-            letter-spacing: -0.01em;
-            text-wrap: pretty;
-        }
-
-        .research-authors {
-            margin: 0.5rem 0 0;
-            color: var(--fg4);
-            font-size: 0.8125rem;
-            line-height: 1.65;
-        }
-
-        .research-authors a {
-            color: var(--blue-bright);
-        }
-
-        .research-venue {
-            margin: 0.55rem 0 0;
-            color: var(--fg3);
-            font-size: 0.875rem;
-            line-height: 1.6;
-        }
-
-        .research-venue em {
-            color: #b8bb26; /* Journal green from index-split.css. */
-            font-weight: 400;
-        }
-
-        .research-status {
-            display: block;
-            font-size: 0.8125rem;
-        }
-
-        .research-summary {
-            margin: 0.8rem 0 0;
-            color: var(--fg3);
-            font-size: 0.9375rem;
-            line-height: 1.7;
-        }
-
-        .research-note {
-            margin: 0.6rem 0 0;
-            color: var(--fg4);
-            font-size: 0.75rem;
-            line-height: 1.65;
-        }
-
-        .research-note a {
-            text-decoration: underline;
-            text-decoration-color: var(--bg3);
-            text-underline-offset: 0.2em;
-        }
-
-        .research-actions {
-            display: flow-root;
-            margin-top: 0.65rem;
-            font-size: 0.8125rem;
-            line-height: 1.5;
-        }
-
-        .research-download {
-            float: left;
-            margin-right: 1.5rem;
-            padding: 0.6rem 0;
-        }
-
-        /* the arrow leans on hover (styles.css); its gap is all margin, the
-           same 0.45em as the homepage card's "paper (PDF)" arrow */
-        .research-download span {
-            margin-left: 0.45em;
-            color: var(--fg4);
-        }
-
-        .research-abstract summary {
-            width: fit-content;
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-            padding: 0.6rem 0;
-            list-style: none;
-            cursor: pointer;
-            color: var(--fg3);
-        }
-
-        .research-abstract summary::-webkit-details-marker {
-            display: none;
-        }
-
-        .research-abstract summary::before {
-            content: '';
-            width: 0.35rem;
-            height: 0.35rem;
-            border-right: 1px solid currentColor;
-            border-bottom: 1px solid currentColor;
-            transform: rotate(-45deg);
-        }
-
-        .research-abstract[open] summary::before {
-            transform: translateY(-0.1rem) rotate(45deg);
-        }
-
-        /* the chevron turns its quarter from right to down over 0.2s, easing
-           out so it settles straight into place; the abstract itself appears
-           at once */
-        @media (prefers-reduced-motion: no-preference) {
-            .research-abstract summary::before {
-                transition: transform 0.2s ease-out;
-            }
-        }
-
-        .research-abstract summary:hover,
-        .research-abstract[open] summary {
-            color: var(--fg);
-        }
-
-        .research-abstract summary:focus-visible {
-            outline: 2px solid var(--yellow-bright);
-            outline-offset: 3px;
-        }
-
-        .abstract-text {
-            clear: both;
-            margin-top: 0.5rem;
-            padding: 0.2rem 0 0.2rem 1rem;
-            border-left: 2px solid var(--bg2);
-            color: var(--fg3);
-            font-size: 0.875rem;
-            line-height: 1.8;
-        }
-
-        .abstract-text p {
-            margin: 0;
-        }
-
-        .research-entry.research-jmp {
-            padding: 1.4rem 1.5rem 1rem;
-            border: 0;
-            border-top: 2px solid var(--red-bright);
-            background: var(--bg0s);
-        }
-
-        .research-jmp h3 {
-            font: 400 2rem/1.2 var(--serif);
-            letter-spacing: -0.02em;
-        }
-
-        .research-jmp .research-authors {
-            margin-top: 0.7rem;
-        }
-
-        .skip-link {
-            position: absolute;
-            top: 0.75rem;
-            left: 0.75rem;
-            z-index: 2;
-            padding: 0.6rem 0.9rem;
-            background: var(--deep);
-            color: var(--fg);
-            transform: translateY(-200%);
-        }
-
-        .skip-link:focus {
-            transform: translateY(0);
-            outline: 2px solid var(--yellow-bright);
-        }
-
-        @media (max-width: 760px) {
-            .profile-name {
-                font-size: 1.375rem;
-            }
-
-            .profile-name .last {
-                white-space: normal;
-            }
-
-            .page .research-heading {
-                margin-bottom: 1.75rem;
-                font-size: 2.25rem;
-            }
-
-            .research-entry.research-jmp {
-                padding: 1.25rem 1.125rem 0.85rem;
-            }
-
-            .research-jmp h3 {
-                font-size: 1.75rem;
-            }
-        }
-
-        @media print {
-            .skip-link {
-                display: none;
-            }
-
-            .research-venue em {
-                color: var(--fg);
-            }
-
-            .page .research-heading {
-                margin-bottom: 1.25rem;
-            }
-
-            .research-entry {
-                break-inside: avoid;
-            }
-
-            .research-entry.research-jmp {
-                border: 1px solid var(--bg1);
-                border-top: 2px solid var(--red-bright);
-            }
-        }
-    </style>
+            mark(theme, light);
+            document.write('<link rel="stylesheet" href="' + SHEETS[theme] + '" data-theme-sheet>');
+            window.siteTheme = { theme: theme, light: light, sheets: SHEETS, mark: mark };
+        })();
+    </script>
+    <noscript><link rel="stylesheet" href="theme-neu.css"></noscript>
 </head>
 
 <body class="split">
@@ -322,9 +95,12 @@
             <section class="research-section" aria-labelledby="jmp-heading">
                 <h2 id="jmp-heading">Job Market Paper</h2>
                 <article class="research-entry research-jmp" aria-labelledby="jmp-title">
-                    <h3 id="jmp-title"><a href="assets/jmp.pdf">Social Media Toxicity and Mental Health</a></h3>
-                    <p class="research-authors">with <a href="https://sites.google.com/view/francescocapozza/">Francesco Capozza</a>, <a href="https://www.kylanrutherford.me/">Kylan Rutherford</a>, and <a href="https://www.mstalinski.net/">Mateusz Stalinski</a></p>
-                    <p class="research-summary">A six-week field experiment (N&nbsp;=&nbsp;664) randomly assigns users to filtering toxic content on Facebook, X, and Reddit. Contrary to intuition, filtering worsens mental health: the ITT on a GAD-7/PHQ-8 symptom index is 0.15σ. Heightened loneliness and a diminished relative moral self-view are candidate channels.</p>
+                    <!-- the div is the Instrument theme's glass window; the other themes see through it -->
+                    <div class="glass">
+                        <h3 id="jmp-title"><a href="assets/jmp.pdf">Social Media Toxicity and Mental Health</a></h3>
+                        <p class="research-authors">with <a href="https://sites.google.com/view/francescocapozza/">Francesco Capozza</a>, <a href="https://www.kylanrutherford.me/">Kylan Rutherford</a>, and <a href="https://www.mstalinski.net/">Mateusz Stalinski</a></p>
+                        <p class="research-summary">A six-week field experiment (N&nbsp;=&nbsp;664) randomly assigns users to filtering toxic content on Facebook, X, and Reddit. Contrary to intuition, filtering worsens mental health: the ITT on a GAD-7/PHQ-8 symptom index is 0.15σ. Heightened loneliness and a diminished relative moral self-view are candidate channels.</p>
+                    </div>
                     <div class="research-actions">
                         <a class="research-download" href="assets/jmp.pdf" aria-label="Read Social Media Toxicity and Mental Health (PDF)">paper (PDF)<span aria-hidden="true">↗</span></a>
                         <details class="research-abstract">
@@ -487,8 +263,23 @@
                 if (event.target !== photo) view.close();
             });
         })();
+
+        // print: every closed abstract opens for the printed page and closes
+        // again after, so a saved pdf carries the full text
+        (function () {
+            var opened = [];
+            window.addEventListener('beforeprint', function () {
+                opened = [].slice.call(document.querySelectorAll('details:not([open])'));
+                opened.forEach(function (d) { d.open = true; });
+            });
+            window.addEventListener('afterprint', function () {
+                opened.forEach(function (d) { d.open = false; });
+                opened = [];
+            });
+        })();
     </script>
     <script src="glow.js"></script>
+    <script src="theme.js"></script>
 </body>
 
 </html>

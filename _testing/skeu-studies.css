@@ -1,0 +1,121 @@
+/* Skeuomorphic homepage studies (skeu-*.html). Independent of styles.css and
+   of the neumorphic set (neu-*). Shared here: the Gruvbox palette, with its
+   light tones too so paper, brass and chalk can be drawn from it; type;
+   hairline links; the live behaviours (copy key, photo dialog, word lift);
+   the menu for hopping between studies. Each study's materials live in its
+   own file (skeu-desk.css, skeu-instrument.css, skeu-library.css,
+   skeu-seminar.css), loaded after this one. */
+:root {
+  color-scheme: dark;
+  /* dark tones */
+  --bg: #282828;
+  --deep: #1d2021;
+  --bg0s: #32302f;
+  --bg1: #3c3836;
+  --bg2: #504945;
+  --bg3: #665c54;
+  --bg4: #7c6f64;
+  /* light tones: text on dark, and paper */
+  --fg0: #fbf1c7;
+  --fg: #ebdbb2;
+  --fg2: #d5c4a1;
+  --fg3: #bdae93;
+  --fg4: #a89984;
+  --paper: #ebdbb2;
+  --paper-bright: #fbf1c7;
+  --paper-warm: #f2e5bc;
+  --paper-dim: #d5c4a1;
+  /* ink on paper */
+  --ink: #282828;
+  --ink2: #3c3836;
+  --ink3: #504945;
+  --ink4: #665c54;
+  /* accents */
+  --red: #cc241d;
+  --red-bright: #fb4934;
+  --red-deep: #9d0006;
+  --yellow: #d79921;
+  --yellow-bright: #fabd2f;
+  --yellow-deep: #b57614;
+  --orange: #d65d0e;
+  --orange-bright: #fe8019;
+  --green: #98971a;
+  --green-bright: #b8bb26;
+  --green-deep: #79740e;
+  --aqua: #689d6a;
+  --blue: #83a598;
+  --blue-deep: #458588;
+  --serif: Georgia, "Times New Roman", serif;
+  --sans: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  --mono: "Courier New", monospace;
+  --fade-in: 0.2s;
+  --fade-out: 0.5s;
+  /* a tile of monochrome grain, for layering at low opacity over any material */
+  --noise: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='240' height='240'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+* { box-sizing: border-box; }
+html { scrollbar-color: var(--bg3) var(--bg); }
+body { margin: 0; background: var(--bg); color: var(--fg); font: 16px/1.55 var(--sans); -webkit-font-smoothing: antialiased; }
+h1, h2, h3, p { margin: 0; }
+svg { display: block; fill: currentColor; }
+img { display: block; }
+button { font: inherit; color: inherit; cursor: pointer; }
+::selection { background: var(--bg3); color: var(--fg0); }
+
+/* links: never thicker than a hairline, and the red arrives dim */
+a { color: inherit; text-decoration: underline; text-decoration-thickness: 1px; text-decoration-color: transparent; text-underline-offset: 0.12em; transition: color var(--fade-out), text-decoration-color var(--fade-out); }
+a:hover { text-decoration-color: rgb(204 36 29 / 0.9); transition-duration: var(--fade-in); }
+a:focus-visible, button:focus-visible, summary:focus-visible { outline: 2px solid var(--yellow-bright); outline-offset: 3px; }
+
+/* the copy-email key: hidden until the page script finds a clipboard; a
+   successful copy swaps the clipboard icon for a check that draws itself */
+.copy[hidden] { display: none; }
+.copy .icon-copy { fill: none; stroke: currentColor; stroke-width: 1.3; }
+.copy .icon-check { fill: none; stroke: currentColor; stroke-width: 1.5; stroke-linecap: round; stroke-linejoin: round; }
+.copy:not(.done) .icon-check, .copy.done .icon-copy { display: none; }
+@media (prefers-reduced-motion: no-preference) { .copy.done .icon-check path { stroke-dasharray: 1 2; animation: check-draw 0.25s ease-out both; } }
+@keyframes check-draw { from { stroke-dashoffset: 1.1; } to { stroke-dashoffset: 0; } }
+.email-row { position: relative; display: flex; align-items: center; gap: 0.6rem; }
+.copied { position: absolute; right: 0; bottom: calc(100% + 4px); font-size: 0.75rem; line-height: 1.5; white-space: nowrap; color: var(--yellow-bright); }
+.copy.done + .copied { width: 1px; height: 1px; padding: 0; overflow: hidden; clip-path: inset(50%); }
+
+/* the job-market dot, breathing; studies redraw it as an LED, a chalk dot, a wax seal */
+.dot { display: inline-block; width: 0.55rem; height: 0.55rem; border-radius: 50%; background: var(--yellow-bright); box-shadow: 0 0 0 4px rgba(250, 189, 47, 0.15); flex-shrink: 0; }
+@media (prefers-reduced-motion: no-preference) { .dot { animation: breathe 4s ease-in-out infinite; } }
+@keyframes breathe { 50% { box-shadow: 0 0 0 6px rgba(250, 189, 47, 0.1); } }
+
+/* enlarged photo: a modal over the dimmed page, as on the live site */
+.portrait { display: block; padding: 0; border: 0; background: none; font: inherit; cursor: zoom-in; }
+.photo-view[open] { box-sizing: border-box; display: grid; place-items: center; width: 100%; height: 100%; max-width: none; max-height: none; margin: 0; padding: 1.25rem; border: 0; background: none; cursor: zoom-out; animation: photo-fade 0.15s ease-out; }
+.photo-view::backdrop { background: rgba(29, 32, 33, 0.92); animation: photo-fade 0.15s ease-out; }
+.photo-view img { box-sizing: border-box; display: block; width: min(100%, 85vh * 2 / 3); width: min(100%, 85svh * 2 / 3); height: auto; border-radius: 4px; cursor: auto; animation: photo-grow 0.15s ease-out; background: url(../assets/headshot.jpg) top / 100% no-repeat; box-shadow: 0 24px 60px rgba(0, 0, 0, 0.6); }
+.photo-close { position: absolute; top: 0.75rem; right: 0.75rem; width: 2.75rem; height: 2.75rem; padding: 0; border: 0; border-radius: 50%; background: none; color: var(--fg); font: 2rem/1 var(--serif); cursor: pointer; }
+.photo-close:hover { background: var(--bg1); }
+.photo-close:focus-visible { outline: 2px solid var(--yellow-bright); outline-offset: 1px; }
+html:has(.photo-view[open]) { overflow: hidden; scrollbar-gutter: stable; }
+@keyframes photo-fade { from { opacity: 0; } }
+@keyframes photo-grow { from { transform: scale(0.94); } }
+@media (prefers-reduced-motion: reduce) { .photo-view[open], .photo-view::backdrop, .photo-view img { animation: none; } }
+
+/* text brightens under the cursor (glow.js, unchanged from the live site):
+   each word of the muted prose gets a share --w of the lift. a study whose
+   prose sits on paper sets --fg3 and --lift-hover to ink tones on that paper */
+:root { --lift-hover: #e0cfa9; --lift-delay: 0.2s; --lift-in: 0.3s; --lift-out: 0.7s; }
+.w { color: color-mix(in srgb, var(--fg3), var(--lift-hover) calc(var(--w, 0) * 100%)); transition: color var(--lift-out) ease-in-out; }
+
+.skip-link { position: absolute; top: 0.75rem; left: 0.75rem; z-index: 2; padding: 0.6rem 0.9rem; border-radius: 6px; background: var(--deep); color: var(--fg); transform: translateY(-200%); }
+.skip-link:focus { transform: translateY(0); outline: 2px solid var(--yellow-bright); }
+
+/* floating menu to hop between the studies; ?clean hides it for screenshots */
+.proposal-menu { position: fixed; z-index: 5; right: 18px; bottom: 14px; font: 12px/1.4 var(--sans); color: var(--fg3); }
+.proposal-menu summary { cursor: pointer; list-style: none; padding: 9px 14px; border-radius: 999px; background: var(--deep); border: 1px solid var(--bg2); box-shadow: 0 6px 18px rgba(0, 0, 0, 0.4); }
+.proposal-menu summary::-webkit-details-marker { display: none; }
+.proposal-menu summary::after { content: " +"; color: var(--red-bright); }
+.proposal-menu[open] summary::after { content: " −"; }
+.proposal-menu nav { position: absolute; bottom: calc(100% + 10px); right: 0; width: 240px; padding: 8px; border-radius: 12px; background: var(--deep); border: 1px solid var(--bg2); box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5); }
+.proposal-menu nav a { display: block; padding: 8px 10px; border-radius: 8px; color: var(--fg3); text-decoration: none; }
+.proposal-menu nav a:hover { color: var(--fg); background: var(--bg); }
+.proposal-menu nav a[aria-current] { color: var(--yellow-bright); }
+.proposal-menu nav hr { border: 0; border-top: 1px solid var(--bg1); margin: 6px 4px; }
+html.clean-preview .proposal-menu { display: none; }
