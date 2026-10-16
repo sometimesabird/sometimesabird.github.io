@@ -67,5 +67,5 @@ Push to `master` branch → GitHub Pages serves the site automatically at `www.g
 - Do not introduce build tools, bundlers, or static site generators
 - Do not delete `_config.yml`: it is configuration for GitHub Pages' built-in Jekyll pass, not an added build step, and removing it publishes `CLAUDE.md`
 - Do not change the Gruvbox color scheme unless explicitly asked
-- Do not load fonts or anything else from third parties; the two web fonts the skeuomorphic themes use are self-hosted in `assets/fonts/`
+- Do not load fonts or anything else from third parties; the two web fonts the skeuomorphic themes use are self-hosted in `assets/fonts/`. The one exception is the Google tag (gtag.js, `G-G6H97P8QLM`) at the top of the `<head>` of `index.html`, `research.html` and `fun.html`, added at George's request; a new published page needs it too
 - Keep published pages and the stylesheet flat at the root, and put PDFs and images in `assets/`. Put drafts, design experiments, and old page versions in `_testing/`, never at the root; the leading underscore is what keeps the folder unpublished, so do not rename it without one. Links from `_testing/` to root files need a `../` prefix
