@@ -973,48 +973,28 @@ html:has(.photo-view[open]) {
     font-weight: 500;
 }
 
-/* fields as outlined pills, set apart from the prose above */
+/* fields as a plain line under the lede: no borders, so nothing reads as a
+   filter to click. the nbsp in the markup keeps each field whole and breaks
+   a wrapped line after a dot, never before */
 .fields {
-    list-style: none;
     margin: 0 0 2.75rem;
-    padding: 0;
-    display: flex;
-    flex-wrap: wrap;
-    align-items: center;
-    gap: 0.5rem;
-}
-
-.fields::before {
-    content: "fields";
-    margin-right: 0.35rem;
-    font-size: 0.72rem;
-    font-weight: 600;
-    letter-spacing: 0.14em;
-    text-transform: uppercase;
-    color: var(--fg4);
-}
-
-.fields li {
-    margin: 0;
-    padding: 0.15rem 0.75rem;
-    border: 1px solid var(--bg3);
-    border-radius: 999px;
-    font-size: 0.85rem;
+    font-size: 0.9rem;
     line-height: 1.5;
-    color: var(--fg2);
+    color: var(--fg4);
 }
 
 .page section {
     margin-bottom: 2.75rem;
 }
 
-/* eyebrows: regular-weight mono keeps the red quiet */
+/* section headings: italic, muted serif labels. roman and bright they shared
+   face, weight, and color with the paper titles beneath them and read as a
+   smaller sibling of the title rather than its label; italic and fg3 set them
+   apart while keeping the serif tie to the page titles */
 .page h2 {
     margin: 0 0 1rem;
-    font: 400 0.75rem/1.5 var(--mono);
-    letter-spacing: 0.11em;
-    text-transform: uppercase;
-    color: var(--red-bright);
+    font: italic 400 1.25rem/1.3 var(--serif);
+    color: var(--fg3);
 }
 
 /* job market paper card */
@@ -1081,11 +1061,16 @@ html:has(.photo-view[open]) {
     }
 }
 
+/* 2rem is the largest size at which the whole title fits the card's 616px
+   inner width on one line in Georgia with some margin (Liberation Serif, the
+   Linux fallback, is narrower and fits up to 2.375rem), and matches the
+   research page's title. balanced wrapping covers any width where it still
+   breaks, so a wrap never strands one word on the second line */
 .card h3 {
     margin: 0;
-    max-width: 550px;
-    font: 400 2.5rem/1.15 var(--serif);
+    font: 400 2rem/1.15 var(--serif);
     letter-spacing: -0.025em;
+    text-wrap: balance;
 }
 
 .card .question {
@@ -1133,9 +1118,11 @@ html:has(.photo-view[open]) {
 /* arrow glyphs lean the way they point while their link is hovered; only the
    glyph moves, never the words. each is an inline-block, since plain inline
    boxes can't be transformed, which also stops a hover underline at the
-   words. on links that underline (not .text-link, which uses a border), the
-   gap before the arrow is margin, not a space, so the underline doesn't
-   overhang either. the research page's .research-download arrows share this */
+   words. the gap before every arrow is margin, not a space: on links that
+   underline so the line doesn't overhang, and on .text-link so the arrow
+   sits as close to its words as the other arrows do (a space on top of the
+   margin had set it a word apart). the research page's .research-download
+   arrows share this */
 .page .text-link span,
 .research-download span,
 .more span {
@@ -1255,10 +1242,11 @@ html:has(.photo-view[open]) {
     margin-left: 0.25em;
 }
 
-/* mid widths: the main column narrows, so shrink the card title */
+/* below 1000px the main column narrows, so the card title drops to the
+   research page's mobile size; this covers phones too */
 @media (max-width: 1000px) {
     .card h3 {
-        font-size: 2.1875rem;
+        font-size: 1.75rem;
     }
 }
 
@@ -1388,20 +1376,11 @@ html:has(.photo-view[open]) {
 
     .fields {
         margin-bottom: 2.25rem;
-        gap: 0.4rem;
-    }
-
-    .fields li {
-        padding: 0.1rem 0.65rem;
         font-size: 0.8125rem;
     }
 
     .card {
         padding: 1.5rem 1.375rem;
-    }
-
-    .card h3 {
-        font-size: 2.0625rem;
     }
 
     /* badge above the title instead of beside it */
