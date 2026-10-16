@@ -1,0 +1,24 @@
+@import url('favicon-proposals.css');
+main { padding-top: 30px; }
+.options { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+.option { padding: 18px; }
+.number { font-size: 10px; }
+h2 { margin: 9px 0; }
+.description { min-height: 38px; margin-bottom: 18px; }
+.pair { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
+.choice { padding: 10px; border: 1px solid #47423d; border-radius: 8px; min-width: 0; }
+.choice.active { border-color: #d79921; box-shadow: 0 0 0 1px #d79921; }
+.case-label { color: #ebdbb2; font-size: 15px; font-weight: 600; }
+.case-label span { color: #a89984; font-size: 10px; font-weight: 400; margin-left: 5px; }
+.specimen { margin: 14px 0 18px; gap: 8px; }
+.scale { gap: 8px; margin-right: 0; }
+.scale span { font-size: 8px; }
+.tab { padding: 6px; gap: 6px; }
+.tab.dark { padding: 5px; }
+.actions { margin-top: 12px; padding-top: 9px; font-size: 9px; }
+.actions button { padding: 6px; }
+.back { color: #bdae93; white-space: nowrap; text-underline-offset: 4px; font-size: 12px; }
+.review-bar { margin-top: 22px; }
+@media (max-width: 1250px) { .options { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (max-width: 850px) { .options { grid-template-columns: 1fr; } }
+@media (max-width: 520px) { header { gap: 18px; } .option { padding: 13px; } .pair { gap: 8px; } .choice { padding: 8px; } .specimen { flex-wrap: wrap; justify-content: flex-start; gap: 14px; } .description { min-height: 0; font-size: 13px; } .tab { font-size: 10px; } .actions { align-items: flex-start; flex-direction: column; gap: 0; } }

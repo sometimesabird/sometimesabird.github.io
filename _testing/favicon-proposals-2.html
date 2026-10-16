@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="color-scheme" content="dark">
+    <!-- the tab is titled like the real site, so trying a candidate below shows
+         it exactly as a visitor's tab would -->
+    <title>George Beknazar-Yuzbashev</title>
+    <link rel="icon" id="fav16" sizes="16x16" href="favicon-2/01-G-16.png">
+    <link rel="icon" id="fav32" sizes="32x32" href="favicon-2/01-G-32.png">
+    <style>
+        :root { --bg: #282828; --bg1: #3c3836; --bg2: #504945; --fg: #ebdbb2; --fg3: #bdae93; --fg4: #a89984; --red: #cc241d; --yellow: #fabd2f; }
+        * { box-sizing: border-box; }
+        body { margin: 0; padding: 2.5rem 1.5rem 5rem; background: var(--bg); color: var(--fg); font: 16px/1.5 system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; }
+        .wrap { max-width: 72rem; margin: 0 auto; }
+        h1 { font: 400 1.75rem/1.2 Georgia, serif; margin: 0 0 0.5rem; }
+        .intro { color: var(--fg3); max-width: 46rem; margin: 0 0 2rem; }
+        .intro kbd { font: inherit; color: var(--fg); border: 1px solid var(--bg2); border-radius: 4px; padding: 0 0.3em; }
+        .current { display: flex; align-items: center; gap: 0.75rem; color: var(--fg4); margin-bottom: 2.5rem; font-size: 0.9rem; }
+        .current img { width: 16px; height: 16px; }
+        .grid { display: grid; gap: 1.25rem; grid-template-columns: repeat(auto-fill, minmax(20rem, 1fr)); }
+        .card { background: var(--bg1); border-radius: 12px; padding: 1rem 1rem 1.1rem; display: grid; grid-template-columns: 1fr auto; gap: 0.5rem 1rem; outline: 2px solid transparent; outline-offset: 2px; transition: outline-color 0.2s; }
+        .card.on { outline-color: var(--yellow); }
+        .card h2 { grid-column: 1; margin: 0; font: 400 1.15rem/1.3 Georgia, serif; }
+        .card h2 span { color: var(--fg4); font-size: 0.85rem; margin-right: 0.4em; font-family: system-ui, sans-serif; }
+        .card p { grid-column: 1; margin: 0; color: var(--fg3); font-size: 0.9rem; }
+        .big { grid-column: 2; grid-row: 1 / span 2; width: 72px; height: 72px; border-radius: 16px; }
+        .strips { grid-column: 1 / -1; display: grid; gap: 0.4rem; margin-top: 0.4rem; }
+        .strip { border-radius: 6px; padding: 6px 8px 0; display: flex; align-items: flex-end; gap: 2px; height: 38px; font: 12px/1 system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; }
+        .strip.light { background: #dee1e6; color: #202124; }
+        .strip.dark { background: #202124; color: #e8eaed; }
+        .tab { display: flex; align-items: center; gap: 8px; height: 32px; padding: 0 12px; border-radius: 8px 8px 0 0; white-space: nowrap; overflow: hidden; }
+        .strip.light .tab.active { background: #fff; }
+        .strip.dark .tab.active { background: #35363a; }
+        .tab:not(.active) { opacity: 0.6; }
+        .tab img { width: 16px; height: 16px; flex: none; }
+        .tab.x2 img { width: 32px; height: 32px; }
+        .try { grid-column: 1 / -1; justify-self: start; margin-top: 0.6rem; font: inherit; font-size: 0.85rem; color: var(--fg); background: var(--bg2); border: 0; border-radius: 999px; padding: 0.35rem 0.9rem; cursor: pointer; }
+        .try:hover { background: #665c54; }
+        .card.on .try { background: var(--yellow); color: #282828; }
+        .card.on .try::after { content: " ✓"; }
+        footer { margin-top: 3rem; color: var(--fg4); font-size: 0.85rem; max-width: 46rem; }
+    </style>
+</head>
+<body>
+<div class="wrap">
+    <h1>Favicon proposals</h1>
+    <p class="intro">Ten candidates to replace the red atom. Each is shown in a mock light and dark tab strip at tab size, at twice tab size, and large. <strong>Try</strong> puts a candidate in this page's real tab (the title already matches the site), so you can judge it against your actual open tabs; keys <kbd>1</kbd>–<kbd>9</kbd> and <kbd>0</kbd> do the same.</p>
+    <p class="current"><img src="../favicon.ico" alt=""> the current icon, for comparison</p>
+    <div class="grid" id="grid"></div>
+    <footer>All ten are drawn on a 16-pixel grid in the site's Gruvbox palette, so they stay crisp at tab size. The dark plate is shared; any glyph can also be cut out without it. Whichever is chosen gets exported as <code>favicon.ico</code> (16, 32, 48), a <code>favicon.svg</code>, and an Apple touch icon.</footer>
+</div>
+<script>
+    var CANDIDATES = [
+        ['01-G', 'G', 'The plainest: a serif initial in the site’s cream on its dark ground. Reads at every size.'],
+        ['02-by', 'by', 'The domain, george.by, as a word. Lowercase, like the nav.'],
+        ['03-badge', 'badge', 'The journal badge: a dark G on Gruvbox yellow. The one warm tile in a strip of tabs; the loudest of the ten.'],
+        ['04-bird', 'bird', 'sometimesabird: a sparrow on a red branch. The only one that is a picture of you rather than of your work.'],
+        ['05-bars', 'bars', 'Control and treated: two bars, one cream, one red. The experiment in one glance.'],
+        ['06-bubble', 'bubble', 'A post with a line struck through: the intervention, hiding toxic content, as a mark.'],
+        ['07-coin', 'coin', 'Randomisation: a coin, half cream, half red.'],
+        ['08-key', 'key', 'The home key: the nav’s red dot in a pressed neumorphic dish. At tab size it is a red dot on dark.'],
+        ['09-card', 'card', 'The job-market card in miniature: red rule, yellow question, two lines of text.'],
+        ['10-portrait', 'portrait', 'The sidebar photo in a circle. Reads at twice tab size, a blob at tab size.']
+    ];
+    var grid = document.getElementById('grid');
+    function strip(theme, file, x2) {
+        return '<div class="strip ' + theme + '">' +
+            '<div class="tab active' + (x2 ? ' x2' : '') + '"><img src="favicon-2/' + file + '.svg" alt="">George Beknazar-Yuzbashev</div>' +
+            '<div class="tab"><img src="favicon-2/' + file + '.svg" alt="">Research</div></div>';
+    }
+    CANDIDATES.forEach(function (c, i) {
+        var card = document.createElement('article');
+        card.className = 'card';
+        card.dataset.file = c[0];
+        card.innerHTML =
+            '<h2><span>' + (i + 1) + '</span>' + c[1] + '</h2>' +
+            '<img class="big" src="favicon-2/' + c[0] + '.svg" alt="">' +
+            '<p>' + c[2] + '</p>' +
+            '<div class="strips">' + strip('light', c[0]) + strip('dark', c[0]) + '</div>' +
+            '<button class="try" type="button">try in this tab</button>';
+        card.querySelector('.try').addEventListener('click', function () { pick(c[0]); });
+        grid.appendChild(card);
+    });
+    function pick(file) {
+        document.getElementById('fav16').href = 'favicon-2/' + file + '-16.png';
+        document.getElementById('fav32').href = 'favicon-2/' + file + '-32.png';
+        document.querySelectorAll('.card').forEach(function (el) { el.classList.toggle('on', el.dataset.file === file); });
+    }
+    document.addEventListener('keydown', function (e) {
+        if (e.target.tagName === 'INPUT' || e.metaKey || e.ctrlKey || e.altKey) return;
+        var n = e.key === '0' ? 10 : parseInt(e.key, 10);
+        if (n >= 1 && n <= 10) pick(CANDIDATES[n - 1][0]);
+    });
+    pick('01-G');
+</script>
+</body>
+</html>

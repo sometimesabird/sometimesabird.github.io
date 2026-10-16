@@ -29,7 +29,9 @@ Every page can be drawn in one of six themes, chosen on `fun.html` and kept in t
 | `theme.js` | Runs after every page: wires the picker on `fun.html` and swaps the stylesheet in place, adds what a theme needs beyond the shared markup (the neumorphic sun/moon key, the instrument's screws, the glass's refraction filter), and drives the neumorphic pointer lamp and the glass's pointer light |
 | `glow.js` | Text brightens under the cursor, on every theme |
 | `assets/fonts/` | Self-hosted latin woff2 subsets of Courier Prime (400, 700, 400 italic) and IBM Plex Mono (400, 500), with their SIL Open Font License texts |
-| `favicon.ico` | Site icon |
+| `favicon.ico` | Bookish uppercase BY favicon: cream serif initials on charcoal, with 16×16, 32×32, and 48×48 entries. The three pages use `?v=by` to refresh the old atom icon in browser caches |
+| `assets/favicon.svg` | Vector version of the same BY icon, with outlined letters and no font dependency; selected from `_testing/favicon-by/13-serif-BY.svg` |
+| `assets/apple-touch-icon.png` | Opaque 180×180 BY icon for Apple home-screen bookmarks |
 | `CNAME` | Custom domain: `www.george.by` |
 | `_config.yml` | Exclude list for repo-only files at the root (currently `CLAUDE.md`) |
 | `_testing/` | Drafts, design experiments, and old page versions (e.g. `index2.html`, `research-old.html`, `design-*.html`, `text-*.html`, the old Bootstrap stylesheet; the `glass-*` Liquid Glass homepage studies with their gallery `glass-proposals.html`, of which 04b became `theme-glass.css`); kept in the repo, never published |

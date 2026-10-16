@@ -1,0 +1,19 @@
+@import url('favicon-proposals.css');
+main { padding-top: 30px; }
+.options { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+.option { padding: 16px 18px; }
+.option.active { border-color: #d79921; box-shadow: 0 0 0 1px #d79921; }
+.option-top { min-height: 21px; }
+.number { font-size: 10px; }
+.specimen { margin: 14px 0 13px; }
+.scale { gap: 24px; margin-right: 4px; }
+h2 { margin: 0 0 7px; }
+.description { min-height: 57px; margin-bottom: 12px; }
+.tab { padding-top: 6px; padding-bottom: 6px; }
+.tab.dark { padding-top: 5px; padding-bottom: 5px; }
+.actions { margin-top: 14px; padding-top: 10px; }
+.current img { flex-shrink: 0; }
+.review-bar { margin-top: 22px; }
+@media (max-width: 1150px) { .options { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
+@media (max-width: 850px) { .options { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (max-width: 560px) { header { flex-direction: column; gap: 18px; } .options { grid-template-columns: 1fr; } .description { min-height: 0; } .specimen { justify-content: space-between; } }
