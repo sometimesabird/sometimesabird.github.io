@@ -70,7 +70,7 @@
   --shadow-card-hover: 0 44px 90px -30px rgba(0, 0, 0, 0.75), 0 4px 10px rgba(0, 0, 0, 0.25);
   --shadow-key: 0 2px 6px rgba(0, 0, 0, 0.28);
   --shadow-key-hover: 0 6px 14px rgba(0, 0, 0, 0.32);
-  --glint: 0.12;                                  /* the pointer glint's strength */
+  --glint: 0.08;                                  /* the pointer glint's strength; 0.12 in the study read as a spotlight on the sheet */
   --glint-size: 320px;
   --rim-follow: 1;                                /* how far the pointer pulls the rim's highlight, 0–1 (theme.js reads it) */
   --r-panel: 28px;
