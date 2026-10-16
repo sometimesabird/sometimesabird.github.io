@@ -1,0 +1,27 @@
+/* 01 — Clear: wallpaper and material for glass-clear.html. Loaded after
+   glass-studies.css.
+
+   The dark reading of the material as Apple draws it over a wallpaper. The
+   page is Gruvbox dark with pools of the palette's accents behind it, dim
+   and far out of focus, drifting a few percent over a minute: dim red up
+   and to the left, ochre at the top right, slate blue low on the right,
+   aqua low on the left, a trace of purple in the middle. The sidebar and
+   the job market card are clear glass: barely tinted, so the pools pass
+   through them as washes of colour, a light blur, and a bright rim. */
+.lg-clear {
+  --glass-filter: blur(18px) saturate(1.6);
+  --tint-panel: rgba(235, 219, 178, 0.035);
+  background: var(--bg);
+}
+.lg-clear::before {
+  content: ""; position: fixed; inset: -20%; z-index: -1; pointer-events: none;
+  background:
+    radial-gradient(42% 34% at 18% 24%, rgba(204, 36, 29, 0.22), transparent 70%),
+    radial-gradient(36% 30% at 74% 16%, rgba(215, 153, 33, 0.17), transparent 70%),
+    radial-gradient(44% 38% at 80% 74%, rgba(69, 133, 136, 0.3), transparent 70%),
+    radial-gradient(38% 32% at 28% 82%, rgba(104, 157, 106, 0.18), transparent 70%),
+    radial-gradient(30% 26% at 54% 50%, rgba(177, 98, 134, 0.16), transparent 70%);
+  animation: lg-drift 60s ease-in-out infinite alternate;
+}
+@keyframes lg-drift { to { transform: translate(3%, -2%) rotate(5deg) scale(1.05); } }
+@media (prefers-reduced-motion: reduce) { .lg-clear::before { animation: none; } }

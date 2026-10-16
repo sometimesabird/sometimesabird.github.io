@@ -40,7 +40,7 @@
          ?theme=desk or ?theme=neu&light previews a theme without saving it -->
     <script>
         (function () {
-            var SHEETS = { flat: 'styles.css', neu: 'theme-neu.css', 'neu-reactive': 'theme-neu.css', desk: 'theme-desk.css', instrument: 'theme-instrument.css' };
+            var SHEETS = { flat: 'styles.css', neu: 'theme-neu.css', 'neu-reactive': 'theme-neu.css', desk: 'theme-desk.css', instrument: 'theme-instrument.css', glass: 'theme-glass.css' };
             var query = new URLSearchParams(location.search);
             var theme = 'neu', light = false;
             try {
@@ -59,7 +59,7 @@
                 root.classList.toggle('theme-neu', neu);
                 root.classList.toggle('theme-light', light);
                 document.querySelector('meta[name="color-scheme"]').content = light ? 'light' : 'dark';
-                document.querySelector('meta[name="theme-color"]').content = light ? '#f2f1ee' : neu ? '#282828' : '#1d2021';
+                document.querySelector('meta[name="theme-color"]').content = light ? '#f2f1ee' : neu || theme === 'glass' ? '#282828' : '#1d2021';
             }
             mark(theme, light);
             document.write('<link rel="stylesheet" href="' + SHEETS[theme] + '" data-theme-sheet>');

@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex">
+  <meta name="color-scheme" content="dark">
+  <title>Four liquid glass studies — George Beknazar-Yuzbashev</title>
+  <link rel="icon" href="../favicon.ico">
+  <link rel="stylesheet" href="glass-studies.css">
+  <style>
+    body.lg-gallery { background: var(--bg); }
+    body.lg-gallery::before { content: ""; position: fixed; inset: -20%; z-index: -1; pointer-events: none;
+      background:
+        radial-gradient(42% 34% at 18% 24%, rgba(204, 36, 29, 0.14), transparent 70%),
+        radial-gradient(36% 30% at 74% 16%, rgba(215, 153, 33, 0.1), transparent 70%),
+        radial-gradient(44% 38% at 80% 74%, rgba(69, 133, 136, 0.18), transparent 70%),
+        radial-gradient(38% 32% at 28% 82%, rgba(104, 157, 106, 0.1), transparent 70%); }
+    .gallery { max-width: 72rem; margin: 0 auto; padding: 3rem 2rem 4rem; }
+    .gallery .eyebrow { font: 12px/1.5 var(--mono); letter-spacing: 0.11em; text-transform: uppercase; color: var(--fg4); }
+    .gallery h1 { margin-top: 0.75rem; font: 400 2.5rem/1.1 var(--serif); letter-spacing: -0.02em; }
+    .gallery .intro { margin: 1rem 0 0.75rem; max-width: 64ch; color: var(--fg3); }
+    .gallery .intro a, .gallery .design p a, .gallery .notes a { color: var(--fg); text-decoration-color: var(--bg3); }
+    .gallery .shared { margin: 0 0 2.5rem; max-width: 64ch; color: var(--fg4); font-size: 0.9rem; }
+    .design-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 2.5rem; }
+    .design { display: flex; flex-direction: column; gap: 0.9rem; padding: 1.25rem; border-radius: 22px; background: rgba(235, 219, 178, 0.04); -webkit-backdrop-filter: blur(20px) saturate(1.4); backdrop-filter: blur(20px) saturate(1.4); box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.08), inset 0 0 0 1px rgba(255, 255, 255, 0.04), 0 24px 60px -24px rgba(0, 0, 0, 0.6); }
+    .preview-image { display: block; border-radius: 12px; overflow: hidden; background: var(--bg); box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.08); }
+    .preview-image img { width: 100%; height: auto; transition: transform 0.4s ease-out; }
+    @media (hover: hover) and (prefers-reduced-motion: no-preference) { .preview-image:hover img { transform: scale(1.015); } }
+    .design-heading { display: flex; align-items: baseline; gap: 0.75rem; flex-wrap: wrap; margin-top: 0.4rem; }
+    .design h2 { font: 400 1.5rem/1.2 var(--serif); }
+    .design-number { font: 13px var(--mono); color: var(--red-bright); margin-right: 0.6rem; }
+    .material { font: 11px/1.4 var(--mono); letter-spacing: 0.08em; text-transform: uppercase; color: var(--yellow-bright); }
+    .design p { color: var(--fg3); font-size: 0.95rem; }
+    .tradeoff strong { color: var(--fg); font-weight: 600; }
+    .design-keys { display: flex; flex-wrap: wrap; gap: 0.75rem; margin-top: 0.25rem; }
+    .design-keys a { display: inline-flex; align-items: center; gap: 0.5em; padding: 0.6rem 1.1rem; border-radius: 999px; font-size: 0.875rem; color: var(--fg); text-decoration: none; background: rgba(235, 219, 178, 0.085); box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.1), inset 0 -1px 0 rgba(0, 0, 0, 0.2), 0 2px 6px rgba(0, 0, 0, 0.28); transition: background var(--fade-out), transform var(--fade-out); }
+    .design-keys a:hover { background: rgba(235, 219, 178, 0.13); transform: translateY(-1px); transition-duration: var(--fade-in); }
+    .design-keys a span { display: inline-block; transition: transform 0.15s ease-out; }
+    @media (hover: hover) and (prefers-reduced-motion: no-preference) { .design-keys a:hover span { transform: translate(0.12em, -0.12em); } }
+    .notes { margin-top: 3rem; max-width: 64ch; color: var(--fg3); font-size: 0.95rem; }
+    .notes h2 { font: italic 400 1.25rem/1.3 var(--serif); color: var(--fg3); margin-bottom: 0.75rem; }
+    .notes ul { margin: 0; padding-left: 1.2rem; }
+    .notes li { margin-bottom: 0.5rem; }
+    .notes strong { color: var(--fg); font-weight: 600; }
+    .back { margin-top: 3rem; color: var(--fg4); font-size: 0.9rem; }
+    .back a { color: var(--fg3); }
+    @media (max-width: 800px) { .design-grid { grid-template-columns: 1fr; } .gallery { padding: 2rem 1.25rem 3rem; } }
+  </style>
+</head>
+<body class="lg-gallery">
+  <main class="gallery">
+    <p class="eyebrow">George Beknazar-Yuzbashev / Liquid glass homepage studies</p>
+    <h1>Same page, through glass.</h1>
+    <p class="intro">Four readings of the homepage in Apple’s Liquid Glass, all drawn from the Gruvbox palette. The sidebar and the job market card are sheets of glass that blur and tint what lies behind them, catch the light along a thin rim, and answer the pointer: the rim’s highlight leans toward it and a soft glint follows it across each sheet. The publications stay on the content layer beneath, as the material intends. Each keeps the live site’s markup, the compact sidebar, the live behaviours (copy key, click-to-enlarge photo, the word lift), and the two fixed signals: the question is the loudest object on every page, as tinted amber glass, and the AER and JPubE chips are coloured glass that stays bright.</p>
+    <p class="shared">Glass needs something behind it, and that is where the four differ most: what the wallpaper is, how frosted the glass is, whether the page is dark or light, and how much the pointer moves the light. Screenshots are 1440 wide with the pointer pinned over the card; open a study and move the pointer to see the light, hover the card and the keys, and narrow the window for the phone layout. Everything is CSS; no image files beyond the headshot.</p>
+    <div class="design-grid" id="grid">
+
+      <article class="design" id="clear">
+        <a class="preview-image" href="glass-clear.html" aria-label="Open the Clear study"><img src="glass-clear.png" width="1440" height="1000" alt="Clear homepage: Gruvbox dark with dim pools of red, ochre, blue and aqua behind clear glass panels; a glass sidebar with a round portrait in a glass bezel and a capsule nav, and a glass job market card with the question in amber tinted glass."></a>
+        <div class="design-heading"><h2><span class="design-number">01</span>Clear</h2><span class="material">dark · colour pools · clear glass</span></div>
+        <p>The material as Apple draws it, on the site’s dark. Behind the page, pools of the palette’s accents, dim and far out of focus, drift a few percent over a minute: red up and to the left, ochre at the top right, slate blue low on the right, aqua low on the left. The sidebar and the card are clear glass, barely tinted, so the pools pass through them as washes of colour, with a light blur and a bright rim. The nav is one glass capsule with the current page as a lit lozenge; the portrait sits in a glass bezel; the status line is a glass pill.</p>
+        <p class="tradeoff"><strong>Choose this for:</strong> the most recognisable reading of the style while staying dark and warm. The pools are the one knob to argue about: each is a line in <code>glass-clear.css</code>, so they can be fewer, dimmer, or still.</p>
+        <div class="design-keys"><a href="glass-clear.html">Open Clear <span aria-hidden="true">↗</span></a></div>
+      </article>
+
+      <article class="design" id="frost">
+        <a class="preview-image" href="glass-frost.html" aria-label="Open the Frost study"><img src="glass-frost.png" width="1440" height="1000" alt="Frost homepage: monochrome Gruvbox dark with a fine dot grid; the main column is a large frosted sheet holding a brighter frosted job market card, which holds the amber question well; the sidebar is a frosted sheet beside it."></a>
+        <div class="design-heading"><h2><span class="design-number">02</span>Frost</h2><span class="material">dark · monochrome · frosted glass · stacked sheets</span></div>
+        <p>The quiet one, and the nearest to the Neumorphic theme’s taste. No colour behind the glass: the wallpaper is the page’s own grey under a lamp up and to the left, with a fine dot grid and two soft diagonal ridges for the frost to diffuse. The glass is the heavier material, Apple’s “regular” against the first study’s “clear”, and the page is built as stacked sheets with nesting corners: the main column is a faint frosted sheet, the job market card a brighter sheet upon it, and the question a well in the card. Rims are a single pixel and softer.</p>
+        <p class="tradeoff"><strong>Choose this for:</strong> glass that is felt more than seen. It gives up the colour that makes the material obvious and keeps its layering, so it reads as a softer, more translucent Neumorphic rather than a new look.</p>
+        <div class="design-keys"><a href="glass-frost.html">Open Frost <span aria-hidden="true">↗</span></a></div>
+      </article>
+
+      <article class="design" id="daylight">
+        <a class="preview-image" href="glass-daylight.html" aria-label="Open the Daylight study"><img src="glass-daylight.png" width="1440" height="1000" alt="Daylight homepage: Gruvbox light cream with pastel pools of blue, ochre and aqua; white-tinted glass sidebar and job market card with bright white rims, charcoal type, the question in warm amber glass with deep ochre text, and solid ochre venue chips."></a>
+        <div class="design-heading"><h2><span class="design-number">03</span>Daylight</h2><span class="material">light · pastel pools · clear glass</span></div>
+        <p>The canonical reading: clear glass over a light wallpaper, which is where the material is at its most recognisable. The only light study. The page is Gruvbox light’s hard cream with the Clear study’s pools drawn pastel. The glass is white-tinted and well saturated, with a bright white rim and a warm grey shadow; type is Gruvbox light’s charcoal, the accents its deep red and ochre. The question is warm tinted glass with deep ochre type, and the venue chips are solid ochre with cream type, so both signals hold on a light page.</p>
+        <p class="tradeoff"><strong>Choose this for:</strong> the look people picture when they hear the name. It would be the site’s first light default, so the dark/light key the Neumorphic theme has would want porting; the dark studies could serve as its night side.</p>
+        <div class="design-keys"><a href="glass-daylight.html">Open Daylight <span aria-hidden="true">↗</span></a></div>
+      </article>
+
+      <article class="design" id="lens">
+        <a class="preview-image" href="glass-lens.html" aria-label="Open the Lens study"><img src="glass-lens.png" width="1440" height="1000" alt="Lens homepage: Gruvbox dark with hairline ripple rings spreading from the top right and two dim pools; nearly clear glass sidebar and job market card whose edges bend the rings behind them, with the rim highlight swung toward the pointer and a glint under it."></a>
+        <div class="design-heading"><h2><span class="design-number">04</span>Lens</h2><span class="material">dark · ripples · clearest glass · refraction · pointer light</span></div>
+        <p>The most dynamic reading. The glass is the clearest of the four, barely blurred, so what matters is how it bends and lights. In Chromium browsers the sidebar, the card and the status pill truly refract: a displacement map magnifies the wallpaper along their edges, as through a thick pane, so the sheets read as glass by what they do to what is behind them; other browsers keep a plain light blur. The wallpaper gives them something to bend: hairline ripples spreading from the top right, with two dim pools for warmth. The pointer is the light here: the rim highlight on every surface swings fully toward it, the glint is strongest, and the card and keys rise toward it.</p>
+        <p class="tradeoff"><strong>Choose this for:</strong> the version that moves. It is the most “liquid” of the four and the most browser-dependent: the refraction is Chrome and Edge only today (Safari and Firefox see 01 Clear with ripples), and the pointer light does the most work, so it is the one to test on a laptop before deciding.</p>
+        <div class="design-keys"><a href="glass-lens.html">Open Lens <span aria-hidden="true">↗</span></a></div>
+      </article>
+
+      <article class="design" id="lens-pools">
+        <a class="preview-image" href="glass-lens-pools.html" aria-label="Open the Lens over pools study"><img src="glass-lens-pools.png" width="1440" height="1000" alt="Lens over pools homepage: the Lens study's nearly clear glass sidebar and job market card over the Clear study's dim drifting pools of red, ochre, blue and aqua, with the rim highlight swung toward the pointer and a glint under it."></a>
+        <div class="design-heading"><h2><span class="design-number">04b</span>Lens over pools</h2><span class="material">dark · colour pools · clearest glass · refraction · pointer light</span></div>
+        <p>Study 04 with study 01’s wallpaper: the Lens glass, refraction and pointer light, over the Clear study’s drifting pools in place of the ripple rings. Standing still it looks much like Clear, since both are clear glass over the same pools; the difference is in the hand. The glass is three times clearer, the rim highlight swings fully to the pointer rather than halfway, the glint is stronger, and the card and keys rise toward it. The refraction has less to bite on here, since a pool has no edges, so along the sheets’ edges it shows only as a slight thickening of the colour behind.</p>
+        <p class="tradeoff"><strong>Choose this for:</strong> Lens without the rings. If the edge refraction is what you liked about 04, the pools give it little to do; the rings could come back far fainter, or wider spaced, as a middle path, and that is a one-line change in <code>glass-lens-pools.css</code>.</p>
+        <div class="design-keys"><a href="glass-lens-pools.html">Open Lens over pools <span aria-hidden="true">↗</span></a> <a href="glass-lens.html">Open Lens, for comparison <span aria-hidden="true">↗</span></a></div>
+      </article>
+    </div>
+
+    <section class="notes" aria-labelledby="notes-heading">
+      <h2 id="notes-heading">Before choosing</h2>
+      <ul>
+        <li><strong>The pieces mix.</strong> Wallpaper, frost, light or dark, and how far the pointer moves the light are separate dials in <code>glass-studies.css</code> and each study’s file, so “Frost’s sheets over Clear’s pools” or “Lens’s pointer light on Daylight” is a small change, not a fifth study.</li>
+        <li><strong>Browser support.</strong> The blur and tint work in every current browser; without <code>backdrop-filter</code> the sheets fall back to a denser tint. Only the Lens refraction is Chromium-only.</li>
+        <li><strong>Cost.</strong> Blurring a backdrop is the one expensive thing here, and the drifting pools keep it live; on an older laptop the pools can be held still (they already are under reduced motion) at no loss to the look.</li>
+        <li><strong>What integration adds.</strong> A <code>theme-glass.css</code> for the chosen study against the live markup, the research and fun pages in the same material, a print block, the pointer light folded into <code>theme.js</code> beside the Neumorphic lamp, and a sixth name on the picker.</li>
+      </ul>
+    </section>
+    <p class="back"><a href="skeu-proposals.html">← the skeuomorphic studies</a> · <a href="neu-proposals.html">the neumorphic studies</a> · <a href="../index.html">the live site</a></p>
+  </main>
+</body>
+</html>

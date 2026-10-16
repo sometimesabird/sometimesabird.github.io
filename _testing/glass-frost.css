@@ -1,0 +1,44 @@
+/* 02 — Frost: wallpaper and material for glass-frost.html. Loaded after
+   glass-studies.css.
+
+   The quiet reading, and the one nearest the Neumorphic theme's taste. No
+   colour behind the glass: the wallpaper is the page's own grey under a lamp
+   up and to the left, with a fine dot grid and two soft diagonal ridges for
+   the frost to diffuse. The glass is the heavier, more frosted material
+   (Apple's "regular" against the first study's "clear"), and the page is
+   built as stacked sheets with nesting corner radii: the wallpaper, then
+   the main column as a faint frosted sheet, the job market card as a
+   brighter sheet upon it, and the question as a well in the card. The
+   sidebar is a sheet of the same frost. Rims are a single pixel and softer. */
+.lg-frost {
+  --glass-filter: blur(40px) saturate(1) brightness(1.04);
+  --tint-panel: rgba(235, 219, 178, 0.055);
+  --tint-sheet: rgba(235, 219, 178, 0.022);
+  --tint-trough: rgba(29, 32, 33, 0.35);
+  --rim-w: 1px;
+  --rim-hi: rgba(255, 255, 255, 0.42);
+  --rim-mid: rgba(255, 255, 255, 0.12);
+  --rim-lo: rgba(255, 255, 255, 0.03);
+  --rim-far: rgba(255, 255, 255, 0.16);
+  --glint: 0.05;
+  --r-panel: 30px;
+  --r-card: 22px;
+  --r-well: 12px;
+  --shadow-panel: 0 24px 60px -30px rgba(0, 0, 0, 0.6), 0 1px 3px rgba(0, 0, 0, 0.2);
+  --shadow-card: 0 28px 60px -28px rgba(0, 0, 0, 0.6), 0 2px 6px rgba(0, 0, 0, 0.2);
+  background: var(--bg);
+}
+.lg-frost::before {
+  content: ""; position: fixed; inset: 0; z-index: -1; pointer-events: none;
+  background:
+    radial-gradient(1200px 800px at 0 0, rgba(235, 219, 178, 0.07), transparent 70%),
+    linear-gradient(115deg, transparent 25%, rgba(235, 219, 178, 0.035) 45%, transparent 62%),
+    linear-gradient(115deg, transparent 60%, rgba(0, 0, 0, 0.14) 78%, transparent 95%),
+    radial-gradient(circle at center, rgba(235, 219, 178, 0.11) 0.8px, transparent 1.6px) 0 0 / 22px 22px;
+}
+/* the main column is itself a frosted sheet, so the page stacks: wallpaper,
+   sheet, card, well. its padding gives the card and the rows the inset the
+   section labels already keep */
+.lg-frost main { position: relative; isolation: isolate; padding: 2.25rem 2.25rem 2rem; border-radius: var(--r-panel); background: var(--tint-sheet); -webkit-backdrop-filter: blur(28px); backdrop-filter: blur(28px); box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.05), inset 0 0 0 1px rgba(255, 255, 255, 0.025), 0 24px 60px -30px rgba(0, 0, 0, 0.5); }
+.lg-frost section:last-child { margin-bottom: 0; }
+@media (max-width: 820px) { .lg-frost main { padding: 1.5rem 1.4rem 1.4rem; border-radius: 22px; } }

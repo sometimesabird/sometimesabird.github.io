@@ -1,0 +1,43 @@
+/* 04 — Lens: wallpaper and material for glass-lens.html. Loaded after
+   glass-studies.css.
+
+   The most dynamic reading. The glass is the clearest of the four, barely
+   blurred, so what matters is how it bends and lights. Where the browser can
+   pass a backdrop through an SVG filter (Chromium; the page marks html
+   .lens-ok), the sidebar, the job market card and the status pill refract:
+   a displacement map magnifies the wallpaper along their edges, as through
+   a thick pane, so the sheets read as glass by what they do to what lies
+   behind them. The wallpaper gives them something to bend: hairline
+   ripples spreading from the top right, a ring every 44 pixels, with two
+   dim pools for warmth. The pointer is the light here: the rim highlight on
+   every surface swings fully toward it, the glint is strongest, and the
+   card and the keys rise toward it. */
+.lg-lens {
+  --glass-filter: blur(6px) saturate(1.35);
+  --tint-panel: rgba(235, 219, 178, 0.03);
+  --rim-w: 1.5px;
+  --rim-hi: rgba(255, 255, 255, 0.82);
+  --rim-mid: rgba(255, 255, 255, 0.14);
+  --rim-lo: rgba(255, 255, 255, 0.02);
+  --rim-far: rgba(255, 255, 255, 0.22);
+  --glint: 0.12;
+  --glint-size: 320px;
+  --rim-follow: 1;
+  --shadow-panel: 0 30px 70px -28px rgba(0, 0, 0, 0.7), 0 2px 6px rgba(0, 0, 0, 0.25);
+  background: var(--bg);
+}
+.lg-lens::before {
+  content: ""; position: fixed; inset: 0; z-index: -1; pointer-events: none;
+  background:
+    radial-gradient(50% 40% at 20% 30%, rgba(204, 36, 29, 0.11), transparent 70%),
+    radial-gradient(50% 40% at 80% 72%, rgba(69, 133, 136, 0.15), transparent 70%),
+    repeating-radial-gradient(circle at 78% 26%, transparent 0 43px, rgba(235, 219, 178, 0.075) 43px 44px);
+}
+/* true refraction where the browser allows it; the plain blur above stands
+   in everywhere else */
+html.lens-ok .lg-lens :where(.side, .card, .market) { -webkit-backdrop-filter: url(#lens) blur(6px) saturate(1.35); backdrop-filter: url(#lens) blur(6px) saturate(1.35); }
+/* the sheets rise toward the pointer */
+@media (hover: hover) and (prefers-reduced-motion: no-preference) {
+  .lg-lens .card:hover { transform: translateY(-3px); box-shadow: var(--bands), 0 44px 90px -30px rgba(0, 0, 0, 0.75), 0 4px 10px rgba(0, 0, 0, 0.25); }
+  .lg-lens :where(.copy, .icon-links a, .text-link):hover { transform: translateY(-2px) scale(1.03); }
+}

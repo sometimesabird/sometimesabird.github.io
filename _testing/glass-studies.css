@@ -1,0 +1,329 @@
+/* Liquid Glass homepage studies (glass-*.html). Independent of styles.css and
+   of the neumorphic (neu-*) and skeuomorphic (skeu-*) sets. Shared here: the
+   Gruvbox palette, with its light tones too so a daylight study can be drawn
+   from it; the compact sidebar layout the live site uses, at the Neumorphic
+   theme's measures; the glass material, parametrised so each study sets its
+   own blur, tint, rim and wallpaper; the live behaviours (copy key, photo
+   dialog, word lift, and the pointer light that glass-studies.js drives); the
+   menu for hopping between studies. Each study's wallpaper and material
+   settings live in its own file (glass-clear.css, glass-frost.css,
+   glass-daylight.css, glass-lens.css), loaded after this one.
+
+   The material. A sheet of glass is drawn with: the backdrop blurred and
+   saturated behind it (backdrop-filter), a faint tint, soft inner bands at
+   its edges, a drop shadow, a rim one or two pixels wide that catches the
+   light (a conic gradient masked to the edge, bright toward the lamp), and a
+   glint under the pointer. The lamp sits up and to the left; the pointer
+   pulls the rim's highlight toward itself and the glint follows it
+   (glass-studies.js writes --ang, --px, --py, --lw on each surface). Glass is
+   never stacked on glass: the panels and the card are glass, and the keys on
+   them are drawn as tinted, rimmed shapes without a backdrop of their own. */
+:root {
+  color-scheme: dark;
+  /* dark tones */
+  --bg: #282828;
+  --deep: #1d2021;
+  --bg0s: #32302f;
+  --bg1: #3c3836;
+  --bg2: #504945;
+  --bg3: #665c54;
+  --bg4: #7c6f64;
+  /* light tones: text on dark, and paper */
+  --fg0: #fbf1c7;
+  --fg: #ebdbb2;
+  --fg2: #d5c4a1;
+  --fg3: #bdae93;
+  --fg4: #a89984;
+  /* accents */
+  --red: #cc241d;
+  --red-bright: #fb4934;
+  --red-deep: #9d0006;
+  --yellow: #d79921;
+  --yellow-bright: #fabd2f;
+  --yellow-deep: #b57614;
+  --orange: #d65d0e;
+  --green: #98971a;
+  --green-bright: #b8bb26;
+  --aqua: #689d6a;
+  --blue: #83a598;
+  --blue-deep: #458588;
+  --purple: #b16286;
+  --serif: Georgia, "Times New Roman", serif;
+  --sans: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  --mono: "Courier New", monospace;
+  --fade-in: 0.2s;
+  --fade-out: 0.5s;
+  /* text brightens under the cursor (glow.js) */
+  --lift-hover: #e0cfa9;
+  --lift-delay: 0.2s;
+  --lift-in: 0.3s;
+  --lift-out: 0.7s;
+  /* a tile of monochrome grain, for layering at low opacity */
+  --noise: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='240' height='240'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+/* the material's dials, at the dark studies' defaults; each study resets
+   what it changes on its body class */
+.lg {
+  --glass-filter: blur(20px) saturate(1.5);
+  --tint-panel: rgba(235, 219, 178, 0.04);       /* the sidebar and the card */
+  --tint-key: rgba(235, 219, 178, 0.085);        /* keys and the selected nav item */
+  --tint-key-hover: rgba(235, 219, 178, 0.13);
+  --tint-trough: rgba(29, 32, 33, 0.3);          /* the nav capsule's bed */
+  --tint-well: rgba(250, 189, 47, 0.1);          /* the question */
+  --well-ink: var(--yellow-bright);
+  --well-glow: rgba(250, 189, 47, 0.08);
+  --rim-w: 1.5px;
+  --rim-hi: rgba(255, 255, 255, 0.62);           /* toward the light */
+  --rim-mid: rgba(255, 255, 255, 0.16);
+  --rim-lo: rgba(255, 255, 255, 0.035);
+  --rim-far: rgba(255, 255, 255, 0.26);          /* the far edge's secondary catch */
+  --bands: inset 0 1px 0 rgba(255, 255, 255, 0.06), inset 0 -1px 0 rgba(0, 0, 0, 0.22), inset 0 0 0 1px rgba(255, 255, 255, 0.025), inset 0 18px 40px -30px rgba(255, 255, 255, 0.12);
+  --bands-key: inset 0 1px 0 rgba(255, 255, 255, 0.1), inset 0 -1px 0 rgba(0, 0, 0, 0.2);
+  --shadow-panel: 0 30px 70px -28px rgba(0, 0, 0, 0.65), 0 2px 6px rgba(0, 0, 0, 0.22);
+  --shadow-card: 0 36px 80px -30px rgba(0, 0, 0, 0.7), 0 3px 8px rgba(0, 0, 0, 0.25);
+  --shadow-key: 0 2px 6px rgba(0, 0, 0, 0.28);
+  --shadow-key-hover: 0 6px 14px rgba(0, 0, 0, 0.32);
+  --glint: 0.07;                                 /* the pointer glint's strength */
+  --glint-size: 260px;
+  --rim-follow: 0.5;                             /* how far the pointer pulls the rim's highlight, 0–1 (glass-studies.js reads it) */
+  --r-panel: 28px;
+  --r-card: 28px;
+  --r-well: 16px;
+  --hairline: rgba(235, 219, 178, 0.1);          /* the dividers on the content layer */
+  --badge-face: linear-gradient(160deg, rgba(250, 189, 47, 0.92), rgba(215, 153, 33, 0.88));
+  --badge-ink: #1d2021;
+  --edge-red: rgba(204, 36, 29, 0.5);            /* the card's red edge light, at rest */
+  --edge-red-hot: rgba(251, 73, 52, 0.85);
+  --link-ink: rgb(204 36 29 / 0.9);
+  --cut: rgba(0, 0, 0, 0.4);                     /* an etched line's dark cut and lit lip */
+  --lit: rgba(255, 255, 255, 0.12);
+}
+
+* { box-sizing: border-box; }
+html { scrollbar-color: var(--bg3) var(--bg); }
+body { position: relative; isolation: isolate; margin: 0; min-height: 100svh; background: var(--bg); color: var(--fg); font: 16px/1.55 var(--sans); -webkit-font-smoothing: antialiased; }
+h1, h2, h3, p { margin: 0; }
+svg { display: block; fill: currentColor; }
+img { display: block; }
+button { font: inherit; color: inherit; cursor: pointer; }
+::selection { background: var(--bg3); color: var(--fg0); }
+
+/* links: never thicker than a hairline, and the red arrives dim */
+a { color: inherit; text-decoration: underline; text-decoration-thickness: 1px; text-decoration-color: transparent; text-underline-offset: 0.12em; transition: color var(--fade-out), text-decoration-color var(--fade-out); }
+a:hover { text-decoration-color: var(--link-ink); transition-duration: var(--fade-in); }
+a:focus-visible, button:focus-visible, summary:focus-visible { outline: 2px solid var(--yellow-bright); outline-offset: 3px; }
+.with a, .authors a, .note a { color: var(--blue); }
+.venue em { color: var(--yellow-bright); font-weight: 400; font-style: italic; }
+
+/* text links are etched: titles carry a faint line at rest, a dark cut with
+   its lower lip lit, so a title says it is a link before anyone hovers; under
+   the pointer the dim red seeps into the cut as ink. the lines are backgrounds
+   painted behind the glyphs, so descenders sit over the cut rather than
+   breaking it. the colours are registered properties so they can fade */
+@property --ink { syntax: "<color>"; inherits: false; initial-value: transparent; }
+@property --cut-c { syntax: "<color>"; inherits: false; initial-value: transparent; }
+@property --lit-c { syntax: "<color>"; inherits: false; initial-value: transparent; }
+.card h3 a, .title, .email, .more a, .with a, .authors a, .note a {
+  text-decoration: none; --ink: transparent; --cut-c: transparent; --lit-c: transparent;
+  background-image: linear-gradient(var(--ink), var(--ink)), linear-gradient(var(--cut-c), var(--cut-c)), linear-gradient(var(--lit-c), var(--lit-c));
+  background-repeat: no-repeat; background-origin: content-box; background-size: 100% 1px;
+  background-position: 0 calc(100% - 0.1em), 0 calc(100% - 0.1em), 0 calc(100% - 0.1em + 1px);
+  transition: --ink var(--fade-out), --cut-c var(--fade-out), --lit-c var(--fade-out), color var(--fade-out); }
+.card h3 a, .title { --cut-c: var(--cut); --lit-c: var(--lit); }
+:is(.card h3 a, .title, .email, .more a, .with a, .authors a, .note a):hover { --ink: var(--link-ink); --cut-c: var(--cut); --lit-c: var(--lit); transition-duration: var(--fade-in); }
+:is(.card h3 a, .title):hover { color: var(--fg0); }
+
+/* ------------------------------------------------------------------ */
+/* the material                                                         */
+/* ------------------------------------------------------------------ */
+/* every glass surface and every rimmed key. the pointer light's variables
+   rest at the fixed lamp: highlight up and to the left, no glint. :where
+   keeps these rules at the weight of one class (".icon-links a" would
+   otherwise lift the whole list above the layout rules below) */
+.lg :where(.side, .card, .market, .question, .site-nav, .portrait, .badge, .copy, .icon-links a, .text-link, .copied, .skip-link) { position: relative; isolation: isolate; --ang: 315; --px: 50%; --py: 0%; --lw: 0; }
+/* the sheets of glass: backdrop blurred behind them. the keys sit on these
+   and get no backdrop of their own */
+.lg :where(.side, .card, .market, .question, .badge, .skip-link) { -webkit-backdrop-filter: var(--glass-filter); backdrop-filter: var(--glass-filter); }
+/* the rim: a conic gradient whose bright point sits at --ang (0 is up,
+   clockwise), masked to the outer --rim-w of the surface */
+.lg :where(.side, .card, .market, .question, .site-nav, .portrait, .badge, .copy, .icon-links a, .text-link, .copied:not(:empty), .skip-link)::before {
+  content: ""; position: absolute; inset: 0; z-index: -1; border-radius: inherit; padding: var(--rim-w); pointer-events: none;
+  background: conic-gradient(from calc(var(--ang) * 1deg - 180deg), var(--rim-far) 0deg, var(--rim-mid) 35deg, var(--rim-lo) 85deg, var(--rim-lo) 115deg, var(--rim-mid) 150deg, var(--rim-hi) 180deg, var(--rim-mid) 210deg, var(--rim-lo) 245deg, var(--rim-lo) 275deg, var(--rim-mid) 325deg, var(--rim-far) 360deg);
+  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0); -webkit-mask-composite: xor; mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0); mask-composite: exclude; }
+/* the glint: a soft pool of light under the pointer, in the surface's own
+   background over its tint */
+.lg :where(.side, .card, .market, .question) { background: radial-gradient(var(--glint-size) circle at var(--px) var(--py), rgb(255 255 255 / calc(var(--glint) * var(--lw))), transparent 62%), var(--tint-panel); }
+.lg :where(.side, .card) { border-radius: var(--r-panel); box-shadow: var(--bands), var(--shadow-panel); }
+.lg .card { border-radius: var(--r-card); box-shadow: var(--bands), var(--shadow-card); }
+
+/* keys: rimmed, tinted shapes that lift under the pointer. the copy key is
+   tiny, Scholar and the CV round, the paper link a pill */
+.lg :where(.copy, .icon-links a, .text-link) { display: inline-flex; align-items: center; justify-content: center; gap: 0.6em; padding: 0; border: 0; border-radius: 999px; background: var(--tint-key); color: var(--fg); box-shadow: var(--bands-key), var(--shadow-key); text-decoration: none; transition: background var(--fade-out), box-shadow var(--fade-out), color var(--fade-out), transform var(--fade-out); }
+.lg :where(.copy, .icon-links a, .text-link):hover { color: var(--fg0); background: var(--tint-key-hover); box-shadow: var(--bands-key), var(--shadow-key-hover); transform: translateY(-1px); transition-duration: var(--fade-in); }
+.lg :where(.copy, .icon-links a, .text-link):active { transform: translateY(0) scale(0.97); box-shadow: var(--bands-key), 0 1px 2px rgba(0, 0, 0, 0.3); transition-duration: 0.05s; }
+.lg .copy { width: 2rem; height: 2rem; color: var(--fg4); }
+.lg .icon-links a { width: 2.75rem; height: 2.75rem; }
+
+/* the job-market dot, breathing */
+.dot { display: inline-block; width: 0.55rem; height: 0.55rem; border-radius: 50%; background: var(--yellow-bright); box-shadow: 0 0 0 4px color-mix(in srgb, var(--yellow-bright) 15%, transparent), 0 0 10px color-mix(in srgb, var(--yellow-bright) 40%, transparent); flex-shrink: 0; }
+@media (prefers-reduced-motion: no-preference) { .dot { animation: breathe 4s ease-in-out infinite; } }
+@keyframes breathe { 50% { box-shadow: 0 0 0 6px color-mix(in srgb, var(--yellow-bright) 10%, transparent), 0 0 14px color-mix(in srgb, var(--yellow-bright) 30%, transparent); } }
+
+/* journal badges: the venue is the signal, so the chip is coloured glass,
+   yellow, with dark type */
+.lg .badge { display: inline-block; padding: 0.3rem 0.75rem; border-radius: 999px; font-size: 0.72rem; font-weight: 700; letter-spacing: 0.06em; line-height: 1.4; text-align: center; color: var(--badge-ink); background: var(--badge-face); box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.35), inset 0 -1px 0 rgba(0, 0, 0, 0.15), var(--shadow-key); }
+
+/* ------------------------------------------------------------------ */
+/* layout: today's sidebar layout                                       */
+/* ------------------------------------------------------------------ */
+.lg .page { max-width: 68rem; margin: 0 auto; padding: 3rem 2rem 4rem; display: grid; grid-template-columns: 19rem minmax(0, 1fr); gap: 4rem; }
+.lg .side { position: sticky; top: 3rem; align-self: start; padding: 2.25rem 1.75rem 2rem; display: flex; flex-direction: column; }
+@media (min-width: 821px) and (max-height: 900px) { .lg .side { position: relative; top: auto; } }
+
+/* the portrait is a button that opens the larger photo: a round print in a
+   glass bezel. the photo lifts a hair under the pointer */
+.lg .portrait { display: block; width: 13.5rem; height: 13.5rem; padding: 7px; margin: 0 auto 1.6rem; border: 0; border-radius: 50%; background: var(--tint-key); box-shadow: var(--bands-key), 0 10px 30px -10px rgba(0, 0, 0, 0.5); font: inherit; cursor: zoom-in; }
+.lg .portrait img { width: 100%; height: 100%; border-radius: 50%; object-fit: cover; box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.3), 0 2px 8px rgba(0, 0, 0, 0.4); transition: transform 0.4s ease-out; }
+@media (hover: hover) and (prefers-reduced-motion: no-preference) { .lg .portrait:hover img { transform: scale(1.03); } }
+.lg .portrait:focus-visible { outline: 2px solid var(--yellow-bright); outline-offset: 3px; }
+
+/* name */
+.lg .identity h1 { margin: 0; font-size: 1.3rem; line-height: 1.15; font-weight: 700; letter-spacing: -0.01em; }
+.lg .identity h1 .last { display: block; white-space: nowrap; }
+.lg .nickname { margin-top: 0.5rem; color: var(--fg3); font-size: 0.8125rem; }
+.lg .nickname strong { color: var(--fg2); font-weight: 500; }
+.lg .role { margin-top: 1.4rem; color: var(--fg3); font-size: 0.9375rem; line-height: 1.6; }
+.lg .role strong { color: var(--fg); font-weight: normal; }
+.lg .edu { margin-top: 0.6rem; color: var(--fg3); font-size: 0.75rem; }
+
+/* nav: one glass capsule with three segments; the current page is a lit
+   lozenge, the others light up under the pointer */
+.lg .site-nav { margin: 1.75rem 0 0; display: flex; padding: 4px; border-radius: 999px; background: var(--tint-trough); box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.3), inset 0 -1px 0 rgba(255, 255, 255, 0.04); }
+.lg .site-nav a { flex: 1; padding: 0.5rem 0.5rem; border-radius: 999px; text-align: center; font-size: 0.9rem; color: var(--fg3); text-decoration: none; transition: background var(--fade-out), color var(--fade-out), box-shadow var(--fade-out); }
+.lg .site-nav a:hover { color: var(--fg); background: rgba(235, 219, 178, 0.05); transition-duration: var(--fade-in); }
+.lg .site-nav a[aria-current] { color: var(--fg0); background: var(--tint-key); box-shadow: var(--bands-key), 0 2px 8px rgba(0, 0, 0, 0.3); }
+
+/* contact, under a hairline */
+.lg .side .links { padding-top: 1.75rem; display: flex; flex-direction: column; align-items: flex-start; }
+.lg .side .links::before { content: ""; width: 100%; height: 1px; margin: 0 0 1.5rem; background: linear-gradient(90deg, transparent, var(--hairline) 15%, var(--hairline) 85%, transparent); }
+.lg .email-row { position: relative; display: flex; align-items: center; gap: 0.6rem; }
+.lg .email { font-size: 0.875rem; }
+.lg .icon-links { display: flex; gap: 0.75rem; margin-top: 1.1rem; }
+
+/* copy-email key, revealed by the page script. a successful copy lights the
+   key and swaps the clipboard for a check that draws itself */
+.copy[hidden] { display: none; }
+.copy .icon-copy { fill: none; stroke: currentColor; stroke-width: 1.3; }
+.copy .icon-check { fill: none; stroke: currentColor; stroke-width: 1.5; stroke-linecap: round; stroke-linejoin: round; }
+.copy:not(.done) .icon-check, .copy.done .icon-copy { display: none; }
+.lg .copy.done { color: var(--yellow-bright); background: var(--tint-key-hover); }
+@media (prefers-reduced-motion: no-preference) { .copy.done .icon-check path { stroke-dasharray: 1 2; animation: check-draw 0.25s ease-out both; } }
+@keyframes check-draw { from { stroke-dashoffset: 1.1; } to { stroke-dashoffset: 0; } }
+.lg .copied { position: absolute; right: 0; bottom: calc(100% + 4px); font-size: 0.75rem; line-height: 1.5; white-space: nowrap; color: var(--yellow-bright); }
+.lg .copied:not(:empty) { padding: 0.1rem 0.6rem; border-radius: 999px; background: var(--tint-key); box-shadow: var(--bands-key), var(--shadow-key); }
+.copy.done + .copied { width: 1px; height: 1px; padding: 0; overflow: hidden; clip-path: inset(50%); }
+
+/* main column: the status line is a glass pill; section labels and the
+   flat rows share the card's text inset */
+.lg main { min-width: 0; padding-top: 0.25rem; }
+.lg .market { display: inline-flex; align-items: center; gap: 0.75rem; padding: 0.55rem 1.1rem 0.55rem 0.95rem; border-radius: 999px; font-size: 0.9rem; color: var(--fg2); box-shadow: var(--bands-key), var(--shadow-key); }
+.lg .stamp, .lg .glass { display: contents; }
+.lg .lede { margin: 1.6rem 0 1rem; max-width: 38em; font-size: 1.15rem; line-height: 1.5; color: var(--fg3); }
+.lg .lede b { color: var(--fg); font-weight: 500; }
+.lg .fields { margin-bottom: 2.75rem; font-size: 0.9rem; color: var(--fg4); }
+.lg h2 { margin: 0 0 1.1rem 2.25rem; font: italic 400 1.25rem/1.3 var(--serif); color: var(--fg3); }
+.lg section { margin-bottom: 3rem; }
+
+/* the job market card: the tallest sheet on the page, lifting a little under
+   the pointer, with a dim red light along its top edge that warms on hover */
+.lg .card { padding: 2.4rem 2.25rem 2.1rem; transition: transform 0.5s ease-out, box-shadow 0.5s ease-out; }
+.lg .card::after { content: ""; position: absolute; left: 2.25rem; right: 2.25rem; top: 0; height: 2px; z-index: -1; border-radius: 1px; pointer-events: none; background: var(--edge-red); -webkit-mask-image: linear-gradient(90deg, transparent, #000 15%, #000 85%, transparent); mask-image: linear-gradient(90deg, transparent, #000 15%, #000 85%, transparent); transition: background 0.5s ease, box-shadow 0.5s ease; }
+@media (hover: hover) and (prefers-reduced-motion: no-preference) {
+  .lg .card:hover { transform: translateY(-2px); }
+  .lg .card:hover::after, .lg .card:focus-within::after { background: var(--edge-red-hot); box-shadow: 0 2px 14px rgba(251, 73, 52, 0.28); }
+}
+.lg .card h3 { font: 400 2rem/1.15 var(--serif); letter-spacing: -0.025em; text-wrap: balance; }
+/* the question: tinted glass, lit from within; the loudest object on the page */
+.lg .question { margin-top: 1.2rem; padding: 0.9rem 1.2rem; max-width: 550px; border-radius: var(--r-well); color: var(--well-ink); font-size: 0.9375rem; line-height: 1.6; background: radial-gradient(var(--glint-size) circle at var(--px) var(--py), rgb(255 255 255 / calc(var(--glint) * var(--lw))), transparent 62%), var(--tint-well); box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.08), inset 0 -1px 0 rgba(0, 0, 0, 0.15), inset 0 0 36px var(--well-glow), 0 8px 24px -12px rgba(0, 0, 0, 0.5); }
+.lg .teaser { margin-top: 1.2rem; color: var(--fg3); font-size: 0.875rem; line-height: 1.7; }
+.lg .with { margin-top: 1rem; color: var(--fg3); font-size: 0.75rem; line-height: 1.6; }
+.lg .text-link { margin-top: 1.5rem; padding: 0.65rem 1.25rem; font-size: 0.875rem; }
+.lg .text-link span { display: inline-block; transition: transform 0.15s ease-out; }
+@media (hover: hover) and (prefers-reduced-motion: no-preference) {
+  .lg .text-link:hover span { transform: translate(0.12em, -0.12em); }
+  .lg .more a:hover span { transform: translateX(0.2em); }
+}
+
+/* publications lie flat on the content layer between hairlines */
+.lg .papers { list-style: none; margin: 0; padding: 0; }
+.lg .papers li { position: relative; padding: 1.25rem 2.25rem; display: grid; grid-template-columns: 4.5rem minmax(0, 1fr); gap: 1.1rem; align-items: start; }
+.lg .papers li::before, .lg .papers li:last-child::after { content: ""; position: absolute; left: 0; right: 0; height: 1px; background: linear-gradient(90deg, transparent, var(--hairline) 10%, var(--hairline) 90%, transparent); }
+.lg .papers li::before { top: 0; }
+.lg .papers li:last-child::after { bottom: 0; }
+.lg .papers .badge { display: block; margin-top: 0.15rem; padding-left: 0; padding-right: 0; }
+.lg .title { font-size: 1.07rem; font-weight: 500; line-height: 1.35; }
+.lg .venue { display: block; margin-top: 0.25rem; color: var(--fg4); font-size: 0.9rem; }
+.lg .authors { display: block; margin-top: 0.1rem; color: var(--fg4); font-size: 0.875rem; }
+.lg .note { display: block; margin-top: 0.3rem; color: var(--fg4); font-size: 0.78rem; }
+.lg .more { margin: 1.25rem 0 0 2.25rem; font-size: 0.95rem; }
+.lg .more a { color: var(--fg3); }
+.lg .more span { display: inline-block; margin-left: 0.25em; transition: transform 0.15s ease-out; }
+
+/* enlarged photo: a modal over the dimmed page, as on the live site */
+.photo-view[open] { box-sizing: border-box; display: grid; place-items: center; width: 100%; height: 100%; max-width: none; max-height: none; margin: 0; padding: 1.25rem; border: 0; background: none; cursor: zoom-out; animation: photo-fade 0.15s ease-out; }
+.photo-view::backdrop { background: rgba(29, 32, 33, 0.8); -webkit-backdrop-filter: blur(18px); backdrop-filter: blur(18px); animation: photo-fade 0.15s ease-out; }
+.photo-view img { box-sizing: border-box; display: block; width: min(100%, 85vh * 2 / 3); width: min(100%, 85svh * 2 / 3); height: auto; border-radius: 20px; cursor: auto; animation: photo-grow 0.15s ease-out; background: url(../assets/headshot.jpg) top / 100% no-repeat; box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.18), 0 24px 60px rgba(0, 0, 0, 0.6); }
+.photo-close { position: absolute; top: 0.75rem; right: 0.75rem; width: 2.75rem; height: 2.75rem; padding: 0; border: 0; border-radius: 50%; background: none; color: #ebdbb2; font: 2rem/1 var(--serif); cursor: pointer; }
+.photo-close:hover { background: rgba(235, 219, 178, 0.15); }
+.photo-close:focus-visible { outline: 2px solid var(--yellow-bright); outline-offset: 1px; }
+html:has(.photo-view[open]) { overflow: hidden; scrollbar-gutter: stable; }
+@keyframes photo-fade { from { opacity: 0; } }
+@keyframes photo-grow { from { transform: scale(0.94); } }
+@media (prefers-reduced-motion: reduce) { .photo-view[open], .photo-view::backdrop, .photo-view img { animation: none; } }
+
+/* text brightens under the cursor (glow.js): each word of the muted prose
+   gets a share --w of the lift */
+.w { color: color-mix(in srgb, var(--fg3), var(--lift-hover) calc(var(--w, 0) * 100%)); transition: color var(--lift-out) ease-in-out; }
+
+.lg .skip-link { position: absolute; top: 0.75rem; left: 0.75rem; z-index: 2; padding: 0.6rem 0.9rem; border-radius: 999px; background: var(--tint-key); box-shadow: var(--bands-key), var(--shadow-key); color: var(--fg); transform: translateY(-200%); }
+.lg .skip-link:focus { transform: translateY(0); outline: 2px solid var(--yellow-bright); }
+
+/* no backdrop-filter: the sheets fall back to a denser tint, so the type
+   stays legible over the wallpaper */
+@supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+  .lg :is(.side, .card, .market) { background-color: rgba(40, 40, 40, 0.86); }
+}
+
+/* ------------------------------------------------------------------ */
+/* narrower windows: the profile stacks above the main column           */
+/* ------------------------------------------------------------------ */
+@media (max-width: 1000px) { .lg .card h3 { font-size: 1.75rem; } }
+@media (max-width: 820px) {
+  .lg .page { grid-template-columns: 1fr; gap: 2rem; padding: 1.5rem 1.25rem 3rem; }
+  .lg .side { position: relative; top: auto; display: grid; grid-template-columns: 7rem minmax(0, 1fr); column-gap: 1.25rem; padding: 1.5rem; }
+  .lg .portrait { width: 7rem; height: 7rem; padding: 4px; margin: 0; grid-row: span 3; }
+  .lg .identity h1 .last { white-space: normal; }
+  .lg .site-nav, .lg .side .links { grid-column: 1 / -1; }
+  .lg .side .links { padding-top: 1.5rem; }
+  .lg .side .links::before { margin-bottom: 1.25rem; }
+  .lg h2, .lg .more { margin-left: 1.4rem; }
+  .lg .papers li { padding: 1.1rem 1.4rem; }
+  .lg .card { padding: 2rem 1.4rem 1.6rem; }
+  .lg .card::after { left: 1.4rem; right: 1.4rem; }
+}
+
+/* floating menu to hop between the studies; ?clean hides it for screenshots */
+.proposal-menu { position: fixed; z-index: 5; right: 18px; bottom: 14px; font: 12px/1.4 var(--sans); color: var(--fg3); }
+.proposal-menu summary { cursor: pointer; list-style: none; padding: 9px 14px; border-radius: 999px; background: rgba(29, 32, 33, 0.7); -webkit-backdrop-filter: blur(16px); backdrop-filter: blur(16px); border: 1px solid rgba(255, 255, 255, 0.1); box-shadow: 0 6px 18px rgba(0, 0, 0, 0.4); }
+.proposal-menu summary::-webkit-details-marker { display: none; }
+.proposal-menu summary::after { content: " +"; color: var(--red-bright); }
+.proposal-menu[open] summary::after { content: " −"; }
+.proposal-menu nav { position: absolute; bottom: calc(100% + 10px); right: 0; width: 240px; padding: 8px; border-radius: 16px; background: rgba(29, 32, 33, 0.75); -webkit-backdrop-filter: blur(16px); backdrop-filter: blur(16px); border: 1px solid rgba(255, 255, 255, 0.1); box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5); }
+.proposal-menu nav a { display: block; padding: 8px 10px; border-radius: 10px; color: var(--fg3); text-decoration: none; }
+.proposal-menu nav a:hover { color: var(--fg); background: rgba(235, 219, 178, 0.08); }
+.proposal-menu nav a[aria-current] { color: var(--yellow-bright); }
+.proposal-menu nav hr { border: 0; border-top: 1px solid rgba(255, 255, 255, 0.08); margin: 6px 4px; }
+html.clean-preview .proposal-menu { display: none; }
+/* ?clean also holds the wallpaper still, so screenshots are repeatable */
+html.clean-preview .lg::before, html.clean-preview .lg::after { animation: none !important; }

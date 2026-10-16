@@ -1,0 +1,21 @@
+/* 04b — Lens over pools: glass-lens-pools.html. Loaded after glass-studies.css
+   and glass-lens.css, which it leaves whole; this only swaps the wallpaper.
+
+   The Lens study's glass, refraction and pointer light over the Clear
+   study's wallpaper: pools of the palette's accents, dim and out of focus,
+   drifting a few percent over a minute, in place of the ripple rings. The
+   refraction has less to bite on here, since a pool has no edges, so the
+   sheets read as glass mostly by their rim, their tint and the glint, and
+   along their edges by a slight thickening of whatever colour lies behind. */
+.lg-lens-pools::before {
+  content: ""; position: fixed; inset: -20%; z-index: -1; pointer-events: none;
+  background:
+    radial-gradient(42% 34% at 18% 24%, rgba(204, 36, 29, 0.22), transparent 70%),
+    radial-gradient(36% 30% at 74% 16%, rgba(215, 153, 33, 0.17), transparent 70%),
+    radial-gradient(44% 38% at 80% 74%, rgba(69, 133, 136, 0.3), transparent 70%),
+    radial-gradient(38% 32% at 28% 82%, rgba(104, 157, 106, 0.18), transparent 70%),
+    radial-gradient(30% 26% at 54% 50%, rgba(177, 98, 134, 0.16), transparent 70%);
+  animation: lg-drift 60s ease-in-out infinite alternate;
+}
+@keyframes lg-drift { to { transform: translate(3%, -2%) rotate(5deg) scale(1.05); } }
+@media (prefers-reduced-motion: reduce) { .lg-lens-pools::before { animation: none; } }
