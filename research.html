@@ -27,7 +27,7 @@
     <link rel="icon" href="favicon.ico?v=by" sizes="16x16 32x32 48x48">
     <link rel="icon" href="assets/favicon.svg" type="image/svg+xml" sizes="any">
     <link rel="apple-touch-icon" href="assets/apple-touch-icon.png" sizes="180x180">
-    <!-- the theme (chosen on fun.html, kept in this browser; Neumorphic by
+    <!-- the theme (chosen on fun.html, kept in this browser; Neumorphic Reactive by
          default): this writes one stylesheet before anything paints, so no
          other theme shows first and no page is styled twice, and sets the
          html class and the two metas above to match. without JavaScript the
@@ -39,7 +39,7 @@
         (function () {
             var SHEETS = { flat: 'styles.css', neu: 'theme-neu.css', 'neu-reactive': 'theme-neu.css', desk: 'theme-desk.css', instrument: 'theme-instrument.css', glass: 'theme-glass.css' };
             var query = new URLSearchParams(location.search);
-            var theme = 'neu', light = false;
+            var theme = 'neu-reactive', light = false;
             try {
                 theme = localStorage.getItem('theme') || theme;
                 light = localStorage.getItem('theme-light') === '1';
@@ -47,7 +47,7 @@
             if (query.has('theme')) theme = query.get('theme');
             if (query.has('light')) light = true;
             if (query.has('dark')) light = false;
-            if (!SHEETS[theme]) theme = 'neu';
+            if (!SHEETS[theme]) theme = 'neu-reactive';
             // the html classes the stylesheets key on, and the browser's own chrome
             function mark(theme, light) {
                 var root = document.documentElement, neu = theme.indexOf('neu') === 0;
