@@ -1929,13 +1929,14 @@ html:has(.photo-view[open]) {
 /* one radio per theme, drawn like the nav: a short dash that lengthens and
    turns red for the theme in use. the inputs stay in the page, unseen, so
    the keyboard and screen readers get native radios; theme.js listens to
-   them. each theme's stylesheet draws this picker in its own material */
+   them. each theme's stylesheet draws this picker in its own material, and
+   each sets it in a little from the line above it */
 .theme-picker {
     display: flex;
     flex-direction: column;
     align-items: flex-start;
     gap: 0.3rem;
-    margin: 0;
+    margin: 0 0 0 1.5rem;
     padding: 0;
 }
 
@@ -2002,6 +2003,10 @@ html:has(.photo-view[open]) {
     .page .fun-heading {
         margin-bottom: 1.75rem;
         font-size: 2.25rem;
+    }
+
+    .theme-picker {
+        margin-left: 1rem;
     }
 }
 

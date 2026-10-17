@@ -384,7 +384,7 @@ html:has(.photo-view[open]) { overflow: hidden; scrollbar-gutter: stable; }
 /* one radio per theme, drawn like the nav: a pill that rises under the
    pointer, pressed in with a red dot for the theme in use. the inputs stay
    in the page, unseen, so the keyboard and screen readers get native radios */
-.theme-neu .theme-picker { display: flex; flex-direction: column; align-items: flex-start; gap: 0.45rem; margin: 0; padding: 0 1.05rem; }
+.theme-neu .theme-picker { display: flex; flex-direction: column; align-items: flex-start; gap: 0.45rem; margin: 0 0 0 1.2rem; padding: 0 1.05rem; }
 .theme-neu .theme-picker label { position: relative; display: flex; align-items: center; gap: 0.7rem; padding: 0.55rem 1.1rem 0.55rem 0.95rem; border-radius: 999px; color: var(--fg3); cursor: pointer; transition: box-shadow var(--fade-out), color var(--fade-out); }
 .theme-neu .theme-picker input { position: absolute; width: 1px; height: 1px; margin: 0; opacity: 0; pointer-events: none; }
 .theme-neu .theme-picker label::before { content: ""; width: 0.4rem; height: 0.4rem; border-radius: 50%; background: var(--bg3); transition: background var(--fade-out); }
@@ -436,7 +436,7 @@ html:has(.photo-view[open]) { overflow: hidden; scrollbar-gutter: stable; }
   .theme-neu .research-heading { margin-bottom: 1.5rem; font-size: 2.25rem; }
   .theme-neu .fun-heading { margin-bottom: 1.25rem; font-size: 2.25rem; }
   .theme-neu .abstract-text { padding: 0.85rem 1rem; }
-  .theme-neu .theme-picker { padding: 0 0.45rem; }
+  .theme-neu .theme-picker { margin-left: 0.95rem; padding: 0 0.45rem; }
 }
 
 /* ------------------------------------------------------------------ */
@@ -486,6 +486,6 @@ html:has(.photo-view[open]) { overflow: hidden; scrollbar-gutter: stable; }
   .theme-neu .research-abstract summary::before { display: none; }
   .theme-neu .research-abstract summary { padding: 0.3rem 0; }
   .theme-neu .abstract-text { margin: 0.25rem 0 0; padding: 0.2rem 0 0.2rem 1rem; border-left: 2px solid var(--bg2); border-radius: 0; }
-  .theme-neu .theme-picker { padding: 0; }
+  .theme-neu .theme-picker { margin-left: 3.2rem; padding: 0; }
   .theme-neu .theme-picker label { padding: 0.35rem 0; }
 }
