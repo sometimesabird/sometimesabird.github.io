@@ -106,7 +106,7 @@ html.theme-light ::selection { background: #d5e2e9; color: var(--fg0); }
 h1, h2, h3, p { margin: 0; }
 svg { display: block; fill: currentColor; }
 img { display: block; }
-.with a, .authors a, .note a, .research-authors a { color: var(--blue); }
+.with a, .authors a, .notes a, .research-authors a { color: var(--blue); }
 .venue em { color: var(--yellow-bright); font-weight: 400; font-style: italic; }
 
 /* ------------------------------------------------------------------ */
@@ -273,16 +273,21 @@ html.theme-light .theme-toggle .icon-moon { display: block; }
 
 /* publications lie flat between grooves, their text at the card inset */
 .theme-neu .papers { list-style: none; margin: 0; padding: 0; }
-.theme-neu .papers li { position: relative; padding: 1.25rem 2.25rem; display: grid; grid-template-columns: 4.5rem minmax(0, 1fr); gap: 1.1rem; align-items: start; }
-.theme-neu .papers li::before,
-.theme-neu .papers li:last-child::after { content: ""; position: absolute; left: 0; right: 0; height: 2px; border-radius: 1px; background: linear-gradient(to bottom, var(--lo), var(--hi)); }
-.theme-neu .papers li::before { top: 0; }
-.theme-neu .papers li:last-child::after { bottom: 0; }
+.theme-neu .papers > li { position: relative; padding: 1.25rem 2.25rem; display: grid; grid-template-columns: 4.5rem minmax(0, 1fr); gap: 1.1rem; align-items: start; }
+.theme-neu .papers > li::before,
+.theme-neu .papers > li:last-child::after { content: ""; position: absolute; left: 0; right: 0; height: 2px; border-radius: 1px; background: linear-gradient(to bottom, var(--lo), var(--hi)); }
+.theme-neu .papers > li::before { top: 0; }
+.theme-neu .papers > li:last-child::after { bottom: 0; }
 .theme-neu .papers .badge { display: block; margin-top: 0.15rem; padding-left: 0; padding-right: 0; }
+/* a working paper's badge is the plain raised surface, so the gold stays with the journals */
+.theme-neu .badge.wp { color: var(--fg3); background: var(--convex); }
 .theme-neu .title { font-size: 1.07rem; font-weight: 500; line-height: 1.35; }
 .theme-neu .venue { display: block; margin-top: 0.25rem; color: var(--fg4); font-size: 0.9rem; }
 .theme-neu .authors { display: block; margin-top: 0.1rem; color: var(--fg4); font-size: 0.875rem; }
-.theme-neu .note { display: block; margin-top: 0.3rem; color: var(--fg4); font-size: 0.78rem; }
+/* notes under a paper (recognition, talks): bullets a step quieter than the coauthors */
+.theme-neu .notes { list-style: disc; margin: 0.35rem 0 0; padding: 0 0 0 1.1em; color: var(--fg4); font-size: 0.78rem; line-height: 1.6; }
+.theme-neu .notes li { margin: 0; }
+.theme-neu .notes li + li { margin-top: 0.1rem; }
 /* "all research" as a quiet text link; the paper key is the one button */
 .theme-neu .more { margin: 1.25rem 0 0 2.25rem; font-size: 0.95rem; }
 .theme-neu .more a { color: var(--fg3); }
@@ -300,7 +305,7 @@ html.theme-light .theme-toggle .icon-moon { display: block; }
 @property --cut { syntax: "<color>"; inherits: false; initial-value: transparent; }
 @property --lit { syntax: "<color>"; inherits: false; initial-value: transparent; }
 .theme-neu :is(.card, .research-entry) h3 a,
-.theme-neu :is(.title, .email, .more a, .with a, .authors a, .note a, .research-authors a, .research-note a, .research-download, .fun-text a, .themes-intro a) {
+.theme-neu :is(.title, .email, .more a, .with a, .authors a, .notes a, .research-authors a, .research-note a, .research-download, .fun-text a, .themes-intro a) {
   text-decoration: none; --ink: transparent; --cut: transparent; --lit: transparent;
   background-image: linear-gradient(var(--ink), var(--ink)), linear-gradient(var(--cut), var(--cut)), linear-gradient(var(--lit), var(--lit));
   background-repeat: no-repeat; background-origin: content-box; background-size: 100% 1px;
@@ -310,7 +315,7 @@ html.theme-light .theme-toggle .icon-moon { display: block; }
    to read as a link on its own */
 .theme-neu :is(.card, .research-entry) h3 a, .theme-neu a.title, .theme-neu .research-note a, .theme-neu .fun-text a { --cut: var(--lo); --lit: var(--hi); }
 .theme-neu :is(.card, .research-entry) h3 a:hover,
-.theme-neu :is(.title, .email, .more a, .with a, .authors a, .note a, .research-authors a, .research-note a, .research-download, .fun-text a, .themes-intro a):hover {
+.theme-neu :is(.title, .email, .more a, .with a, .authors a, .notes a, .research-authors a, .research-note a, .research-download, .fun-text a, .themes-intro a):hover {
   --ink: var(--link-ink, rgb(204 36 29 / 0.9)); --cut: var(--lo); --lit: var(--hi); transition-duration: var(--fade-in); }
 /* the title also lifts a step brighter, so the line is not doing the whole job */
 .theme-neu :is(.card, .research-entry) h3 a:hover, .theme-neu .title:hover { color: var(--fg0); }
@@ -425,7 +430,7 @@ html:has(.photo-view[open]) { overflow: hidden; scrollbar-gutter: stable; }
   .theme-neu .side .links { padding-top: 1.5rem; }
   .theme-neu .side .links::before { margin-bottom: 1.25rem; }
   .theme-neu h2, .theme-neu .more, .theme-neu .research-heading, .theme-neu .fun-text, .theme-neu .themes-intro, .theme-neu .themes-note { margin-left: 1.4rem; }
-  .theme-neu .papers li, .theme-neu .research-entry:not(.research-jmp) { padding: 1.1rem 1.4rem; }
+  .theme-neu .papers > li, .theme-neu .research-entry:not(.research-jmp) { padding: 1.1rem 1.4rem; }
   .theme-neu :is(.card, .research-jmp) { padding: 2rem 1.4rem 1.6rem; }
   .theme-neu :is(.card, .research-jmp)::before, .theme-neu :is(.card, .research-jmp)::after { left: 1.4rem; right: 1.4rem; top: 0.75rem; }
   .theme-neu .research-heading { margin-bottom: 1.5rem; font-size: 2.25rem; }
@@ -455,25 +460,25 @@ html:has(.photo-view[open]) { overflow: hidden; scrollbar-gutter: stable; }
   .theme-neu :is(.site-nav, .copy, .copied, .dot, .more, .photo-view, .skip-link, .theme-toggle), .theme-neu .side .links::before { display: none; }
   /* the profile stacks above the main column: a small photo beside the text */
   .theme-neu .page { display: block; max-width: none; padding: 0; }
-  .theme-neu .side { position: static; display: grid; grid-template-columns: 5rem minmax(0, 1fr); column-gap: 1rem; align-items: start; padding: 0 0 1.25rem; border-radius: 0; border-bottom: 1px solid var(--bg1); }
+  .theme-neu .side { position: static; display: grid; grid-template-columns: 5rem minmax(0, 1fr); column-gap: 1rem; align-items: start; padding: 0 0 1rem; border-radius: 0; border-bottom: 1px solid var(--bg1); }
   .theme-neu .portrait { width: 5rem; height: 5rem; padding: 0; margin: 0; grid-row: span 3; border-radius: 4px; }
   .theme-neu .portrait img { border-radius: 4px; }
   .theme-neu .role { margin-top: 0.5rem; }
   .theme-neu .side .links { grid-column: 1 / -1; padding-top: 0.75rem; }
   .theme-neu .icon-links { margin-top: 0.5rem; }
-  .theme-neu main { padding-top: 1.25rem; }
+  .theme-neu main { padding-top: 1rem; }
   .theme-neu .market { padding: 0; }
   /* the card keeps a hairline frame and its red rule; the question keeps a bar */
-  .theme-neu :is(.card, .research-jmp) { padding: 1.25rem 1.5rem; border: 1px solid var(--bg1); border-radius: 8px; }
+  .theme-neu :is(.card, .research-jmp) { padding: 1rem 1.5rem; border: 1px solid var(--bg1); border-radius: 8px; }
   .theme-neu :is(.card, .research-jmp)::before { left: 1.5rem; right: 1.5rem; top: 0.6rem; background: #9d0006; -webkit-mask-image: none; mask-image: none; }
   .theme-neu .question { padding: 0.4rem 0 0.4rem 1rem; border-left: 2px solid var(--fg4); border-radius: 0; color: var(--fg2); }
   .theme-neu .text-link { padding: 0; }
   .theme-neu h2 { margin-left: 1.5rem; break-after: avoid; }
-  .theme-neu .papers li, .theme-neu .research-entry:not(.research-jmp) { padding: 1rem 1.5rem; }
-  .theme-neu .papers li::before, .theme-neu .papers li:last-child::after,
+  .theme-neu .papers > li, .theme-neu .research-entry:not(.research-jmp) { padding: 1rem 1.5rem; }
+  .theme-neu .papers > li::before, .theme-neu .papers > li:last-child::after,
   .theme-neu .research-entry:not(.research-jmp)::before, .theme-neu .research-entry:not(.research-jmp):last-of-type::after { height: 1px; background: var(--bg1); }
-  .theme-neu .badge { border: 1px solid #000; color: #000; }
-  .theme-neu .card, .theme-neu .papers li, .theme-neu .research-entry { break-inside: avoid; }
+  .theme-neu .badge, .theme-neu .badge.wp { border: 1px solid #000; color: #000; }
+  .theme-neu .card, .theme-neu .papers > li, .theme-neu .research-entry { break-inside: avoid; }
   /* the job market entry prints with its abstract open and may not fit under
      the profile; it breaks rather than leave the first page empty */
   .theme-neu .research-jmp { break-inside: auto; }

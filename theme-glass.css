@@ -114,7 +114,7 @@ button { font: inherit; color: inherit; cursor: pointer; }
 a { color: inherit; text-decoration: underline; text-decoration-thickness: 1px; text-decoration-color: transparent; text-underline-offset: 0.12em; transition: color var(--fade-out), text-decoration-color var(--fade-out); }
 a:hover { text-decoration-color: var(--link-ink); transition-duration: var(--fade-in); }
 a:focus-visible, button:focus-visible, summary:focus-visible { outline: 2px solid var(--yellow-bright); outline-offset: 3px; }
-.with a, .authors a, .note a, .research-authors a { color: var(--blue); }
+.with a, .authors a, .notes a, .research-authors a { color: var(--blue); }
 .venue em { color: var(--yellow-bright); font-weight: 400; font-style: italic; }
 
 /* text links are etched: titles carry a faint line at rest, a dark cut with
@@ -128,7 +128,7 @@ a:focus-visible, button:focus-visible, summary:focus-visible { outline: 2px soli
 @property --cut-c { syntax: "<color>"; inherits: false; initial-value: transparent; }
 @property --lit-c { syntax: "<color>"; inherits: false; initial-value: transparent; }
 .theme-glass :is(.card, .research-entry) h3 a,
-.theme-glass :is(.title, .email, .more a, .with a, .authors a, .note a, .research-authors a, .research-note a, .research-download, .fun-text a, .themes-intro a) {
+.theme-glass :is(.title, .email, .more a, .with a, .authors a, .notes a, .research-authors a, .research-note a, .research-download, .fun-text a, .themes-intro a) {
   text-decoration: none; --ink: transparent; --cut-c: transparent; --lit-c: transparent;
   background-image: linear-gradient(var(--ink), var(--ink)), linear-gradient(var(--cut-c), var(--cut-c)), linear-gradient(var(--lit-c), var(--lit-c));
   background-repeat: no-repeat; background-origin: content-box; background-size: 100% 1px;
@@ -136,7 +136,7 @@ a:focus-visible, button:focus-visible, summary:focus-visible { outline: 2px soli
   transition: --ink var(--fade-out), --cut-c var(--fade-out), --lit-c var(--fade-out), color var(--fade-out); }
 .theme-glass :is(.card, .research-entry) h3 a, .theme-glass a.title, .theme-glass .research-note a, .theme-glass .fun-text a { --cut-c: var(--cut); --lit-c: var(--lit); }
 .theme-glass :is(.card, .research-entry) h3 a:hover,
-.theme-glass :is(.title, .email, .more a, .with a, .authors a, .note a, .research-authors a, .research-note a, .research-download, .fun-text a, .themes-intro a):hover { --ink: var(--link-ink); --cut-c: var(--cut); --lit-c: var(--lit); transition-duration: var(--fade-in); }
+.theme-glass :is(.title, .email, .more a, .with a, .authors a, .notes a, .research-authors a, .research-note a, .research-download, .fun-text a, .themes-intro a):hover { --ink: var(--link-ink); --cut-c: var(--cut); --lit-c: var(--lit); transition-duration: var(--fade-in); }
 .theme-glass :is(.card, .research-entry) h3 a:hover, .theme-glass .title:hover { color: var(--fg0); }
 
 /* ------------------------------------------------------------------ */
@@ -271,15 +271,20 @@ html.lens-ok.theme-glass :where(.side, .card, .research-jmp, .market) { -webkit-
 
 /* publications lie flat on the content layer between hairlines */
 .theme-glass .papers { list-style: none; margin: 0; padding: 0; }
-.theme-glass .papers li { position: relative; padding: 1.25rem 2.25rem; display: grid; grid-template-columns: 4.5rem minmax(0, 1fr); gap: 1.1rem; align-items: start; }
-.theme-glass .papers li::before, .theme-glass .papers li:last-child::after { content: ""; position: absolute; left: 0; right: 0; height: 1px; background: linear-gradient(90deg, transparent, var(--hairline) 10%, var(--hairline) 90%, transparent); }
-.theme-glass .papers li::before { top: 0; }
-.theme-glass .papers li:last-child::after { bottom: 0; }
+.theme-glass .papers > li { position: relative; padding: 1.25rem 2.25rem; display: grid; grid-template-columns: 4.5rem minmax(0, 1fr); gap: 1.1rem; align-items: start; }
+.theme-glass .papers > li::before, .theme-glass .papers > li:last-child::after { content: ""; position: absolute; left: 0; right: 0; height: 1px; background: linear-gradient(90deg, transparent, var(--hairline) 10%, var(--hairline) 90%, transparent); }
+.theme-glass .papers > li::before { top: 0; }
+.theme-glass .papers > li:last-child::after { bottom: 0; }
 .theme-glass .papers .badge { display: block; margin-top: 0.15rem; padding-left: 0; padding-right: 0; }
+/* a working paper's chip is clear frosted glass with light type, so the yellow stays with the journals */
+.theme-glass .badge.wp { --badge-face: linear-gradient(160deg, rgba(235, 219, 178, 0.26), rgba(168, 153, 132, 0.18)); --badge-ink: var(--fg); }
 .theme-glass .title { font-size: 1.07rem; font-weight: 500; line-height: 1.35; }
 .theme-glass .venue { display: block; margin-top: 0.25rem; color: var(--fg4); font-size: 0.9rem; }
 .theme-glass .authors { display: block; margin-top: 0.1rem; color: var(--fg4); font-size: 0.875rem; }
-.theme-glass .note { display: block; margin-top: 0.3rem; color: var(--fg4); font-size: 0.78rem; }
+/* notes under a paper (recognition, talks): bullets a step quieter than the coauthors */
+.theme-glass .notes { list-style: disc; margin: 0.35rem 0 0; padding: 0 0 0 1.1em; color: var(--fg4); font-size: 0.78rem; line-height: 1.6; }
+.theme-glass .notes li { margin: 0; }
+.theme-glass .notes li + li { margin-top: 0.1rem; }
 /* "all research" as a quiet text link; the paper key is the one button */
 .theme-glass .more { margin: 1.25rem 0 0 2.25rem; font-size: 0.95rem; }
 .theme-glass .more a { color: var(--fg3); }
@@ -382,7 +387,7 @@ html:has(.photo-view[open]) { overflow: hidden; scrollbar-gutter: stable; }
   .theme-glass .side .links { padding-top: 1.5rem; }
   .theme-glass .side .links::before { margin-bottom: 1.25rem; }
   .theme-glass h2, .theme-glass .more, .theme-glass .research-heading, .theme-glass .fun-text, .theme-glass .themes-intro, .theme-glass .theme-picker, .theme-glass .themes-note { margin-left: 1.4rem; }
-  .theme-glass .papers li, .theme-glass .research-entry:not(.research-jmp) { padding: 1.1rem 1.4rem; }
+  .theme-glass .papers > li, .theme-glass .research-entry:not(.research-jmp) { padding: 1.1rem 1.4rem; }
   .theme-glass :is(.card, .research-jmp) { padding: 2rem 1.4rem 1.6rem; }
   .theme-glass :is(.card, .research-jmp)::after { left: 1.4rem; right: 1.4rem; }
   .theme-glass .research-heading { margin-bottom: 1.5rem; font-size: 2.25rem; }
@@ -412,25 +417,25 @@ html:has(.photo-view[open]) { overflow: hidden; scrollbar-gutter: stable; }
   .theme-glass :is(.site-nav, .copy, .copied, .dot, .more, .photo-view, .skip-link, .lens-filter), .theme-glass .side .links::before { display: none; }
   /* the profile stacks above the main column: a small photo beside the text */
   .theme-glass .page { display: block; max-width: none; padding: 0; }
-  .theme-glass .side { position: static; display: grid; grid-template-columns: 5rem minmax(0, 1fr); column-gap: 1rem; align-items: start; padding: 0 0 1.25rem; border-radius: 0; border-bottom: 1px solid var(--bg1); }
+  .theme-glass .side { position: static; display: grid; grid-template-columns: 5rem minmax(0, 1fr); column-gap: 1rem; align-items: start; padding: 0 0 1rem; border-radius: 0; border-bottom: 1px solid var(--bg1); }
   .theme-glass .portrait { width: 5rem; height: 5rem; padding: 0; margin: 0; grid-row: span 3; border-radius: 4px; }
   .theme-glass .portrait img { border-radius: 4px; }
   .theme-glass .role { margin-top: 0.5rem; }
   .theme-glass .side .links { grid-column: 1 / -1; padding-top: 0.75rem; }
   .theme-glass .icon-links { margin-top: 0.5rem; }
-  .theme-glass main { padding-top: 1.25rem; }
+  .theme-glass main { padding-top: 1rem; }
   .theme-glass .market { padding: 0; }
   /* the card keeps a hairline frame and its red light as a rule; the question keeps a bar */
-  .theme-glass :is(.card, .research-jmp) { padding: 1.25rem 1.5rem; border: 1px solid var(--bg1); border-radius: 8px; }
+  .theme-glass :is(.card, .research-jmp) { padding: 1rem 1.5rem; border: 1px solid var(--bg1); border-radius: 8px; }
   .theme-glass :is(.card, .research-jmp)::after { left: 1.5rem; right: 1.5rem; top: 0.6rem; background: #9d0006; -webkit-mask-image: none; mask-image: none; }
   .theme-glass .question { padding: 0.4rem 0 0.4rem 1rem; border-left: 2px solid var(--fg4); border-radius: 0; color: var(--fg2); }
   .theme-glass .text-link { padding: 0; }
   .theme-glass h2 { margin-left: 1.5rem; break-after: avoid; }
-  .theme-glass .papers li, .theme-glass .research-entry:not(.research-jmp) { padding: 1rem 1.5rem; }
-  .theme-glass .papers li::before, .theme-glass .papers li:last-child::after,
+  .theme-glass .papers > li, .theme-glass .research-entry:not(.research-jmp) { padding: 1rem 1.5rem; }
+  .theme-glass .papers > li::before, .theme-glass .papers > li:last-child::after,
   .theme-glass .research-entry:not(.research-jmp)::before, .theme-glass .research-entry:not(.research-jmp):last-of-type::after { background: var(--bg1); }
   .theme-glass .badge { border: 1px solid #000; color: #000; }
-  .theme-glass .card, .theme-glass .papers li, .theme-glass .research-entry { break-inside: avoid; }
+  .theme-glass .card, .theme-glass .papers > li, .theme-glass .research-entry { break-inside: avoid; }
   /* the job market entry prints with its abstract open and may not fit under
      the profile; it breaks rather than leave the first page empty */
   .theme-glass .research-jmp { break-inside: auto; }

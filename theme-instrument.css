@@ -447,13 +447,13 @@ html:has(.photo-view[open]) { overflow: hidden; scrollbar-gutter: stable; }
 
 /* publications: rows between engraved lines, brass nameplates for the venues */
 .theme-instrument .papers { list-style: none; margin: 0; padding: 0; }
-.theme-instrument .papers li {
+.theme-instrument .papers > li {
   display: grid; grid-template-columns: 4.75rem minmax(0, 1fr); gap: 1.1rem; align-items: start;
   padding: 1.25rem 0.25rem;
   border-top: 1px solid rgba(0, 0, 0, 0.55);
   box-shadow: inset 0 1px 0 rgba(235, 219, 178, 0.07);
 }
-.theme-instrument .papers li:last-child { border-bottom: 1px solid rgba(0, 0, 0, 0.55); box-shadow: inset 0 1px 0 rgba(235, 219, 178, 0.07), 0 1px 0 rgba(235, 219, 178, 0.07); }
+.theme-instrument .papers > li:last-child { border-bottom: 1px solid rgba(0, 0, 0, 0.55); box-shadow: inset 0 1px 0 rgba(235, 219, 178, 0.07), 0 1px 0 rgba(235, 219, 178, 0.07); }
 .theme-instrument .badge {
   position: relative; display: inline-flex; justify-content: center; align-items: center;
   width: 4.6rem; height: 1.5rem; margin-top: 0.1rem; border-radius: 3px;
@@ -477,11 +477,21 @@ html:has(.photo-view[open]) { overflow: hidden; scrollbar-gutter: stable; }
 }
 .theme-instrument .badge::before { left: 5px; transform: rotate(35deg); }
 .theme-instrument .badge::after { right: 5px; transform: rotate(-20deg); }
+/* a working paper's nameplate is steel, with steel screws, so the brass stays with the journals */
+.theme-instrument .badge.wp { background: linear-gradient(180deg, var(--fg4), #928374 52%, var(--bg4)); }
+.theme-instrument .badge.wp::before, .theme-instrument .badge.wp::after {
+  background:
+    linear-gradient(180deg, transparent 40%, rgba(0, 0, 0, 0.55) 40% 60%, transparent 60%),
+    radial-gradient(circle at 40% 35%, var(--paper-dim), var(--bg4) 55%, var(--ink3));
+}
 .theme-instrument .title { font-size: 1.05rem; font-weight: 500; line-height: 1.35; color: var(--fg); }
 .theme-instrument .venue { display: block; margin-top: 0.25rem; font-size: 0.9rem; color: var(--fg3); }
 .theme-instrument .venue em { color: var(--yellow-bright); font-weight: 400; }
 .theme-instrument .authors { display: block; margin-top: 0.1rem; font-size: 0.875rem; color: var(--fg4); }
-.theme-instrument .note { display: block; margin-top: 0.3rem; font-size: 0.78rem; color: var(--fg4); }
+/* notes under a paper (recognition, talks): bullets a step quieter than the coauthors */
+.theme-instrument .notes { list-style: disc; margin: 0.35rem 0 0; padding: 0 0 0 1.1em; font-size: 0.78rem; line-height: 1.6; color: var(--fg4); }
+.theme-instrument .notes li { margin: 0; }
+.theme-instrument .notes li + li { margin-top: 0.1rem; }
 .theme-instrument .more { margin: 1.2rem 0 0 0.25rem; font-size: 0.9rem; }
 .theme-instrument .more a { color: var(--fg3); text-shadow: var(--engrave); }
 .theme-instrument .more a:hover { color: var(--fg); text-decoration-color: rgb(204 36 29 / 0.9); }
@@ -569,7 +579,7 @@ html:has(.photo-view[open]) { overflow: hidden; scrollbar-gutter: stable; }
   .theme-instrument .glass { padding: 1.4rem 1.2rem 1.3rem; }
   .theme-instrument :is(.card, .research-jmp) h3 { font-size: 1.5rem; }
   .theme-instrument .question { font-size: 0.9rem; }
-  .theme-instrument .papers li { grid-template-columns: 4.6rem minmax(0, 1fr); gap: 0.8rem; padding: 1.1rem 0.1rem; }
+  .theme-instrument .papers > li { grid-template-columns: 4.6rem minmax(0, 1fr); gap: 0.8rem; padding: 1.1rem 0.1rem; }
   .theme-instrument .research-entry:not(.research-jmp) { padding: 1.1rem 0.1rem; }
   .theme-instrument .research-heading, .theme-instrument .fun-heading { margin-bottom: 1.5rem; font-size: 2.25rem; }
   .theme-instrument .abstract-text { padding: 0.85rem 1rem; }
@@ -589,7 +599,7 @@ html:has(.photo-view[open]) { overflow: hidden; scrollbar-gutter: stable; }
   .theme-instrument body::before, .theme-instrument .page::before, .theme-instrument .screws, .theme-instrument .portrait::before, .theme-instrument .glass::before,
   .theme-instrument .badge::before, .theme-instrument .badge::after,
   .theme-instrument :is(.site-nav, .copy, .copied, .dot, .more, .photo-view, .skip-link, .theme-toggle) { display: none; }
-  .theme-instrument :is(.page, .side, .portrait, .glass, .copy, .icon-links a, .text-link, .papers li, .research-entry, .abstract-text, .theme-picker, .theme-picker label) { background: none !important; box-shadow: none !important; border: 0; transform: none !important; }
+  .theme-instrument :is(.page, .side, .portrait, .glass, .copy, .icon-links a, .text-link, .papers > li, .research-entry, .abstract-text, .theme-picker, .theme-picker label) { background: none !important; box-shadow: none !important; border: 0; transform: none !important; }
   .theme-instrument * { text-shadow: none !important; }
   .w { color: inherit; transition: none; }
   /* the profile stacks above the main column: a small photo beside the text */
@@ -610,10 +620,10 @@ html:has(.photo-view[open]) { overflow: hidden; scrollbar-gutter: stable; }
   .theme-instrument .question { padding: 0.4rem 0 0.4rem 1rem; border-left: 2px solid var(--fg4); color: var(--fg2); font: inherit; font-size: 0.9375rem; letter-spacing: 0; }
   .theme-instrument .text-link { margin-left: 0; padding: 0; font: inherit; font-size: 0.875rem; letter-spacing: 0; text-transform: none; color: #000; }
   .theme-instrument h2 { margin-left: 1.5rem; break-after: avoid; color: #000; }
-  .theme-instrument .papers li, .theme-instrument .research-entry:not(.research-jmp) { padding: 1rem 1.5rem; border-top: 1px solid var(--bg1); }
-  .theme-instrument .papers li:last-child, .theme-instrument .research-entry:not(.research-jmp):last-of-type { border-bottom: 1px solid var(--bg1); }
+  .theme-instrument .papers > li, .theme-instrument .research-entry:not(.research-jmp) { padding: 1rem 1.5rem; border-top: 1px solid var(--bg1); }
+  .theme-instrument .papers > li:last-child, .theme-instrument .research-entry:not(.research-jmp):last-of-type { border-bottom: 1px solid var(--bg1); }
   .theme-instrument .badge { width: auto; height: auto; margin-top: 0.2rem; padding: 0.15rem 0.4rem; border: 1px solid #000; color: #000; }
-  .theme-instrument :is(.card, .research-jmp), .theme-instrument .papers li, .theme-instrument .research-entry { break-inside: avoid; }
+  .theme-instrument :is(.card, .research-jmp), .theme-instrument .papers > li, .theme-instrument .research-entry { break-inside: avoid; }
   .theme-instrument .research-heading { margin: 0 0 1.25rem 1.5rem; }
   .theme-instrument .research-actions { font: inherit; font-size: 0.8125rem; letter-spacing: 0; text-transform: none; color: #000; }
   .theme-instrument .research-abstract summary::before { display: none; }

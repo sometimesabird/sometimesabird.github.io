@@ -1168,7 +1168,7 @@ html:has(.photo-view[open]) {
     padding: 0;
 }
 
-.papers li {
+.papers > li {
     margin: 0;
     padding: 1rem 0;
     border-top: 1px solid var(--bg1);
@@ -1193,7 +1193,13 @@ html:has(.photo-view[open]) {
     text-align: center;
 }
 
-.papers li:last-child {
+/* a working paper's badge is a step quieter, so the journals keep the signal */
+.papers .badge.wp {
+    background: var(--bg2);
+    color: var(--fg3);
+}
+
+.papers > li:last-child {
     border-bottom: 1px solid var(--bg1);
 }
 
@@ -1223,16 +1229,34 @@ html:has(.photo-view[open]) {
     font-size: 0.875rem;
 }
 
-/* policy recognition: its own line, a step quieter than the coauthors */
-.page .note {
+/* notes under a paper (recognition, talks): bullets a step quieter than the
+   coauthors. .note is the older single-line form, kept for the _testing drafts */
+.page .note,
+.page .notes {
     display: block;
-    margin: 0.3rem 0 0;
+    margin: 0.35rem 0 0;
+    padding: 0;
     color: var(--fg4);
     font-size: 0.78rem;
+    line-height: 1.6;
+}
+
+.page .notes {
+    list-style: disc;
+    padding-left: 1.1em;
+}
+
+.page .notes li {
+    margin: 0;
+}
+
+.page .notes li + li {
+    margin-top: 0.1rem;
 }
 
 .page .authors a,
-.page .note a {
+.page .note a,
+.page .notes a {
     color: var(--blue-bright);
 }
 
@@ -1391,7 +1415,7 @@ html:has(.photo-view[open]) {
     }
 
     /* badge above the title instead of beside it */
-    .papers li {
+    .papers > li {
         grid-template-columns: 1fr;
         gap: 0.45rem;
     }
@@ -1459,7 +1483,7 @@ html:has(.photo-view[open]) {
     }
 
     .card,
-    .papers li {
+    .papers > li {
         break-inside: avoid;
     }
 
@@ -1469,12 +1493,13 @@ html:has(.photo-view[open]) {
 
     /* the page is wide enough for the badge to sit beside the title again;
        backgrounds don't print by default, so outline it instead */
-    .papers li {
+    .papers > li {
         grid-template-columns: 4.5rem minmax(0, 1fr);
         gap: 1rem;
     }
 
-    .papers .badge {
+    .papers .badge,
+    .papers .badge.wp {
         margin-top: 0.2rem;
         border: 1px solid var(--fg);
         background: none;
