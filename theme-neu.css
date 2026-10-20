@@ -43,7 +43,22 @@
   --hi-shadow: #353331;
   --lo: #191919;
   --edge-ink: rgba(235, 219, 178, 0.08);
-  --badge-edge: rgba(255, 240, 200, 0.35);
+  /* the journal badge's gold is a material of its own, shaped the way the
+     page is: a lit and a shaded end along the lamp, a flat middle for the
+     reactive lamp overhead, a rim catching the light, and an inner bevel
+     (lit toward the lamp, shaded away from it) so the chip reads as a raised
+     pillow rather than a sticker, which a fill the page's shadows alone
+     cannot do. the lit side is bright on purpose, a polished key catching
+     the lamp, the shaded side soft. the working-paper chip sets the bevel
+     to nothing and keeps its quieter rim, --wp-edge */
+  --badge-ink: #1d2021;
+  --badge-a: #fdcd42;
+  --badge-b: #cd931a;
+  --badge-flat: #e2aa2a;
+  --badge-edge: rgba(255, 240, 200, 0.85);
+  --wp-edge: rgba(255, 240, 200, 0.35);
+  --badge-hi: rgba(255, 240, 200, 0.9);
+  --badge-lo: rgba(96, 56, 0, 0.45);
   /* raised surfaces run light to dark along the lamp, pressed ones the
      reverse; --flat is their middle, the shade a surface shows with the
      reactive lamp straight overhead */
@@ -85,7 +100,12 @@ html.theme-light {
   --yellow: var(--accent); --yellow-bright: var(--accent); --blue: var(--accent); --green-bright: #427165;
   --hi: #ffffff; --hi-shadow: #ffffff; --lo: #d6d5d1;
   --edge-ink: rgba(255, 255, 255, 0.8);
-  --badge-edge: rgba(255, 255, 255, 0.8);
+  --badge-ink: var(--accent-hover);
+  --badge-a: #f4f8fa; --badge-b: #c8d5de; --badge-flat: #dbe4e9;
+  --badge-edge: rgba(255, 255, 255, 1);
+  --wp-edge: rgba(255, 255, 255, 0.8);
+  --badge-hi: rgba(255, 255, 255, 1);
+  --badge-lo: rgba(54, 95, 119, 0.16);
   --convex-a: #faf9f6; --convex-b: #eeede9; --concave-a: #e9e9e5; --concave-b: #f7f6f3; --flat: #f4f3f0;
   --lift-hover: var(--fg0);
   --link-ink: var(--accent);
@@ -158,8 +178,17 @@ img { display: block; }
 @keyframes breathe { 50% { box-shadow: 0 0 0 6px color-mix(in srgb, var(--yellow-bright) 10%, transparent); } }
 
 /* journal badges: the venue is the signal, so it keeps its yellow fill, a
-   raised chip rather than a flat tag */
-.badge { display: inline-block; padding: 0.3rem 0.75rem; border-radius: 999px; font-size: 0.72rem; font-weight: 700; letter-spacing: 0.06em; line-height: 1.4; text-align: center; color: #1d2021; background: linear-gradient(145deg, #f3b82f, #d49a1c); box-shadow: calc(var(--sx) * 3px) calc(var(--sy) * 3px) 8px var(--lo), calc(var(--sx) * -2px) calc(var(--sy) * -2px) 6px var(--hi), inset calc(var(--lx) * 1px) calc(var(--ly) * 1px) 0 var(--badge-edge); }
+   raised chip rather than a flat tag. the chip is the gold material above
+   under the same lamp as every other surface: its gradient turns and
+   flattens with --la and --lc as the page's convex does, its outer shadows
+   are the working-paper chip's, and the inner bevel follows the lamp vector
+   so it shortens and vanishes under the reactive pointer like the rest */
+.badge { display: inline-block; padding: 0.3rem 0.75rem; border-radius: 999px; font-size: 0.72rem; font-weight: 700; letter-spacing: 0.06em; line-height: 1.4; text-align: center; color: var(--badge-ink);
+  background: linear-gradient(calc(var(--la) * 1deg), color-mix(in srgb, var(--badge-a) calc(var(--lc) * 100%), var(--badge-flat)), color-mix(in srgb, var(--badge-b) calc(var(--lc) * 100%), var(--badge-flat)));
+  box-shadow: calc(var(--sx) * 3px) calc(var(--sy) * 3px) 8px var(--lo), calc(var(--sx) * -2px) calc(var(--sy) * -2px) 6px var(--hi),
+    inset calc(var(--lx) * 1px) calc(var(--ly) * 1px) 0 var(--badge-edge),
+    inset calc(var(--sx) * 4px) calc(var(--sy) * 4px) 9px var(--badge-hi),
+    inset calc(var(--sx) * -3px) calc(var(--sy) * -3px) 6px var(--badge-lo); }
 
 /* ------------------------------------------------------------------ */
 /* layout: today's sidebar layout, every surface given depth            */
@@ -277,8 +306,10 @@ html.theme-light .theme-toggle .icon-moon { display: block; }
 .theme-neu .papers > li::before { top: 0; }
 .theme-neu .papers > li:last-child::after { bottom: 0; }
 .theme-neu .papers .badge { display: block; margin-top: 0.15rem; padding-left: 0; padding-right: 0; }
-/* a working paper's badge is the plain raised surface, so the gold stays with the journals */
-.theme-neu .badge.wp { color: var(--fg3); background: var(--convex); }
+/* a working paper's badge is the plain raised surface, so the gold stays with
+   the journals; the page material carries no bevel and a quieter rim, its
+   shadows are enough */
+.theme-neu .badge.wp { --badge-hi: transparent; --badge-lo: transparent; --badge-edge: var(--wp-edge); color: var(--fg3); background: var(--convex); }
 .theme-neu .title { font-size: 1.07rem; font-weight: 500; line-height: 1.35; }
 .theme-neu .venue { display: block; margin-top: 0.25rem; color: var(--fg4); font-size: 0.9rem; }
 .theme-neu .authors { display: block; margin-top: 0.1rem; color: var(--fg4); font-size: 0.875rem; }
@@ -377,7 +408,6 @@ html:has(.photo-view[open]) { overflow: hidden; scrollbar-gutter: stable; }
 .theme-light .theme-picker label:has(input:checked) { color: var(--accent); }
 .theme-light .theme-picker label:hover::before { background: var(--accent); }
 .theme-light .question { color: var(--accent-hover); background: linear-gradient(rgba(54, 95, 119, 0.05), rgba(54, 95, 119, 0.05)), var(--concave); box-shadow: var(--press), inset 0 0 26px rgba(54, 95, 119, 0.06); }
-.theme-light .badge { color: var(--accent-hover); background: linear-gradient(145deg, #edf2f5, #dae4ea); }
 .theme-light :is(.text-link, .cv) { color: var(--accent); }
 .theme-light :is(.text-link, .cv, .with a, .authors a, .notes a):hover { color: var(--accent-hover); }
 .theme-light .card::before { background: #96acb8; }
