@@ -2,7 +2,7 @@
 
 ## Project Overview
 
-Personal academic website for George Beknazar-Yuzbashev, hosted on GitHub Pages at **www.george.by**. George is an Economics PhD student at Columbia University researching political economics, behavioral economics, and experimental economics.
+Personal academic website for George Beknazar-Yuzbashev, hosted on GitHub Pages at **www.george.by**. George is a Postdoctoral Scholar in Economics at the University of Chicago (PhD, Columbia, 2025), on the 2026–2027 academic job market, researching political economics, behavioral economics, and experimental economics.
 
 ## Architecture
 
@@ -14,14 +14,14 @@ Every page can be drawn in one of six themes, chosen on `fun.html` and kept in t
 
 | File | Role |
 |---|---|
-| `index.html` | Homepage: sidebar (photo, name, position, nav, contact) + job-market line, JMP card, selected work |
+| `index.html` | The one content page: sidebar (photo, name, position, contact) + a top line (job-market status on the left, CV key on the right), the JMP card with its expandable abstract, then two sections, "Publications and Conditionally Accepted Papers" and "Working Papers", each row with a venue badge, linked coauthors, notes as bullets, a short summary, a paper link and an expandable abstract |
 | `assets/headshot.jpg` | 512×512 headshot used in the sidebar and as the social-preview image |
 | `assets/headshot-full.jpg` | 1536×2304 uncropped version of the Columbia headshot (`headshot.jpg` is its top square), shown when the sidebar photo is clicked; lazy, so it only downloads once the sidebar photo is hovered, focused, or opened |
 | `assets/cv.pdf` | CV, linked from the sidebar button |
 | `assets/jmp.pdf` | Job market paper, linked from the homepage card and research page; a copy of `~/Dropbox/Research/mental_health/paper/paper.pdf`, so re-copy it when the paper is revised |
-| `research.html` | Research page: job market paper, publications, and working papers, each with a short summary and an expandable abstract |
+| `research.html` | Redirect stub to `index.html` (meta refresh plus `location.replace`), kept so old links still land; the research page's content moved onto the homepage in October 2026. Unthemed and without the Google tag |
 | `fun.html` | Fun page: a research line and the theme picker, two sections of equal rank under the heading |
-| `styles.css` | The Flat theme, the site's earlier look: Gruvbox dark, flat panels. Holds the research and fun page rules too; the pages have no style blocks of their own |
+| `styles.css` | The Flat theme, the site's earlier look: Gruvbox dark, flat panels. Holds the fun page rules too; the pages have no style blocks of their own |
 | `theme-neu.css` | The Neumorphic theme and Neumorphic Reactive, the default (soft raised and pressed surfaces, dark and light palettes, the pointer lamp's variables) |
 | `theme-desk.css` | The Skeuomorphic Desk theme (leather blotter, paper, sticky note); Courier Prime from `assets/fonts/` |
 | `theme-instrument.css` | The Skeuomorphic Instrument theme (brushed faceplate, bakelite keys, amber readout); IBM Plex Mono from `assets/fonts/` |
@@ -43,18 +43,19 @@ Every page can be drawn in one of six themes, chosen on `fun.html` and kept in t
 - **Color scheme** — Gruvbox dark (`#282828` background, `#ebdbb2` text, `#cc241d` accent)
 ## Key Conventions
 
-- Navigation is a simple three-link bar: Home / Research / Fun
-- Research papers use native `<details>` elements for expandable abstracts
+- There is no navigation bar (removed October 2026). The homepage carries everything; `fun.html` is kept for the theme picker but is reachable only by URL, and its sidebar name links back to the homepage
+- Papers use native `<details>` elements for expandable abstracts; the page script opens them all before printing
 - Coauthor names link to their personal websites
-- Social links (GitHub, Bitbucket, Twitter, Instagram) are in the homepage footer area
+- Paper rows reuse the old research page's class names (`.research-summary`, `.research-actions`, `.research-download`, `.research-abstract`, `.abstract-text`), since every theme already draws them
+- The sidebar carries the email (with a copy key) and the Google Scholar and CV icon links; the text CV key (`.cv`) at the top right of the main column is the second, more visible route to the CV
 - The site is minimal by design — avoid adding unnecessary complexity, frameworks, or build steps
 
 ## Themes
 
 Six themes, picked on `fun.html` by name only: Neumorphic and Neumorphic Reactive, the default (`theme-neu.css`; Reactive makes the pointer the only lamp), Flat (`styles.css`), Skeuomorphic Desk (`theme-desk.css`), Skeuomorphic Instrument (`theme-instrument.css`), Liquid Glass (`theme-glass.css`). The choice lives in `localStorage` as `theme`, with `theme-light` for the neumorphic dark/light key, and applies to every page.
 
-- **One stylesheet per page view.** An identical inline script in the `<head>` of `index.html`, `research.html` and `fun.html` reads the choice, sets `html.theme-*` classes and the two metas, and `document.write`s that theme's `<link>` before paint, so no page is ever styled twice and no other theme flashes first; a `<noscript>` link loads `theme-neu.css`, and the `<html>` tag carries `class="theme-neu"` statically for that case (the script re-marks it). Keep the three copies of that script identical. `?theme=desk` or `?theme=neu&light` previews a theme without saving it.
-- **The markup is shared.** All five stylesheets are written against the same HTML. Two wrappers exist for one theme each and are `display: contents` or unstyled everywhere else: `.stamp` around the job-market line (Desk's rubber stamp) and `.glass` around the JMP card's text (Instrument's window). `theme.js` adds and removes the rest (`.theme-toggle`, `.screws`, `.lens-filter` and the `html.lens-ok` mark), so the other themes never see them.
+- **One stylesheet per page view.** An identical inline script in the `<head>` of `index.html` and `fun.html` reads the choice, sets `html.theme-*` classes and the two metas, and `document.write`s that theme's `<link>` before paint, so no page is ever styled twice and no other theme flashes first; a `<noscript>` link loads `theme-neu.css`, and the `<html>` tag carries `class="theme-neu"` statically for that case (the script re-marks it). Keep the two copies of that script identical. `?theme=desk` or `?theme=neu&light` previews a theme without saving it.
+- **The markup is shared.** All five stylesheets are written against the same HTML. Two wrappers exist for one theme each and are `display: contents` or unstyled everywhere else: `.stamp` around the job-market line (Desk's rubber stamp) and `.glass` around the JMP card's text (Instrument's window). `.topline` wraps the job-market line and the CV key and is a wrapping flex row in every theme; the CV key is drawn as that theme's key (a bordered button, a raised pill, a brass plate, a bakelite button, a lit glass pill). `theme.js` adds and removes the rest (`.theme-toggle`, `.screws`, `.lens-filter` and the `html.lens-ok` mark), so the other themes never see them.
 - **Every change to a page is a change to five stylesheets.** A new element or class must be drawn in `styles.css`, `theme-neu.css`, `theme-desk.css`, `theme-instrument.css` and `theme-glass.css`, and each has a print block to extend. Do not add page-specific `<style>` blocks to the pages: they would apply under every theme.
 - **The lamp.** `theme.js` writes `--lx --ly --lm --la --lc` on each surface named in its `SURFACES` list; the "the lamp" block of `theme-neu.css` redeclares the shadow variables on the same list. A new neumorphic surface goes in both. `?lamp=x,y` pins the pointer at viewport coordinates for screenshots.
 - **The glass light.** The same way for Liquid Glass: `theme.js` (`shine`) writes `--ang --px --py --lw` on each surface in its own `SURFACES` list, and "the material" block of `theme-glass.css` draws the rim and the glint from them on the same list. A new glass surface goes in both. Glass is never stacked on glass: only the sheets (sidebar, card, wells, status pill, badges) carry `backdrop-filter`; keys on them are tinted, rimmed shapes. The refraction (`backdrop-filter: url(#lens)`) is Chromium-only and gated by `html.lens-ok`; the plain blur is the fallback.
@@ -69,5 +70,5 @@ Push to `master` branch → GitHub Pages serves the site automatically at `www.g
 - Do not introduce build tools, bundlers, or static site generators
 - Do not delete `_config.yml`: it is configuration for GitHub Pages' built-in Jekyll pass, not an added build step, and removing it publishes `CLAUDE.md`
 - Do not change the Gruvbox color scheme unless explicitly asked
-- Do not load fonts or anything else from third parties; the two web fonts the skeuomorphic themes use are self-hosted in `assets/fonts/`. The one exception is the Google tag (gtag.js, `G-G6H97P8QLM`) at the top of the `<head>` of `index.html`, `research.html` and `fun.html`, added at George's request; a new published page needs it too
+- Do not load fonts or anything else from third parties; the two web fonts the skeuomorphic themes use are self-hosted in `assets/fonts/`. The one exception is the Google tag (gtag.js, `G-G6H97P8QLM`) at the top of the `<head>` of `index.html` and `fun.html`, added at George's request; a new published page needs it too (the `research.html` redirect stub is left within the same instant and carries none)
 - Keep published pages and the stylesheet flat at the root, and put PDFs and images in `assets/`. Put drafts, design experiments, and old page versions in `_testing/`, never at the root; the leading underscore is what keeps the folder unpublished, so do not rename it without one. Links from `_testing/` to root files need a `../` prefix

@@ -145,7 +145,7 @@
     // pins the pointer at viewport coordinates, for screenshots
     // ------------------------------------------------------------------
     var lamp = (function () {
-        var SURFACES = '.side, .card, .research-jmp, .portrait, .market, .question, .badge, .site-nav a, .copy, .icon-links a, .text-link, .theme-toggle, .theme-picker label, .abstract-text';
+        var SURFACES = '.side, .card, .portrait, .market, .cv, .question, .badge, .copy, .icon-links a, .text-link, .theme-toggle, .theme-picker label, .abstract-text';
         var WEIGHT = 0.32;    // the pointer lamp's share against the fixed lamp
         var LAMP_H = 700;     // px: the lamp's height over the desk; a surface this far away feels its full weight
         var LAMP_REACH = 1.5; // in heights: the pointer term stops growing past this distance
@@ -207,6 +207,8 @@
             });
             document.addEventListener('scroll', start, { passive: true });
             window.addEventListener('resize', start);
+            // an abstract opening or closing moves everything below it
+            document.addEventListener('toggle', start, true);
         }
 
         function leave() {
@@ -312,7 +314,7 @@
     // pointer, as for the lamp above
     // ------------------------------------------------------------------
     var shine = (function () {
-        var SURFACES = '.side, .card, .research-jmp, .market, .question, .abstract-text, .site-nav, .theme-picker, .portrait, .badge, .copy, .icon-links a, .text-link, .copied';
+        var SURFACES = '.side, .card, .market, .cv, .question, .abstract-text, .theme-picker, .portrait, .badge, .copy, .icon-links a, .text-link, .copied';
         var REST = 315;      // deg: the fixed lamp's direction, 0 up and clockwise
         var REACH = 360;     // px: how far past a surface's edge the glint still reaches
         var SMOOTH = 0.1;    // s: time constant of the pointer smoothing

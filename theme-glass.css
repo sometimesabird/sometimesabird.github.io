@@ -53,7 +53,7 @@
   --tint-panel: rgba(235, 219, 178, 0.03);        /* the sheets: sidebar, card */
   --tint-key: rgba(235, 219, 178, 0.085);         /* keys and the lit nav item */
   --tint-key-hover: rgba(235, 219, 178, 0.13);
-  --tint-trough: rgba(29, 32, 33, 0.3);           /* the capsules' bed: nav, picker */
+  --tint-trough: rgba(29, 32, 33, 0.3);           /* the picker's bed */
   --tint-well: rgba(250, 189, 47, 0.1);           /* the question */
   --tint-well-plain: rgba(235, 219, 178, 0.05);   /* an open abstract */
   --well-ink: var(--yellow-bright);
@@ -114,7 +114,7 @@ button { font: inherit; color: inherit; cursor: pointer; }
 a { color: inherit; text-decoration: underline; text-decoration-thickness: 1px; text-decoration-color: transparent; text-underline-offset: 0.12em; transition: color var(--fade-out), text-decoration-color var(--fade-out); }
 a:hover { text-decoration-color: var(--link-ink); transition-duration: var(--fade-in); }
 a:focus-visible, button:focus-visible, summary:focus-visible { outline: 2px solid var(--yellow-bright); outline-offset: 3px; }
-.with a, .authors a, .notes a, .research-authors a { color: var(--blue); }
+.with a, .authors a, .notes a { color: var(--blue); }
 .venue em { color: var(--yellow-bright); font-weight: 400; font-style: italic; }
 
 /* text links are etched: titles carry a faint line at rest, a dark cut with
@@ -127,17 +127,17 @@ a:focus-visible, button:focus-visible, summary:focus-visible { outline: 2px soli
 @property --ink { syntax: "<color>"; inherits: false; initial-value: transparent; }
 @property --cut-c { syntax: "<color>"; inherits: false; initial-value: transparent; }
 @property --lit-c { syntax: "<color>"; inherits: false; initial-value: transparent; }
-.theme-glass :is(.card, .research-entry) h3 a,
-.theme-glass :is(.title, .email, .more a, .with a, .authors a, .notes a, .research-authors a, .research-note a, .research-download, .fun-text a, .themes-intro a) {
+.theme-glass .card h3 a,
+.theme-glass :is(.title, .email, .with a, .authors a, .notes a, .research-download, .fun-text a, .themes-intro a) {
   text-decoration: none; --ink: transparent; --cut-c: transparent; --lit-c: transparent;
   background-image: linear-gradient(var(--ink), var(--ink)), linear-gradient(var(--cut-c), var(--cut-c)), linear-gradient(var(--lit-c), var(--lit-c));
   background-repeat: no-repeat; background-origin: content-box; background-size: 100% 1px;
   background-position: 0 calc(100% - 0.1em), 0 calc(100% - 0.1em), 0 calc(100% - 0.1em + 1px);
   transition: --ink var(--fade-out), --cut-c var(--fade-out), --lit-c var(--fade-out), color var(--fade-out); }
-.theme-glass :is(.card, .research-entry) h3 a, .theme-glass a.title, .theme-glass .research-note a, .theme-glass .fun-text a { --cut-c: var(--cut); --lit-c: var(--lit); }
-.theme-glass :is(.card, .research-entry) h3 a:hover,
-.theme-glass :is(.title, .email, .more a, .with a, .authors a, .notes a, .research-authors a, .research-note a, .research-download, .fun-text a, .themes-intro a):hover { --ink: var(--link-ink); --cut-c: var(--cut); --lit-c: var(--lit); transition-duration: var(--fade-in); }
-.theme-glass :is(.card, .research-entry) h3 a:hover, .theme-glass .title:hover { color: var(--fg0); }
+.theme-glass .card h3 a, .theme-glass a.title, .theme-glass .fun-text a { --cut-c: var(--cut); --lit-c: var(--lit); }
+.theme-glass .card h3 a:hover,
+.theme-glass :is(.title, .email, .with a, .authors a, .notes a, .research-download, .fun-text a, .themes-intro a):hover { --ink: var(--link-ink); --cut-c: var(--cut); --lit-c: var(--lit); transition-duration: var(--fade-in); }
+.theme-glass .card h3 a:hover, .theme-glass .title:hover { color: var(--fg0); }
 
 /* ------------------------------------------------------------------ */
 /* the material                                                         */
@@ -146,30 +146,30 @@ a:focus-visible, button:focus-visible, summary:focus-visible { outline: 2px soli
    highlight up and to the left, no glint. :where keeps these rules at the
    weight of one class (".icon-links a" would otherwise lift the whole list
    above the layout rules below) */
-.theme-glass :where(.side, .card, .research-jmp, .market, .question, .abstract-text, .site-nav, .theme-picker, .portrait, .badge, .copy, .icon-links a, .text-link, .copied, .skip-link) { position: relative; isolation: isolate; --ang: 315; --px: 50%; --py: 0%; --lw: 0; }
+.theme-glass :where(.side, .card, .market, .cv, .question, .abstract-text, .theme-picker, .portrait, .badge, .copy, .icon-links a, .text-link, .copied) { position: relative; isolation: isolate; --ang: 315; --px: 50%; --py: 0%; --lw: 0; }
 /* the sheets and wells: the backdrop blurred behind them. the keys sit on
    the sheets and get no backdrop of their own */
-.theme-glass :where(.side, .card, .research-jmp, .market, .question, .abstract-text, .badge, .skip-link) { -webkit-backdrop-filter: var(--glass-filter); backdrop-filter: var(--glass-filter); }
+.theme-glass :where(.side, .card, .market, .question, .abstract-text, .badge) { -webkit-backdrop-filter: var(--glass-filter); backdrop-filter: var(--glass-filter); }
 /* true refraction where the browser allows it (theme.js adds the filter and
    the mark): the sheets and the status pill bend what lies behind their edges */
-html.lens-ok.theme-glass :where(.side, .card, .research-jmp, .market) { -webkit-backdrop-filter: url(#lens) var(--glass-filter); backdrop-filter: url(#lens) var(--glass-filter); }
+html.lens-ok.theme-glass :where(.side, .card, .market) { -webkit-backdrop-filter: url(#lens) var(--glass-filter); backdrop-filter: url(#lens) var(--glass-filter); }
 /* the rim: a conic gradient whose bright point sits at --ang (0 is up,
    clockwise), masked to the outer --rim-w of the surface */
-.theme-glass :where(.side, .card, .research-jmp, .market, .question, .abstract-text, .site-nav, .theme-picker, .portrait, .badge, .copy, .icon-links a, .text-link, .copied:not(:empty), .skip-link)::before {
+.theme-glass :where(.side, .card, .market, .cv, .question, .abstract-text, .theme-picker, .portrait, .badge, .copy, .icon-links a, .text-link, .copied:not(:empty))::before {
   content: ""; position: absolute; inset: 0; z-index: -1; border-radius: inherit; padding: var(--rim-w); pointer-events: none;
   background: conic-gradient(from calc(var(--ang) * 1deg - 180deg), var(--rim-far) 0deg, var(--rim-mid) 35deg, var(--rim-lo) 85deg, var(--rim-lo) 115deg, var(--rim-mid) 150deg, var(--rim-hi) 180deg, var(--rim-mid) 210deg, var(--rim-lo) 245deg, var(--rim-lo) 275deg, var(--rim-mid) 325deg, var(--rim-far) 360deg);
   -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0); -webkit-mask-composite: xor; mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0); mask-composite: exclude; }
 /* the glint: a soft pool of light under the pointer, in the surface's own
    background over its tint */
-.theme-glass :where(.side, .card, .research-jmp, .market) { background: radial-gradient(var(--glint-size) circle at var(--px) var(--py), rgb(255 255 255 / calc(var(--glint) * var(--lw))), transparent 62%), var(--tint-panel); }
-.theme-glass :where(.side, .card, .research-jmp) { border-radius: var(--r-panel); box-shadow: var(--bands), var(--shadow-panel); }
-.theme-glass :where(.card, .research-jmp) { box-shadow: var(--bands), var(--shadow-card); }
+.theme-glass :where(.side, .card, .market) { background: radial-gradient(var(--glint-size) circle at var(--px) var(--py), rgb(255 255 255 / calc(var(--glint) * var(--lw))), transparent 62%), var(--tint-panel); }
+.theme-glass :where(.side, .card) { border-radius: var(--r-panel); box-shadow: var(--bands), var(--shadow-panel); }
+.theme-glass :where(.card) { box-shadow: var(--bands), var(--shadow-card); }
 
 /* keys: rimmed, tinted shapes that rise under the pointer. the copy key is
-   tiny, Scholar and the CV round, the paper link a pill */
-.theme-glass :where(.copy, .icon-links a, .text-link) { display: inline-flex; align-items: center; justify-content: center; gap: 0.6em; padding: 0; border: 0; border-radius: 999px; background: var(--tint-key); color: var(--fg); box-shadow: var(--bands-key), var(--shadow-key); text-decoration: none; transition: background var(--fade-out), box-shadow var(--fade-out), color var(--fade-out), transform var(--fade-out); }
-.theme-glass :where(.copy, .icon-links a, .text-link):hover { color: var(--fg0); background: var(--tint-key-hover); box-shadow: var(--bands-key), var(--shadow-key-hover); transform: translateY(-2px) scale(1.03); transition-duration: var(--fade-in); }
-.theme-glass :where(.copy, .icon-links a, .text-link):active { transform: translateY(0) scale(0.97); box-shadow: var(--bands-key), 0 1px 2px rgba(0, 0, 0, 0.3); transition-duration: 0.05s; }
+   tiny, Scholar and the CV icon round, the paper link and the CV key pills */
+.theme-glass :where(.copy, .icon-links a, .text-link, .cv) { display: inline-flex; align-items: center; justify-content: center; gap: 0.6em; padding: 0; border: 0; border-radius: 999px; background: var(--tint-key); color: var(--fg); box-shadow: var(--bands-key), var(--shadow-key); text-decoration: none; transition: background var(--fade-out), box-shadow var(--fade-out), color var(--fade-out), transform var(--fade-out); }
+.theme-glass :where(.copy, .icon-links a, .text-link, .cv):hover { color: var(--fg0); background: var(--tint-key-hover); box-shadow: var(--bands-key), var(--shadow-key-hover); transform: translateY(-2px) scale(1.03); transition-duration: var(--fade-in); }
+.theme-glass :where(.copy, .icon-links a, .text-link, .cv):active { transform: translateY(0) scale(0.97); box-shadow: var(--bands-key), 0 1px 2px rgba(0, 0, 0, 0.3); transition-duration: 0.05s; }
 .theme-glass .copy { width: 2rem; height: 2rem; color: var(--fg4); }
 .theme-glass .icon-links a { width: 2.75rem; height: 2.75rem; }
 
@@ -207,13 +207,6 @@ html.lens-ok.theme-glass :where(.side, .card, .research-jmp, .market) { -webkit-
 .theme-glass .role strong { color: var(--fg); font-weight: normal; }
 .theme-glass .edu { margin-top: 0.6rem; color: var(--fg3); font-size: 0.75rem; }
 
-/* nav: one glass capsule with three segments; the current page is a lit
-   lozenge, the others light up under the pointer */
-.theme-glass .site-nav { margin: 1.75rem 0 0; display: flex; padding: 4px; border-radius: 999px; background: var(--tint-trough); box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.3), inset 0 -1px 0 rgba(255, 255, 255, 0.04); }
-.theme-glass .site-nav a { flex: 1; padding: 0.5rem 0.5rem; border-radius: 999px; text-align: center; font-size: 0.9rem; color: var(--fg3); text-decoration: none; transition: background var(--fade-out), color var(--fade-out), box-shadow var(--fade-out); }
-.theme-glass .site-nav a:hover { color: var(--fg); background: rgba(235, 219, 178, 0.05); transition-duration: var(--fade-in); }
-.theme-glass .site-nav a[aria-current] { color: var(--fg0); background: var(--tint-key); box-shadow: var(--bands-key), 0 2px 8px rgba(0, 0, 0, 0.3); }
-
 /* contact, under a hairline */
 .theme-glass .side .links { padding-top: 1.75rem; display: flex; flex-direction: column; align-items: flex-start; }
 .theme-glass .side .links::before { content: ""; width: 100%; height: 1px; margin: 0 0 1.5rem; background: linear-gradient(90deg, transparent, var(--hairline) 15%, var(--hairline) 85%, transparent); }
@@ -234,39 +227,45 @@ html.lens-ok.theme-glass :where(.side, .card, .research-jmp, .market) { -webkit-
 .theme-glass .copied:not(:empty) { padding: 0.1rem 0.6rem; border-radius: 999px; background: var(--tint-key); box-shadow: var(--bands-key), var(--shadow-key); }
 .theme-glass .copy.done + .copied { width: 1px; height: 1px; padding: 0; overflow: hidden; clip-path: inset(50%); }
 
-/* main column: the status line is a glass pill; section labels and the
-   flat rows share the card's text inset */
+/* main column: the status line is a glass pill, the CV key a lit pill at
+   the other end of its line; section labels and the flat rows share the
+   card's text inset */
 .theme-glass main { min-width: 0; padding-top: 0.25rem; }
+.theme-glass .topline { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 0.75rem 1.5rem; }
 .theme-glass .market { display: inline-flex; align-items: center; gap: 0.75rem; padding: 0.55rem 1.1rem 0.55rem 0.95rem; border-radius: 999px; font-size: 0.9rem; color: var(--fg2); box-shadow: var(--bands-key), var(--shadow-key); }
 /* the Desk theme draws the line's span as a stamp and the Instrument the
    card's div as a window; here both are no box */
 .theme-glass .stamp, .theme-glass .glass { display: contents; }
+.theme-glass .cv { margin-left: auto; white-space: nowrap; }
 .theme-glass .lede { margin: 1.6rem 0 1rem; max-width: 38em; font-size: 1.15rem; line-height: 1.5; color: var(--fg3); }
 .theme-glass .lede b { color: var(--fg); font-weight: 500; }
 .theme-glass .fields { margin-bottom: 2.75rem; font-size: 0.9rem; color: var(--fg4); }
 .theme-glass h2 { margin: 0 0 1.1rem 2.25rem; font: italic 400 1.25rem/1.3 var(--serif); color: var(--fg3); }
 .theme-glass section { margin-bottom: 3rem; }
 
-/* the job market card (on the research page too): the tallest sheet on the
-   page, rising under the pointer, with a dim red light along its top edge
-   that warms on hover */
-.theme-glass :is(.card, .research-jmp) { padding: 2.4rem 2.25rem 2.1rem; transition: transform 0.5s ease-out, box-shadow 0.5s ease-out; }
-.theme-glass :is(.card, .research-jmp)::after { content: ""; position: absolute; left: 2.25rem; right: 2.25rem; top: 0; height: 2px; z-index: -1; border-radius: 1px; pointer-events: none; background: var(--edge-red); -webkit-mask-image: linear-gradient(90deg, transparent, #000 15%, #000 85%, transparent); mask-image: linear-gradient(90deg, transparent, #000 15%, #000 85%, transparent); transition: background 0.5s ease, box-shadow 0.5s ease; }
-.theme-glass :is(.card, .research-jmp):focus-within::after { background: var(--edge-red-hot); box-shadow: 0 2px 14px rgba(251, 73, 52, 0.28); }
+/* the job market card: the tallest sheet on the page, rising under the
+   pointer, with a dim red light along its top edge that warms on hover */
+.theme-glass .card { padding: 2.4rem 2.25rem 2.1rem; transition: transform 0.5s ease-out, box-shadow 0.5s ease-out; }
+.theme-glass .card::after { content: ""; position: absolute; left: 2.25rem; right: 2.25rem; top: 0; height: 2px; z-index: -1; border-radius: 1px; pointer-events: none; background: var(--edge-red); -webkit-mask-image: linear-gradient(90deg, transparent, #000 15%, #000 85%, transparent); mask-image: linear-gradient(90deg, transparent, #000 15%, #000 85%, transparent); transition: background 0.5s ease, box-shadow 0.5s ease; }
+.theme-glass .card:focus-within::after { background: var(--edge-red-hot); box-shadow: 0 2px 14px rgba(251, 73, 52, 0.28); }
 @media (hover: hover) and (prefers-reduced-motion: no-preference) {
-  .theme-glass :is(.card, .research-jmp):hover { transform: translateY(-3px); box-shadow: var(--bands), var(--shadow-card-hover); }
-  .theme-glass :is(.card, .research-jmp):hover::after { background: var(--edge-red-hot); box-shadow: 0 2px 14px rgba(251, 73, 52, 0.28); }
+  .theme-glass .card:hover { transform: translateY(-3px); box-shadow: var(--bands), var(--shadow-card-hover); }
+  .theme-glass .card:hover::after { background: var(--edge-red-hot); box-shadow: 0 2px 14px rgba(251, 73, 52, 0.28); }
 }
-.theme-glass :is(.card, .research-jmp) h3 { font: 400 2rem/1.15 var(--serif); letter-spacing: -0.025em; text-wrap: balance; }
+.theme-glass .card h3 { font: 400 2rem/1.15 var(--serif); letter-spacing: -0.025em; text-wrap: balance; }
 /* the question: tinted glass, lit from within; the loudest object on the page */
 .theme-glass .question { margin-top: 1.2rem; padding: 0.9rem 1.2rem; max-width: 550px; border-radius: var(--r-well); color: var(--well-ink); font-size: 0.9375rem; line-height: 1.6; background: radial-gradient(var(--glint-size) circle at var(--px) var(--py), rgb(255 255 255 / calc(var(--glint) * var(--lw))), transparent 62%), var(--tint-well); box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.08), inset 0 -1px 0 rgba(0, 0, 0, 0.15), inset 0 0 36px var(--well-glow), 0 8px 24px -12px rgba(0, 0, 0, 0.5); }
 .theme-glass .teaser { margin-top: 1.2rem; color: var(--fg3); font-size: 0.875rem; line-height: 1.7; }
 .theme-glass .with { margin-top: 1rem; color: var(--fg3); font-size: 0.75rem; line-height: 1.6; }
-.theme-glass .text-link { margin-top: 1.5rem; padding: 0.65rem 1.25rem; font-size: 0.875rem; }
-.theme-glass .text-link span { display: inline-block; transition: transform 0.15s ease-out; }
+.theme-glass :is(.text-link, .cv) { padding: 0.65rem 1.25rem; font-size: 0.875rem; }
+.theme-glass :is(.text-link, .cv) span { display: inline-block; transition: transform 0.15s ease-out; }
+/* the card's actions: the paper key floated left, the abstract toggle beside
+   it at the key's height, the open abstract clearing both below */
+.theme-glass .card .research-actions { margin-top: 1.5rem; }
+.theme-glass .card .text-link { float: left; margin: 0 1.5rem 0 0; }
+.theme-glass .card .research-abstract summary { padding: 0.72rem 0; }
 @media (hover: hover) and (prefers-reduced-motion: no-preference) {
-  .theme-glass .text-link:hover span, .theme-glass .research-download:hover span { transform: translate(0.12em, -0.12em); }
-  .theme-glass .more a:hover span { transform: translateX(0.2em); }
+  .theme-glass :is(.text-link, .cv, .research-download):hover span { transform: translate(0.12em, -0.12em); }
 }
 
 /* publications lie flat on the content layer between hairlines */
@@ -285,11 +284,6 @@ html.lens-ok.theme-glass :where(.side, .card, .research-jmp, .market) { -webkit-
 .theme-glass .notes { list-style: disc; margin: 0.35rem 0 0; padding: 0 0 0 1.1em; color: var(--fg4); font-size: 0.78rem; line-height: 1.6; }
 .theme-glass .notes li { margin: 0; }
 .theme-glass .notes li + li { margin-top: 0.1rem; }
-/* "all research" as a quiet text link; the paper key is the one button */
-.theme-glass .more { margin: 1.25rem 0 0 2.25rem; font-size: 0.95rem; }
-.theme-glass .more a { color: var(--fg3); }
-.theme-glass .more span { display: inline-block; margin-left: 0.25em; transition: transform 0.15s ease-out; }
-
 /* enlarged photo: a modal over the dimmed, blurred page */
 .photo-view[open] { box-sizing: border-box; display: grid; place-items: center; width: 100%; height: 100%; max-width: none; max-height: none; margin: 0; padding: 1.25rem; border: 0; background: none; cursor: zoom-out; animation: photo-fade 0.15s ease-out; }
 .photo-view::backdrop { background: rgba(29, 32, 33, 0.8); -webkit-backdrop-filter: blur(18px); backdrop-filter: blur(18px); animation: photo-fade 0.15s ease-out; }
@@ -306,36 +300,20 @@ html:has(.photo-view[open]) { overflow: hidden; scrollbar-gutter: stable; }
    gets a share --w of the lift */
 .w { color: color-mix(in srgb, var(--fg3), var(--lift-hover) calc(var(--w, 0) * 100%)); transition: color var(--lift-out) ease-in-out; }
 
-.theme-glass .skip-link { position: absolute; top: 0.75rem; left: 0.75rem; z-index: 2; padding: 0.6rem 0.9rem; border-radius: 999px; background: var(--tint-key); box-shadow: var(--bands-key), var(--shadow-key); color: var(--fg); transform: translateY(-200%); }
-.theme-glass .skip-link:focus { transform: translateY(0); outline: 2px solid var(--yellow-bright); }
 /* the refraction filter theme.js adds: an SVG with no size of its own */
 .theme-glass .lens-filter { position: absolute; width: 0; height: 0; overflow: hidden; }
 
 /* no backdrop-filter: the sheets fall back to a denser tint, so the type
    stays legible over the wallpaper */
 @supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
-  .theme-glass :is(.side, .card, .research-jmp, .market, .abstract-text) { background-color: rgba(40, 40, 40, 0.86); }
+  .theme-glass :is(.side, .card, .market, .abstract-text) { background-color: rgba(40, 40, 40, 0.86); }
 }
 
 /* ------------------------------------------------------------------ */
-/* the research page: entries lie flat between hairlines, the job       */
-/* market paper in its sheet, open abstracts in glass wells             */
+/* under each paper: the summary, then the paper link and the abstract  */
+/* toggle on one line, the open abstract in a glass well below          */
 /* ------------------------------------------------------------------ */
-.theme-glass .research-heading { margin: 0 0 2rem 2.25rem; font: 400 2.75rem/1.1 var(--serif); letter-spacing: -0.025em; }
-.theme-glass .research-section { margin-bottom: 3rem; }
-.theme-glass .research-entry:not(.research-jmp) { position: relative; padding: 1.5rem 2.25rem; }
-.theme-glass .research-entry:not(.research-jmp)::before,
-.theme-glass .research-entry:not(.research-jmp):last-of-type::after { content: ""; position: absolute; left: 0; right: 0; height: 1px; background: linear-gradient(90deg, transparent, var(--hairline) 10%, var(--hairline) 90%, transparent); }
-.theme-glass .research-entry:not(.research-jmp)::before { top: 0; }
-.theme-glass .research-entry:not(.research-jmp):last-of-type::after { bottom: 0; }
-.theme-glass .research-entry:not(.research-jmp) h3 { margin: 0; font-size: 1.1875rem; font-weight: 600; line-height: 1.4; letter-spacing: -0.01em; text-wrap: pretty; }
-.theme-glass .research-jmp h3 { line-height: 1.2; letter-spacing: -0.02em; }
-.theme-glass .research-authors { margin: 0.5rem 0 0; color: var(--fg4); font-size: 0.8125rem; line-height: 1.65; }
-.theme-glass .research-venue { margin: 0.55rem 0 0; color: var(--fg3); font-size: 0.875rem; line-height: 1.6; }
-.theme-glass .research-venue em { color: var(--green-bright); font-weight: 400; }
-.theme-glass .research-status { display: block; font-size: 0.8125rem; }
 .theme-glass .research-summary { margin: 0.8rem 0 0; color: var(--fg3); font-size: 0.9375rem; line-height: 1.7; }
-.theme-glass .research-note { margin: 0.6rem 0 0; color: var(--fg4); font-size: 0.75rem; line-height: 1.65; }
 .theme-glass .research-actions { display: flow-root; margin-top: 0.65rem; font-size: 0.8125rem; line-height: 1.5; }
 .theme-glass .research-download { float: left; margin-right: 1.5rem; padding: 0.6rem 0; }
 .theme-glass .research-download span { display: inline-block; margin-left: 0.45em; color: var(--fg4); transition: transform 0.15s ease-out; }
@@ -348,8 +326,6 @@ html:has(.photo-view[open]) { overflow: hidden; scrollbar-gutter: stable; }
 /* an open abstract rests in a glass well: plain tint, a rim, the glint */
 .theme-glass .abstract-text { clear: both; margin: 0.5rem 0 0.5rem; padding: 1rem 1.25rem; border-radius: var(--r-well); color: var(--fg3); font-size: 0.875rem; line-height: 1.8; background: radial-gradient(var(--glint-size) circle at var(--px) var(--py), rgb(255 255 255 / calc(var(--glint) * var(--lw))), transparent 62%), var(--tint-well-plain); box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.06), inset 0 -1px 0 rgba(0, 0, 0, 0.15), 0 8px 24px -12px rgba(0, 0, 0, 0.5); }
 .theme-glass .abstract-text p { margin: 0; }
-.theme-glass .research-jmp .research-authors { margin-top: 0.7rem; }
-.theme-glass .research-jmp .research-actions { margin-top: 1rem; }
 
 /* ------------------------------------------------------------------ */
 /* the fun page: the heading, then two sections of equal rank, research */
@@ -359,10 +335,10 @@ html:has(.photo-view[open]) { overflow: hidden; scrollbar-gutter: stable; }
 .theme-glass .fun-heading em { color: var(--red-bright); }
 /* the sections' lines sit at the card inset, under their labels */
 .theme-glass :is(.fun-text, .themes-intro) { margin: 0 0 1.25rem 2.25rem; }
-/* one radio per theme, drawn like the nav turned on its side: a glass
-   capsule whose segments light under the pointer, the theme in use a lit
-   lozenge. the lozenge moves without a fade: theme.js checks the stored
-   theme's radio after the page has painted with the default one checked,
+/* one radio per theme: a glass capsule whose segments light under the
+   pointer, the theme in use a lit lozenge. the lozenge moves without a
+   fade: theme.js checks the stored theme's radio after the page has
+   painted with the default one checked,
    and a fade there would show the default lit for half a second on every
    load. the inputs stay in the page, unseen, so the keyboard and screen
    readers get native radios */
@@ -377,20 +353,19 @@ html:has(.photo-view[open]) { overflow: hidden; scrollbar-gutter: stable; }
 /* ------------------------------------------------------------------ */
 /* narrower windows: the profile stacks above the main column           */
 /* ------------------------------------------------------------------ */
-@media (max-width: 1000px) { .theme-glass :is(.card, .research-jmp) h3 { font-size: 1.75rem; } }
+@media (max-width: 1000px) { .theme-glass .card h3 { font-size: 1.75rem; } }
 @media (max-width: 820px) {
   .theme-glass .page { grid-template-columns: 1fr; gap: 2rem; padding: 1.5rem 1.25rem 3rem; }
   .theme-glass .side { position: relative; top: auto; display: grid; grid-template-columns: 7rem minmax(0, 1fr); column-gap: 1.25rem; padding: 1.5rem; }
   .theme-glass .portrait { width: 7rem; height: 7rem; padding: 4px; margin: 0; grid-row: span 3; }
   .theme-glass .identity :is(h1, .profile-name) .last { white-space: normal; }
-  .theme-glass .site-nav, .theme-glass .side .links { grid-column: 1 / -1; }
+  .theme-glass .side .links { grid-column: 1 / -1; }
   .theme-glass .side .links { padding-top: 1.5rem; }
   .theme-glass .side .links::before { margin-bottom: 1.25rem; }
-  .theme-glass h2, .theme-glass .more, .theme-glass .research-heading, .theme-glass .fun-text, .theme-glass .themes-intro, .theme-glass .themes-note { margin-left: 1.4rem; }
-  .theme-glass .papers > li, .theme-glass .research-entry:not(.research-jmp) { padding: 1.1rem 1.4rem; }
-  .theme-glass :is(.card, .research-jmp) { padding: 2rem 1.4rem 1.6rem; }
-  .theme-glass :is(.card, .research-jmp)::after { left: 1.4rem; right: 1.4rem; }
-  .theme-glass .research-heading { margin-bottom: 1.5rem; font-size: 2.25rem; }
+  .theme-glass h2, .theme-glass .fun-text, .theme-glass .themes-intro, .theme-glass .themes-note { margin-left: 1.4rem; }
+  .theme-glass .papers > li { padding: 1.1rem 1.4rem; }
+  .theme-glass .card { padding: 2rem 1.4rem 1.6rem; }
+  .theme-glass .card::after { left: 1.4rem; right: 1.4rem; }
   .theme-glass .fun-heading { margin-bottom: 1.25rem; font-size: 2.25rem; }
   .theme-glass .abstract-text { padding: 0.85rem 1rem; }
   .theme-glass .theme-picker { min-width: 0; max-width: calc(100% - 2.4rem); margin-left: 2.4rem; }
@@ -398,8 +373,8 @@ html:has(.photo-view[open]) { overflow: hidden; scrollbar-gutter: stable; }
 
 /* ------------------------------------------------------------------ */
 /* print / save as pdf: a white page, dark text, every sheet flat, the  */
-/* wallpaper put away; structure comes back as hairlines. research.html */
-/* opens every abstract before printing                                 */
+/* wallpaper put away; structure comes back as hairlines. the page      */
+/* script opens every abstract before printing                          */
 /* ------------------------------------------------------------------ */
 @media print {
   @page { margin: 1.5cm; }
@@ -410,11 +385,11 @@ html:has(.photo-view[open]) { overflow: hidden; scrollbar-gutter: stable; }
   }
   body { background: #fff; color: #000; -webkit-font-smoothing: auto; }
   .theme-glass body::before { display: none; }
-  .theme-glass :is(.side, .card, .research-jmp, .copy, .icon-links a, .text-link, .portrait, .question, .market, .badge, .site-nav, .site-nav a, .abstract-text, .copied, .skip-link, .theme-picker, .theme-picker label), .theme-glass .portrait img { box-shadow: none !important; background: none !important; -webkit-backdrop-filter: none !important; backdrop-filter: none !important; transform: none !important; }
-  .theme-glass :where(.side, .card, .research-jmp, .market, .question, .abstract-text, .site-nav, .theme-picker, .portrait, .badge, .copy, .icon-links a, .text-link, .copied, .skip-link)::before { display: none; }
+  .theme-glass :is(.side, .card, .copy, .icon-links a, .text-link, .cv, .portrait, .question, .market, .badge, .abstract-text, .copied, .theme-picker, .theme-picker label), .theme-glass .portrait img { box-shadow: none !important; background: none !important; -webkit-backdrop-filter: none !important; backdrop-filter: none !important; transform: none !important; }
+  .theme-glass :where(.side, .card, .market, .cv, .question, .abstract-text, .theme-picker, .portrait, .badge, .copy, .icon-links a, .text-link, .copied)::before { display: none; }
   .w { color: inherit; transition: none; }
   /* screen-only controls dropped */
-  .theme-glass :is(.site-nav, .copy, .copied, .dot, .more, .photo-view, .skip-link, .lens-filter), .theme-glass .side .links::before { display: none; }
+  .theme-glass :is(.copy, .copied, .cv, .dot, .photo-view, .lens-filter), .theme-glass .side .links::before { display: none; }
   /* the profile stacks above the main column: a small photo beside the text */
   .theme-glass .page { display: block; max-width: none; padding: 0; }
   .theme-glass .side { position: static; display: grid; grid-template-columns: 5rem minmax(0, 1fr); column-gap: 1rem; align-items: start; padding: 0 0 1rem; border-radius: 0; border-bottom: 1px solid var(--bg1); }
@@ -426,22 +401,19 @@ html:has(.photo-view[open]) { overflow: hidden; scrollbar-gutter: stable; }
   .theme-glass main { padding-top: 1rem; }
   .theme-glass .market { padding: 0; }
   /* the card keeps a hairline frame and its red light as a rule; the question keeps a bar */
-  .theme-glass :is(.card, .research-jmp) { padding: 1rem 1.5rem; border: 1px solid var(--bg1); border-radius: 8px; }
-  .theme-glass :is(.card, .research-jmp)::after { left: 1.5rem; right: 1.5rem; top: 0.6rem; background: #9d0006; -webkit-mask-image: none; mask-image: none; }
+  .theme-glass .card { padding: 1rem 1.5rem; border: 1px solid var(--bg1); border-radius: 8px; }
+  .theme-glass .card::after { left: 1.5rem; right: 1.5rem; top: 0.6rem; background: #9d0006; -webkit-mask-image: none; mask-image: none; }
   .theme-glass .question { padding: 0.4rem 0 0.4rem 1rem; border-left: 2px solid var(--fg4); border-radius: 0; color: var(--fg2); }
   .theme-glass .text-link { padding: 0; }
   .theme-glass h2 { margin-left: 1.5rem; break-after: avoid; }
-  .theme-glass .papers > li, .theme-glass .research-entry:not(.research-jmp) { padding: 1rem 1.5rem; }
-  .theme-glass .papers > li::before, .theme-glass .papers > li:last-child::after,
-  .theme-glass .research-entry:not(.research-jmp)::before, .theme-glass .research-entry:not(.research-jmp):last-of-type::after { background: var(--bg1); }
+  .theme-glass .papers > li { padding: 1rem 1.5rem; }
+  .theme-glass .papers > li::before, .theme-glass .papers > li:last-child::after { background: var(--bg1); }
   .theme-glass .badge { border: 1px solid #000; color: #000; }
-  .theme-glass .card, .theme-glass .papers > li, .theme-glass .research-entry { break-inside: avoid; }
-  /* the job market entry prints with its abstract open and may not fit under
-     the profile; it breaks rather than leave the first page empty */
-  .theme-glass .research-jmp { break-inside: auto; }
-  .theme-glass .research-heading { margin: 0 0 1.25rem 1.5rem; }
+  /* the card prints with its abstract open and may not fit under the
+     profile; it breaks rather than leave the first page empty */
+  .theme-glass .papers > li { break-inside: avoid; }
   .theme-glass .research-abstract summary::before { display: none; }
-  .theme-glass .research-abstract summary { padding: 0.3rem 0; }
+  .theme-glass .research-abstract summary, .theme-glass .card .research-abstract summary { padding: 0.3rem 0; }
   .theme-glass .abstract-text { margin: 0.25rem 0 0; padding: 0.2rem 0 0.2rem 1rem; border-left: 2px solid var(--bg2); border-radius: 0; }
   .theme-glass .theme-picker { margin-left: 3.75rem; padding: 0; }
   .theme-glass .theme-picker label { padding: 0.35rem 0; }

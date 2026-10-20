@@ -106,7 +106,7 @@ html.theme-light ::selection { background: #d5e2e9; color: var(--fg0); }
 h1, h2, h3, p { margin: 0; }
 svg { display: block; fill: currentColor; }
 img { display: block; }
-.with a, .authors a, .notes a, .research-authors a { color: var(--blue); }
+.with a, .authors a, .notes a { color: var(--blue); }
 .venue em { color: var(--yellow-bright); font-weight: 400; font-style: italic; }
 
 /* ------------------------------------------------------------------ */
@@ -122,7 +122,7 @@ img { display: block; }
    the surfaces themselves so var() resolves against the surface's own
    vector rather than the root's. without the script, or with the pointer
    away, every surface is the resting theme exactly */
-.theme-neu :is(.side, .card, .research-jmp, .portrait, .market, .question, .badge, .site-nav a, .copy, .icon-links a, .text-link, .theme-toggle, .theme-picker label, .abstract-text, .copied, .skip-link) {
+.theme-neu :is(.side, .card, .portrait, .market, .cv, .question, .badge, .copy, .icon-links a, .text-link, .theme-toggle, .theme-picker label, .abstract-text, .copied) {
   --sx: calc(var(--lx) * var(--lm));
   --sy: calc(var(--ly) * var(--lm));
   --raise: calc(var(--sx) * 9px) calc(var(--sy) * 9px) 20px var(--lo), calc(var(--sx) * -9px) calc(var(--sy) * -9px) 20px var(--hi-shadow);
@@ -138,16 +138,17 @@ img { display: block; }
 /* ------------------------------------------------------------------ */
 /* surfaces                                                             */
 /* ------------------------------------------------------------------ */
-/* slabs, raised off the page: the sidebar and the job market card (on the
-   research page too). :where keeps them at the weight of one class, so the
-   layout rules below win by order alone */
-.theme-neu :where(.side, .card, .research-jmp) { background: var(--convex); border-radius: 28px; box-shadow: var(--raise), var(--edge); }
+/* slabs, raised off the page: the sidebar and the job market card. :where
+   keeps them at the weight of one class, so the layout rules below win by
+   order alone */
+.theme-neu :where(.side, .card) { background: var(--convex); border-radius: 28px; box-shadow: var(--raise), var(--edge); }
 
 /* keys: raised buttons that press in under the pointer. the copy key and
-   the theme key are tiny, Scholar and the CV round, the paper link a pill */
-.theme-neu :where(.copy, .icon-links a, .text-link, .theme-toggle) { display: inline-flex; align-items: center; justify-content: center; gap: 0.6em; padding: 0; border: 0; border-radius: 999px; background: var(--convex); color: var(--fg); box-shadow: var(--raise-sm), var(--edge); text-decoration: none; transition: box-shadow var(--fade-out), color var(--fade-out); }
-.theme-neu :where(.copy, .icon-links a, .text-link, .theme-toggle):hover { color: var(--fg); text-decoration-color: transparent; box-shadow: calc(var(--sx) * 6px) calc(var(--sy) * 6px) 14px var(--lo), calc(var(--sx) * -6px) calc(var(--sy) * -6px) 14px var(--hi), var(--edge); transition-duration: var(--fade-in); }
-.theme-neu :where(.copy, .icon-links a, .text-link, .theme-toggle):active { box-shadow: var(--press-sm); background: var(--concave); transition-duration: 0.05s; }
+   the theme key are tiny, Scholar and the CV icon round, the paper link and
+   the CV key pills */
+.theme-neu :where(.copy, .icon-links a, .text-link, .cv, .theme-toggle) { display: inline-flex; align-items: center; justify-content: center; gap: 0.6em; padding: 0; border: 0; border-radius: 999px; background: var(--convex); color: var(--fg); box-shadow: var(--raise-sm), var(--edge); text-decoration: none; transition: box-shadow var(--fade-out), color var(--fade-out); }
+.theme-neu :where(.copy, .icon-links a, .text-link, .cv, .theme-toggle):hover { color: var(--fg); text-decoration-color: transparent; box-shadow: calc(var(--sx) * 6px) calc(var(--sy) * 6px) 14px var(--lo), calc(var(--sx) * -6px) calc(var(--sy) * -6px) 14px var(--hi), var(--edge); transition-duration: var(--fade-in); }
+.theme-neu :where(.copy, .icon-links a, .text-link, .cv, .theme-toggle):active { box-shadow: var(--press-sm); background: var(--concave); transition-duration: 0.05s; }
 .theme-neu :where(.copy, .theme-toggle) { width: 2rem; height: 2rem; color: var(--fg4); }
 .theme-neu .icon-links a { width: 2.75rem; height: 2.75rem; }
 
@@ -189,16 +190,6 @@ img { display: block; }
 .theme-neu .role strong { color: var(--fg); font-weight: normal; }
 .theme-neu .edu { margin-top: 0.6rem; color: var(--fg3); font-size: 0.75rem; }
 
-/* nav: pills that rise under the pointer; the current page is pressed in,
-   its dot red */
-.theme-neu .site-nav { margin: 1.75rem -0.25rem 0; display: flex; flex-direction: column; gap: 0.45rem; }
-.theme-neu .site-nav a { display: flex; align-items: center; gap: 0.7rem; padding: 0.55rem 0.95rem; border-radius: 999px; color: var(--fg3); text-decoration: none; transition: box-shadow var(--fade-out), color var(--fade-out); }
-.theme-neu .site-nav a::before { content: ""; width: 0.4rem; height: 0.4rem; border-radius: 50%; background: var(--bg3); transition: background var(--fade-out); }
-.theme-neu .site-nav a:hover { color: var(--fg); box-shadow: var(--raise-sm), var(--edge); transition-duration: var(--fade-in); }
-.theme-neu .site-nav a:hover::before { background: var(--fg); }
-.theme-neu .site-nav a[aria-current] { color: var(--fg); background: var(--concave); box-shadow: var(--press-sm); }
-.theme-neu .site-nav a[aria-current]::before { background: var(--red-bright); }
-
 /* contact, under a groove cut across the panel */
 .theme-neu .side .links { padding-top: 1.75rem; display: flex; flex-direction: column; align-items: flex-start; }
 .theme-neu .side .links::before { content: ""; width: 100%; height: 2px; margin: 0 0 1.5rem; border-radius: 1px; background: linear-gradient(to bottom, var(--lo), var(--hi)); }
@@ -227,13 +218,16 @@ img { display: block; }
 html:not(.theme-light) .theme-toggle .icon-sun,
 html.theme-light .theme-toggle .icon-moon { display: block; }
 
-/* main column: the status line is a pressed pill; section labels and the
-   flat rows share the card's text inset, so the column has two alignments,
-   page things at the edge and card things inset */
+/* main column: the status line is a pressed pill, the CV key a raised one at
+   the other end of its line; section labels and the flat rows share the
+   card's text inset, so the column has two alignments, page things at the
+   edge and card things inset */
 .theme-neu main { min-width: 0; padding-top: 0.25rem; }
+.theme-neu .topline { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 0.75rem 1.5rem; }
 .theme-neu .market { display: inline-flex; align-items: center; gap: 0.75rem; padding: 0.55rem 1.1rem 0.55rem 0.95rem; border-radius: 999px; font-size: 0.9rem; color: var(--fg2); background: var(--concave); box-shadow: var(--press-sm); }
 /* the Desk theme draws the line's span as a rubber stamp; here it is no box */
 .theme-neu .stamp { display: contents; }
+.theme-neu .cv { margin-left: auto; white-space: nowrap; }
 .theme-neu .lede { margin: 1.6rem 0 1rem; max-width: 38em; font-size: 1.15rem; line-height: 1.5; color: var(--fg3); }
 .theme-neu .lede b { color: var(--fg); font-weight: 500; }
 .theme-neu .fields { margin-bottom: 2.75rem; font-size: 0.9rem; color: var(--fg4); }
@@ -241,17 +235,21 @@ html.theme-light .theme-toggle .icon-moon { display: block; }
 .theme-neu section { margin-bottom: 3rem; }
 
 /* the job market card: the tallest object on the page */
-.theme-neu :is(.card, .research-jmp) { position: relative; padding: 2.4rem 2.25rem 2.1rem; box-shadow: var(--raise-lg), var(--edge); }
-.theme-neu :is(.card, .research-jmp) h3 { font: 400 2rem/1.15 var(--serif); letter-spacing: -0.025em; text-wrap: balance; }
+.theme-neu .card { position: relative; padding: 2.4rem 2.25rem 2.1rem; box-shadow: var(--raise-lg), var(--edge); }
+.theme-neu .card h3 { font: 400 2rem/1.15 var(--serif); letter-spacing: -0.025em; text-wrap: balance; }
 /* the question is pressed into the card and lit faintly from within */
 .theme-neu .question { margin-top: 1.2rem; padding: 0.9rem 1.2rem; max-width: 550px; border-radius: 16px; color: var(--yellow-bright); font-size: 0.9375rem; line-height: 1.6; background: var(--concave); box-shadow: var(--press), inset 0 0 26px color-mix(in srgb, var(--yellow-bright) 5%, transparent); }
 .theme-neu .teaser { margin-top: 1.2rem; color: var(--fg3); font-size: 0.875rem; line-height: 1.7; }
 .theme-neu .with { margin-top: 1rem; color: var(--fg3); font-size: 0.75rem; line-height: 1.6; }
-.theme-neu .text-link { margin-top: 1.5rem; padding: 0.65rem 1.25rem; font-size: 0.875rem; }
-.theme-neu .text-link span { display: inline-block; transition: transform 0.15s ease-out; }
+.theme-neu :is(.text-link, .cv) { padding: 0.65rem 1.25rem; font-size: 0.875rem; }
+.theme-neu :is(.text-link, .cv) span { display: inline-block; transition: transform 0.15s ease-out; }
+/* the card's actions: the paper key floated left, the abstract toggle beside
+   it at the key's height, the open abstract clearing both below */
+.theme-neu .card .research-actions { margin-top: 1.5rem; }
+.theme-neu .card .text-link { float: left; margin: 0 1.5rem 0 0; }
+.theme-neu .card .research-abstract summary { padding: 0.72rem 0; }
 @media (hover: hover) and (prefers-reduced-motion: no-preference) {
-  .theme-neu .text-link:hover span, .theme-neu .research-download:hover span { transform: translate(0.12em, -0.12em); }
-  .theme-neu .more a:hover span { transform: translateX(0.2em); }
+  .theme-neu :is(.text-link, .cv, .research-download):hover span { transform: translate(0.12em, -0.12em); }
 }
 
 /* a muted red rule, set into the card's surface just below its top edge and
@@ -259,17 +257,17 @@ html.theme-light .theme-toggle .icon-moon { display: block; }
    fading out so nothing cuts the soft surface. on hover it brightens to the
    flat theme's reflective gradient and a trace of red bleeds a few pixels
    down into the card */
-.theme-neu :is(.card, .research-jmp) { --jmp-border-opacity: 0; --jmp-border-fade: 0.6s; }
-.theme-neu :is(.card, .research-jmp)::before,
-.theme-neu :is(.card, .research-jmp)::after { content: ""; position: absolute; pointer-events: none; left: 2.25rem; right: 2.25rem; top: 0.875rem; -webkit-mask-image: linear-gradient(90deg, transparent, #000 12%, #000 88%, transparent); mask-image: linear-gradient(90deg, transparent, #000 12%, #000 88%, transparent); }
-.theme-neu :is(.card, .research-jmp)::before { height: 2px; background: rgba(204, 36, 29, 0.65); }
-.theme-neu :is(.card, .research-jmp)::after { height: 10px; opacity: var(--jmp-border-opacity); transition: opacity var(--jmp-border-fade) ease;
+.theme-neu .card { --jmp-border-opacity: 0; --jmp-border-fade: 0.6s; }
+.theme-neu .card::before,
+.theme-neu .card::after { content: ""; position: absolute; pointer-events: none; left: 2.25rem; right: 2.25rem; top: 0.875rem; -webkit-mask-image: linear-gradient(90deg, transparent, #000 12%, #000 88%, transparent); mask-image: linear-gradient(90deg, transparent, #000 12%, #000 88%, transparent); }
+.theme-neu .card::before { height: 2px; background: rgba(204, 36, 29, 0.65); }
+.theme-neu .card::after { height: 10px; opacity: var(--jmp-border-opacity); transition: opacity var(--jmp-border-fade) ease;
   background:
     linear-gradient(100deg, #ce3829 0%, #ed5038 18%, #fa895b 38%, #f36242 54%, #d43b2b 80%, #c93125 100%) top / 100% 2px no-repeat,
     linear-gradient(to bottom, rgb(251 73 52 / 0.19), rgb(251 73 52 / 0.05) 45%, rgb(251 73 52 / 0)) 0 2px / 100% 8px no-repeat; }
-.theme-neu :is(.card, .research-jmp):focus-within { --jmp-border-opacity: 1; --jmp-border-fade: 0.35s; }
-@media (hover: hover) { .theme-neu :is(.card, .research-jmp):hover { --jmp-border-opacity: 1; --jmp-border-fade: 0.35s; } }
-@media (prefers-reduced-motion: reduce) { .theme-neu :is(.card, .research-jmp)::after { transition: none; } }
+.theme-neu .card:focus-within { --jmp-border-opacity: 1; --jmp-border-fade: 0.35s; }
+@media (hover: hover) { .theme-neu .card:hover { --jmp-border-opacity: 1; --jmp-border-fade: 0.35s; } }
+@media (prefers-reduced-motion: reduce) { .theme-neu .card::after { transition: none; } }
 
 /* publications lie flat between grooves, their text at the card inset */
 .theme-neu .papers { list-style: none; margin: 0; padding: 0; }
@@ -288,11 +286,6 @@ html.theme-light .theme-toggle .icon-moon { display: block; }
 .theme-neu .notes { list-style: disc; margin: 0.35rem 0 0; padding: 0 0 0 1.1em; color: var(--fg4); font-size: 0.78rem; line-height: 1.6; }
 .theme-neu .notes li { margin: 0; }
 .theme-neu .notes li + li { margin-top: 0.1rem; }
-/* "all research" as a quiet text link; the paper key is the one button */
-.theme-neu .more { margin: 1.25rem 0 0 2.25rem; font-size: 0.95rem; }
-.theme-neu .more a { color: var(--fg3); }
-.theme-neu .more span { display: inline-block; margin-left: 0.25em; transition: transform 0.15s ease-out; }
-
 /* text links are engraved: titles carry a faint groove at rest (a dark cut,
    the lamp catching its lower lip; the same two-tone line that divides the
    publications), so a title says it is a link before anyone hovers, and
@@ -304,8 +297,8 @@ html.theme-light .theme-toggle .icon-moon { display: block; }
 @property --ink { syntax: "<color>"; inherits: false; initial-value: transparent; }
 @property --cut { syntax: "<color>"; inherits: false; initial-value: transparent; }
 @property --lit { syntax: "<color>"; inherits: false; initial-value: transparent; }
-.theme-neu :is(.card, .research-entry) h3 a,
-.theme-neu :is(.title, .email, .more a, .with a, .authors a, .notes a, .research-authors a, .research-note a, .research-download, .fun-text a, .themes-intro a) {
+.theme-neu .card h3 a,
+.theme-neu :is(.title, .email, .with a, .authors a, .notes a, .research-download, .fun-text a, .themes-intro a) {
   text-decoration: none; --ink: transparent; --cut: transparent; --lit: transparent;
   background-image: linear-gradient(var(--ink), var(--ink)), linear-gradient(var(--cut), var(--cut)), linear-gradient(var(--lit), var(--lit));
   background-repeat: no-repeat; background-origin: content-box; background-size: 100% 1px;
@@ -313,12 +306,12 @@ html.theme-light .theme-toggle .icon-moon { display: block; }
   transition: --ink var(--fade-out), --cut var(--fade-out), --lit var(--fade-out), color var(--fade-out); }
 /* engraved at rest: the titles, and the prose links whose text is too muted
    to read as a link on its own */
-.theme-neu :is(.card, .research-entry) h3 a, .theme-neu a.title, .theme-neu .research-note a, .theme-neu .fun-text a { --cut: var(--lo); --lit: var(--hi); }
-.theme-neu :is(.card, .research-entry) h3 a:hover,
-.theme-neu :is(.title, .email, .more a, .with a, .authors a, .notes a, .research-authors a, .research-note a, .research-download, .fun-text a, .themes-intro a):hover {
+.theme-neu .card h3 a, .theme-neu a.title, .theme-neu .fun-text a { --cut: var(--lo); --lit: var(--hi); }
+.theme-neu .card h3 a:hover,
+.theme-neu :is(.title, .email, .with a, .authors a, .notes a, .research-download, .fun-text a, .themes-intro a):hover {
   --ink: var(--link-ink, rgb(204 36 29 / 0.9)); --cut: var(--lo); --lit: var(--hi); transition-duration: var(--fade-in); }
 /* the title also lifts a step brighter, so the line is not doing the whole job */
-.theme-neu :is(.card, .research-entry) h3 a:hover, .theme-neu .title:hover { color: var(--fg0); }
+.theme-neu .card h3 a:hover, .theme-neu .title:hover { color: var(--fg0); }
 
 /* enlarged photo: a modal over the dimmed page */
 .photo-view[open] { box-sizing: border-box; display: grid; place-items: center; width: 100%; height: 100%; max-width: none; max-height: none; margin: 0; padding: 1.25rem; border: 0; background: none; cursor: zoom-out; animation: photo-fade 0.15s ease-out; }
@@ -336,28 +329,11 @@ html:has(.photo-view[open]) { overflow: hidden; scrollbar-gutter: stable; }
    gets a share --w of the lift */
 .w { color: color-mix(in srgb, var(--fg3), var(--lift-hover) calc(var(--w, 0) * 100%)); transition: color var(--lift-out) ease-in-out; }
 
-.skip-link { position: absolute; top: 0.75rem; left: 0.75rem; z-index: 2; padding: 0.6rem 0.9rem; border-radius: 999px; background: var(--convex); box-shadow: var(--raise-sm), var(--edge); color: var(--fg); transform: translateY(-200%); }
-.skip-link:focus { transform: translateY(0); outline: 2px solid var(--yellow-bright); }
-
 /* ------------------------------------------------------------------ */
-/* the research page: entries lie flat between grooves, the job market  */
-/* paper in its card                                                    */
+/* under each paper: the summary, then the paper link and the abstract  */
+/* toggle on one line, the open abstract in a pressed well below        */
 /* ------------------------------------------------------------------ */
-.theme-neu .research-heading { margin: 0 0 2rem 2.25rem; font: 400 2.75rem/1.1 var(--serif); letter-spacing: -0.025em; }
-.theme-neu .research-section { margin-bottom: 3rem; }
-.theme-neu .research-entry:not(.research-jmp) { position: relative; padding: 1.5rem 2.25rem; }
-.theme-neu .research-entry:not(.research-jmp)::before,
-.theme-neu .research-entry:not(.research-jmp):last-of-type::after { content: ""; position: absolute; left: 0; right: 0; height: 2px; border-radius: 1px; background: linear-gradient(to bottom, var(--lo), var(--hi)); }
-.theme-neu .research-entry:not(.research-jmp)::before { top: 0; }
-.theme-neu .research-entry:not(.research-jmp):last-of-type::after { bottom: 0; }
-.theme-neu .research-entry:not(.research-jmp) h3 { margin: 0; font-size: 1.1875rem; font-weight: 600; line-height: 1.4; letter-spacing: -0.01em; text-wrap: pretty; }
-.theme-neu .research-jmp h3 { line-height: 1.2; letter-spacing: -0.02em; }
-.theme-neu .research-authors { margin: 0.5rem 0 0; color: var(--fg4); font-size: 0.8125rem; line-height: 1.65; }
-.theme-neu .research-venue { margin: 0.55rem 0 0; color: var(--fg3); font-size: 0.875rem; line-height: 1.6; }
-.theme-neu .research-venue em { color: var(--green-bright); font-weight: 400; }
-.theme-neu .research-status { display: block; font-size: 0.8125rem; }
 .theme-neu .research-summary { margin: 0.8rem 0 0; color: var(--fg3); font-size: 0.9375rem; line-height: 1.7; }
-.theme-neu .research-note { margin: 0.6rem 0 0; color: var(--fg4); font-size: 0.75rem; line-height: 1.65; }
 .theme-neu .research-actions { display: flow-root; margin-top: 0.65rem; font-size: 0.8125rem; line-height: 1.5; }
 .theme-neu .research-download { float: left; margin-right: 1.5rem; padding: 0.6rem 0; }
 .theme-neu .research-download span { display: inline-block; margin-left: 0.45em; color: var(--fg4); transition: transform 0.15s ease-out; }
@@ -370,8 +346,6 @@ html:has(.photo-view[open]) { overflow: hidden; scrollbar-gutter: stable; }
 /* an open abstract rests in a pressed well */
 .theme-neu .abstract-text { clear: both; margin: 0.5rem 0 0.5rem; padding: 1rem 1.25rem; border-radius: 16px; color: var(--fg3); font-size: 0.875rem; line-height: 1.8; background: var(--concave); box-shadow: var(--press); }
 .theme-neu .abstract-text p { margin: 0; }
-.theme-neu .research-jmp .research-authors { margin-top: 0.7rem; }
-.theme-neu .research-jmp .research-actions { margin-top: 1rem; }
 
 /* ------------------------------------------------------------------ */
 /* the fun page: the heading, then two sections of equal rank, research */
@@ -381,9 +355,9 @@ html:has(.photo-view[open]) { overflow: hidden; scrollbar-gutter: stable; }
 .theme-neu .fun-heading em { color: var(--red-bright); }
 /* the sections' lines sit at the card inset, under their labels */
 .theme-neu :is(.fun-text, .themes-intro) { margin: 0 0 1.25rem 2.25rem; }
-/* one radio per theme, drawn like the nav: a pill that rises under the
-   pointer, pressed in with a red dot for the theme in use. the inputs stay
-   in the page, unseen, so the keyboard and screen readers get native radios */
+/* one radio per theme: a pill that rises under the pointer, pressed in with
+   a red dot for the theme in use. the inputs stay in the page, unseen, so
+   the keyboard and screen readers get native radios */
 .theme-neu .theme-picker { display: flex; flex-direction: column; align-items: flex-start; gap: 0.45rem; margin: 0 0 0 1.2rem; padding: 0 1.05rem; }
 .theme-neu .theme-picker label { position: relative; display: flex; align-items: center; gap: 0.7rem; padding: 0.55rem 1.1rem 0.55rem 0.95rem; border-radius: 999px; color: var(--fg3); cursor: pointer; transition: box-shadow var(--fade-out), color var(--fade-out); }
 .theme-neu .theme-picker input { position: absolute; width: 1px; height: 1px; margin: 0; opacity: 0; pointer-events: none; }
@@ -400,14 +374,14 @@ html:has(.photo-view[open]) { overflow: hidden; scrollbar-gutter: stable; }
 /* chips or red hover reflections leak through from the dark theme      */
 /* ------------------------------------------------------------------ */
 .theme-light .dot { --yellow-bright: var(--green-bright); }
-.theme-light .site-nav a[aria-current], .theme-light .theme-picker label:has(input:checked) { color: var(--accent); }
-.theme-light .site-nav a:hover::before, .theme-light .theme-picker label:hover::before { background: var(--accent); }
+.theme-light .theme-picker label:has(input:checked) { color: var(--accent); }
+.theme-light .theme-picker label:hover::before { background: var(--accent); }
 .theme-light .question { color: var(--accent-hover); background: linear-gradient(rgba(54, 95, 119, 0.05), rgba(54, 95, 119, 0.05)), var(--concave); box-shadow: var(--press), inset 0 0 26px rgba(54, 95, 119, 0.06); }
 .theme-light .badge { color: var(--accent-hover); background: linear-gradient(145deg, #edf2f5, #dae4ea); }
-.theme-light :is(.text-link, .more a) { color: var(--accent); }
-.theme-light :is(.text-link, .more a, .with a, .research-authors a):hover { color: var(--accent-hover); }
-.theme-light :is(.card, .research-jmp)::before { background: #96acb8; }
-.theme-light :is(.card, .research-jmp)::after {
+.theme-light :is(.text-link, .cv) { color: var(--accent); }
+.theme-light :is(.text-link, .cv, .with a, .authors a, .notes a):hover { color: var(--accent-hover); }
+.theme-light .card::before { background: #96acb8; }
+.theme-light .card::after {
   background:
     linear-gradient(100deg, #365f77, #7093a7 38%, #527a91 62%, #365f77) top / 100% 2px no-repeat,
     linear-gradient(to bottom, rgb(54 95 119 / 0.12), rgb(54 95 119 / 0)) 0 2px / 100% 8px no-repeat; }
@@ -418,22 +392,20 @@ html:has(.photo-view[open]) { overflow: hidden; scrollbar-gutter: stable; }
 /* ------------------------------------------------------------------ */
 /* narrower windows: the profile stacks above the main column           */
 /* ------------------------------------------------------------------ */
-@media (max-width: 1000px) { .theme-neu :is(.card, .research-jmp) h3 { font-size: 1.75rem; } }
+@media (max-width: 1000px) { .theme-neu .card h3 { font-size: 1.75rem; } }
 @media (max-width: 820px) {
   .theme-neu .page { grid-template-columns: 1fr; gap: 2rem; padding: 1.5rem 1.25rem 3rem; }
   .theme-neu .side { position: relative; top: auto; display: grid; grid-template-columns: 7rem minmax(0, 1fr); column-gap: 1.25rem; padding: 1.5rem; }
   .theme-neu .theme-toggle { top: auto; bottom: 1.875rem; right: 1.5rem; }
   .theme-neu .portrait { width: 7rem; height: 7rem; padding: 7px; margin: 0; grid-row: span 3; }
   .theme-neu .identity :is(h1, .profile-name) .last { white-space: normal; }
-  .theme-neu .site-nav, .theme-neu .side .links { grid-column: 1 / -1; }
-  .theme-neu .site-nav { flex-direction: row; flex-wrap: wrap; }
+  .theme-neu .side .links { grid-column: 1 / -1; }
   .theme-neu .side .links { padding-top: 1.5rem; }
   .theme-neu .side .links::before { margin-bottom: 1.25rem; }
-  .theme-neu h2, .theme-neu .more, .theme-neu .research-heading, .theme-neu .fun-text, .theme-neu .themes-intro, .theme-neu .themes-note { margin-left: 1.4rem; }
-  .theme-neu .papers > li, .theme-neu .research-entry:not(.research-jmp) { padding: 1.1rem 1.4rem; }
-  .theme-neu :is(.card, .research-jmp) { padding: 2rem 1.4rem 1.6rem; }
-  .theme-neu :is(.card, .research-jmp)::before, .theme-neu :is(.card, .research-jmp)::after { left: 1.4rem; right: 1.4rem; top: 0.75rem; }
-  .theme-neu .research-heading { margin-bottom: 1.5rem; font-size: 2.25rem; }
+  .theme-neu h2, .theme-neu .fun-text, .theme-neu .themes-intro, .theme-neu .themes-note { margin-left: 1.4rem; }
+  .theme-neu .papers > li { padding: 1.1rem 1.4rem; }
+  .theme-neu .card { padding: 2rem 1.4rem 1.6rem; }
+  .theme-neu .card::before, .theme-neu .card::after { left: 1.4rem; right: 1.4rem; top: 0.75rem; }
   .theme-neu .fun-heading { margin-bottom: 1.25rem; font-size: 2.25rem; }
   .theme-neu .abstract-text { padding: 0.85rem 1rem; }
   .theme-neu .theme-picker { margin-left: 0.95rem; padding: 0 0.45rem; }
@@ -441,7 +413,7 @@ html:has(.photo-view[open]) { overflow: hidden; scrollbar-gutter: stable; }
 
 /* ------------------------------------------------------------------ */
 /* print / save as pdf: a white page, dark text, every surface flat;    */
-/* structure comes back as hairlines. research.html opens every         */
+/* structure comes back as hairlines. the page script opens every       */
 /* abstract before printing                                             */
 /* ------------------------------------------------------------------ */
 @media print {
@@ -453,11 +425,11 @@ html:has(.photo-view[open]) { overflow: hidden; scrollbar-gutter: stable; }
     --red-bright: #9d0006; --yellow-bright: #3c3836; --blue: #076678; --green-bright: #000;
   }
   body, html.theme-light body { background: #fff; color: #000; -webkit-font-smoothing: auto; }
-  .theme-neu :is(.side, .card, .research-jmp, .copy, .icon-links a, .text-link, .portrait, .question, .market, .badge, .site-nav a, .abstract-text, .copied, .skip-link, .theme-picker label), .theme-neu .portrait img { box-shadow: none !important; background: none !important; }
-  .theme-neu :is(.card, .research-jmp)::after { display: none; }
+  .theme-neu :is(.side, .card, .copy, .icon-links a, .text-link, .cv, .portrait, .question, .market, .badge, .abstract-text, .copied, .theme-picker label), .theme-neu .portrait img { box-shadow: none !important; background: none !important; }
+  .theme-neu .card::after { display: none; }
   .w { color: inherit; transition: none; }
   /* screen-only controls dropped */
-  .theme-neu :is(.site-nav, .copy, .copied, .dot, .more, .photo-view, .skip-link, .theme-toggle), .theme-neu .side .links::before { display: none; }
+  .theme-neu :is(.copy, .copied, .cv, .dot, .photo-view, .theme-toggle), .theme-neu .side .links::before { display: none; }
   /* the profile stacks above the main column: a small photo beside the text */
   .theme-neu .page { display: block; max-width: none; padding: 0; }
   .theme-neu .side { position: static; display: grid; grid-template-columns: 5rem minmax(0, 1fr); column-gap: 1rem; align-items: start; padding: 0 0 1rem; border-radius: 0; border-bottom: 1px solid var(--bg1); }
@@ -469,22 +441,19 @@ html:has(.photo-view[open]) { overflow: hidden; scrollbar-gutter: stable; }
   .theme-neu main { padding-top: 1rem; }
   .theme-neu .market { padding: 0; }
   /* the card keeps a hairline frame and its red rule; the question keeps a bar */
-  .theme-neu :is(.card, .research-jmp) { padding: 1rem 1.5rem; border: 1px solid var(--bg1); border-radius: 8px; }
-  .theme-neu :is(.card, .research-jmp)::before { left: 1.5rem; right: 1.5rem; top: 0.6rem; background: #9d0006; -webkit-mask-image: none; mask-image: none; }
+  .theme-neu .card { padding: 1rem 1.5rem; border: 1px solid var(--bg1); border-radius: 8px; }
+  .theme-neu .card::before { left: 1.5rem; right: 1.5rem; top: 0.6rem; background: #9d0006; -webkit-mask-image: none; mask-image: none; }
   .theme-neu .question { padding: 0.4rem 0 0.4rem 1rem; border-left: 2px solid var(--fg4); border-radius: 0; color: var(--fg2); }
   .theme-neu .text-link { padding: 0; }
   .theme-neu h2 { margin-left: 1.5rem; break-after: avoid; }
-  .theme-neu .papers > li, .theme-neu .research-entry:not(.research-jmp) { padding: 1rem 1.5rem; }
-  .theme-neu .papers > li::before, .theme-neu .papers > li:last-child::after,
-  .theme-neu .research-entry:not(.research-jmp)::before, .theme-neu .research-entry:not(.research-jmp):last-of-type::after { height: 1px; background: var(--bg1); }
+  .theme-neu .papers > li { padding: 1rem 1.5rem; }
+  .theme-neu .papers > li::before, .theme-neu .papers > li:last-child::after { height: 1px; background: var(--bg1); }
   .theme-neu .badge, .theme-neu .badge.wp { border: 1px solid #000; color: #000; }
-  .theme-neu .card, .theme-neu .papers > li, .theme-neu .research-entry { break-inside: avoid; }
-  /* the job market entry prints with its abstract open and may not fit under
-     the profile; it breaks rather than leave the first page empty */
-  .theme-neu .research-jmp { break-inside: auto; }
-  .theme-neu .research-heading { margin: 0 0 1.25rem 1.5rem; }
+  /* the card prints with its abstract open and may not fit under the
+     profile; it breaks rather than leave the first page empty */
+  .theme-neu .papers > li { break-inside: avoid; }
   .theme-neu .research-abstract summary::before { display: none; }
-  .theme-neu .research-abstract summary { padding: 0.3rem 0; }
+  .theme-neu .research-abstract summary, .theme-neu .card .research-abstract summary { padding: 0.3rem 0; }
   .theme-neu .abstract-text { margin: 0.25rem 0 0; padding: 0.2rem 0 0.2rem 1rem; border-left: 2px solid var(--bg2); border-radius: 0; }
   .theme-neu .theme-picker { margin-left: 3.2rem; padding: 0; }
   .theme-neu .theme-picker label { padding: 0.35rem 0; }

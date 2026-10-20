@@ -674,53 +674,6 @@ html:has(.photo-view[open]) {
     line-height: 1.6;
 }
 
-.site-nav {
-    margin-top: 2rem;
-    display: flex;
-    flex-direction: column;
-    gap: 0.3rem;
-}
-
-.site-nav a {
-    position: relative;
-    padding-left: 1.1rem;
-    color: var(--fg3);
-}
-
-.site-nav a::before {
-    content: "";
-    position: absolute;
-    left: 0;
-    top: 0.6em;
-    width: 0.5rem;
-    height: 2px;
-    background: var(--bg3);
-    transition: width var(--fade-out), background var(--fade-out);
-}
-
-/* nav links never underline; the color stays transparent rather than the
-   line being removed, since a removed line comes back instantly on mouse-out
-   while its color is still fading out of red */
-.site-nav a:hover {
-    color: var(--fg);
-    text-decoration-color: transparent;
-}
-
-.site-nav a:hover::before {
-    width: 0.7rem;
-    background: var(--fg);
-    transition-duration: var(--fade-in);
-}
-
-.site-nav a[aria-current] {
-    color: var(--fg);
-}
-
-.site-nav a[aria-current]::before {
-    width: 0.7rem;
-    background: var(--red);
-}
-
 /* cv button, as on the split page */
 .button {
     display: inline-flex;
@@ -778,7 +731,7 @@ html:has(.photo-view[open]) {
     fill: currentColor;
 }
 
-/* email above the scholar / cv icons, under the nav */
+/* email above the scholar / cv icons, under the affiliation */
 .links {
     margin-top: 2rem;
     display: flex;
@@ -921,7 +874,7 @@ html:has(.photo-view[open]) {
     padding: 5px 0;
 }
 
-/* main column: job-market line, lede, JMP card, selected work */
+/* main column: top line (job-market status, CV key), lede, JMP card, the papers */
 .page main {
     margin: 0;
     padding: 4.5rem 0 4rem;
@@ -929,12 +882,23 @@ html:has(.photo-view[open]) {
     min-width: 0;
 }
 
+/* the top line: the job-market status on the left, the CV key at the right;
+   on a narrow column the key drops under the status */
+.topline {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 0.75rem 1.5rem;
+    margin: 0 0 1.25rem;
+}
+
 .market {
     display: flex;
     align-items: center;
     gap: 0.75rem;
     flex-wrap: wrap;
-    margin: 0 0 1.25rem;
+    margin: 0;
     color: var(--fg2);
 }
 
@@ -965,6 +929,33 @@ html:has(.photo-view[open]) {
    flex items */
 .stamp {
     display: contents;
+}
+
+/* the CV key: a bordered button, the one on the page, so it reads as the
+   thing to click */
+.page .cv {
+    display: inline-flex;
+    align-items: center;
+    margin-left: auto;
+    padding: 0.5rem 1rem;
+    border: 1px solid var(--bg2);
+    border-radius: 3px;
+    font-size: 0.875rem;
+    color: var(--fg);
+    text-decoration: none;
+    white-space: nowrap;
+    transition: background var(--fade-out), border-color var(--fade-out);
+}
+
+.page .cv:hover {
+    background: var(--bg0s);
+    border-color: var(--bg3);
+    text-decoration: none;
+    transition-duration: var(--fade-in);
+}
+
+.page .cv span {
+    margin-left: 0.45em;
 }
 
 .lede {
@@ -1011,18 +1002,18 @@ html:has(.photo-view[open]) {
     border-top: 2px solid var(--red-bright);
 }
 
-/* Both JMP cards: a still reflection along the 2px rule, with a trace of
+/* The JMP card: a still reflection along the 2px rule, with a trace of
    reflected red inside the card. The overlays never move or reflow text.
    Screen-only, so print keeps the plain red rule. */
 @media screen {
-    .page :is(.card, .research-jmp) {
+    .page .card {
         position: relative;
         --jmp-border-opacity: 0;
         --jmp-border-fade: 0.6s;
     }
 
-    .page :is(.card, .research-jmp)::before,
-    .page :is(.card, .research-jmp)::after {
+    .page .card::before,
+    .page .card::after {
         content: "";
         position: absolute;
         pointer-events: none;
@@ -1032,7 +1023,7 @@ html:has(.photo-view[open]) {
         transition: opacity var(--jmp-border-fade) ease;
     }
 
-    .page :is(.card, .research-jmp)::before {
+    .page .card::before {
         top: -2px;
         height: 2px;
         background: linear-gradient(100deg,
@@ -1040,7 +1031,7 @@ html:has(.photo-view[open]) {
             #f36242 54%, #d43b2b 80%, #c93125 100%);
     }
 
-    .page :is(.card, .research-jmp)::after {
+    .page .card::after {
         top: 0;
         height: 8px;
         background: linear-gradient(to bottom,
@@ -1048,22 +1039,22 @@ html:has(.photo-view[open]) {
             rgb(251 73 52 / 0));
     }
 
-    .page :is(.card, .research-jmp):focus-within {
+    .page .card:focus-within {
         --jmp-border-opacity: 1;
         --jmp-border-fade: 0.35s;
     }
 }
 
 @media screen and (hover: hover) {
-    .page :is(.card, .research-jmp):hover {
+    .page .card:hover {
         --jmp-border-opacity: 1;
         --jmp-border-fade: 0.35s;
     }
 }
 
 @media (prefers-reduced-motion: reduce) {
-    .page :is(.card, .research-jmp)::before,
-    .page :is(.card, .research-jmp)::after {
+    .page .card::before,
+    .page .card::after {
         transition: none;
     }
 }
@@ -1109,8 +1100,7 @@ html:has(.photo-view[open]) {
     color: var(--blue-bright);
 }
 
-/* underlined text links: the card's pdf link and the "full text" link under
-   each abstract on the research page */
+/* underlined text link: the card's pdf key */
 .page .text-link {
     display: inline-block;
     padding-bottom: 3px;
@@ -1128,23 +1118,20 @@ html:has(.photo-view[open]) {
    words. the gap before every arrow is margin, not a space: on links that
    underline so the line doesn't overhang, and on .text-link so the arrow
    sits as close to its words as the other arrows do (a space on top of the
-   margin had set it a word apart). the research page's .research-download
-   arrows share this */
+   margin had set it a word apart). the papers' .research-download arrows
+   and the CV key share this */
 .page .text-link span,
-.research-download span,
-.more span {
+.page .cv span,
+.research-download span {
     display: inline-block;
     transition: transform 0.15s ease-out;
 }
 
 @media (hover: hover) and (prefers-reduced-motion: no-preference) {
     .page .text-link:hover span,
+    .page .cv:hover span,
     .research-download:hover span {
         transform: translate(0.12em, -0.12em);
-    }
-
-    .more a:hover span {
-        transform: translateX(0.2em);
     }
 }
 
@@ -1158,8 +1145,19 @@ html:has(.photo-view[open]) {
     text-decoration-color: transparent;
 }
 
-.card .text-link {
+/* the card's actions: the pdf key floated left, the abstract toggle beside
+   it at its height, the open abstract clearing both below */
+.card .research-actions {
     margin-top: 1.45rem;
+}
+
+.card .research-actions .text-link {
+    float: left;
+    margin: 0 1.5rem 0 0;
+}
+
+.card .research-abstract summary {
+    padding: 0.1rem 0;
 }
 
 .papers {
@@ -1209,7 +1207,7 @@ html:has(.photo-view[open]) {
     line-height: 1.35;
 }
 
-/* venue, coauthors, recognition: shared with the research page's rows */
+/* venue, coauthors, recognition */
 .page .venue {
     display: block;
     margin: 0.25rem 0 0;
@@ -1260,19 +1258,6 @@ html:has(.photo-view[open]) {
     color: var(--blue-bright);
 }
 
-.more {
-    margin: 1rem 0 0;
-    font-size: 0.95rem;
-}
-
-.more a {
-    color: var(--fg3);
-}
-
-.more span {
-    margin-left: 0.25em;
-}
-
 /* below 1000px the main column narrows, so the card title drops to the
    research page's mobile size; this covers phones too */
 @media (max-width: 1000px) {
@@ -1282,7 +1267,7 @@ html:has(.photo-view[open]) {
 }
 
 /* phones and print: stack a compact profile block above the main column --
-   small photo beside the name, then nav, then one cv / email / links row */
+   small photo beside the name, then one email / links row */
 @media (max-width: 760px), print {
     body.split {
         background-image: none;
@@ -1331,18 +1316,8 @@ html:has(.photo-view[open]) {
         margin-top: 0.3rem;
     }
 
-    .site-nav,
     .links {
         grid-column: 1 / -1;
-    }
-
-    .site-nav {
-        flex-direction: row;
-        gap: 1.5rem;
-        margin-top: 1.1rem;
-    }
-
-    .links {
         flex-direction: row;
         flex-wrap: wrap;
         align-items: center;
@@ -1381,7 +1356,7 @@ html:has(.photo-view[open]) {
         gap: 1.1rem;
     }
 
-    /* the nav row sits close above, so drop the tag below the icon */
+    /* the profile text sits close above, so drop the tag below the icon */
     .copied {
         top: calc(100% + 2px);
         bottom: auto;
@@ -1391,10 +1366,13 @@ html:has(.photo-view[open]) {
         padding: 1.5rem 1.25rem 2.5rem;
     }
 
+    .topline {
+        margin-bottom: 1rem;
+    }
+
     /* keep the dot beside the text when the line wraps on narrow phones */
     .market {
         flex-wrap: nowrap;
-        margin-bottom: 1rem;
     }
 
     .market .dot {
@@ -1464,11 +1442,10 @@ html:has(.photo-view[open]) {
         border-bottom: 1px solid var(--bg1);
     }
 
-    .site-nav,
     .copy,
     .copied,
-    .market .dot,
-    .more {
+    .cv,
+    .market .dot {
         display: none;
     }
 
@@ -1482,7 +1459,8 @@ html:has(.photo-view[open]) {
         border-top: 2px solid var(--red-bright);
     }
 
-    .card,
+    /* the card prints with its abstract open and may not fit under the
+       profile; it breaks rather than leave the first page empty */
     .papers > li {
         break-inside: avoid;
     }
@@ -1626,14 +1604,13 @@ html:has(.photo-view[open]) {
 }
 
 /* ------------------------------------------------------------------ */
-/* research page (research.html): entries as flat rows between         */
-/* hairlines, the job market paper in its card. these lived in the      */
-/* page's own style block until the themes (fun.html) arrived: every    */
-/* theme's stylesheet now draws the same markup its own way, so the     */
-/* flat drawing belongs here with the rest of the flat theme            */
+/* under each paper: the summary, then the paper link and the abstract  */
+/* toggle on one line, the open abstract below (index.html); and the    */
+/* fun page's sidebar name. these began on the research page, which     */
+/* moved onto the homepage in October 2026; the class names stayed      */
 /* ------------------------------------------------------------------ */
 
-/* the name in the sidebar where the page has its own h1 (research, fun) */
+/* the name in the sidebar where the page has its own h1 (fun) */
 .profile-name {
     margin: 0;
     font-size: 1.5rem;
@@ -1647,76 +1624,7 @@ html:has(.photo-view[open]) {
     white-space: nowrap;
 }
 
-.page .research-heading {
-    margin: 0 0 2.25rem;
-    font: 400 2.75rem/1.1 var(--serif);
-    letter-spacing: -0.025em;
-}
-
-.page .research-section {
-    margin-bottom: 3rem;
-}
-
-.research-entry {
-    padding: 1.5rem 0;
-    border-top: 1px solid var(--bg1);
-    transition: border-color var(--fade-out);
-}
-
-.research-entry:last-child {
-    border-bottom: 1px solid var(--bg1);
-}
-
-/* the hairline above an entry lightens to bg3, the tone of the resting nav
-   dash, while the pointer rests in it, on the links' hover fades (one step,
-   to bg2, could not be seen on a 1px line). still quiet enough that moving
-   down the list never reads as selecting rows. hover-capable pointers only,
-   so a tap can't leave a rule lit. the job market entry's red rule has its
-   own reflection and glow above */
-@media (hover: hover) {
-    .research-entry:not(.research-jmp):hover {
-        border-top-color: var(--bg3);
-        transition-duration: var(--fade-in);
-    }
-}
-
-.research-entry h3 {
-    margin: 0;
-    font-size: 1.1875rem;
-    font-weight: 600;
-    line-height: 1.4;
-    letter-spacing: -0.01em;
-    text-wrap: pretty;
-}
-
-.research-authors {
-    margin: 0.5rem 0 0;
-    color: var(--fg4);
-    font-size: 0.8125rem;
-    line-height: 1.65;
-}
-
-.research-authors a {
-    color: var(--blue-bright);
-}
-
-.research-venue {
-    margin: 0.55rem 0 0;
-    color: var(--fg3);
-    font-size: 0.875rem;
-    line-height: 1.6;
-}
-
-.research-venue em {
-    color: #b8bb26; /* Journal green from index-split.css. */
-    font-weight: 400;
-}
-
-.research-status {
-    display: block;
-    font-size: 0.8125rem;
-}
-
+/* the summary under a paper's coauthors */
 .research-summary {
     margin: 0.8rem 0 0;
     color: var(--fg3);
@@ -1724,19 +1632,8 @@ html:has(.photo-view[open]) {
     line-height: 1.7;
 }
 
-.research-note {
-    margin: 0.6rem 0 0;
-    color: var(--fg4);
-    font-size: 0.75rem;
-    line-height: 1.65;
-}
-
-.research-note a {
-    text-decoration: underline;
-    text-decoration-color: var(--bg3);
-    text-underline-offset: 0.2em;
-}
-
+/* the paper link and the abstract's toggle on one line, the open abstract
+   clearing both below */
 .research-actions {
     display: flow-root;
     margin-top: 0.65rem;
@@ -1817,38 +1714,6 @@ html:has(.photo-view[open]) {
     margin: 0;
 }
 
-.research-entry.research-jmp {
-    padding: 1.4rem 1.5rem 1rem;
-    border: 0;
-    border-top: 2px solid var(--red-bright);
-    background: var(--bg0s);
-}
-
-.research-jmp h3 {
-    font: 400 2rem/1.2 var(--serif);
-    letter-spacing: -0.02em;
-}
-
-.research-jmp .research-authors {
-    margin-top: 0.7rem;
-}
-
-.skip-link {
-    position: absolute;
-    top: 0.75rem;
-    left: 0.75rem;
-    z-index: 2;
-    padding: 0.6rem 0.9rem;
-    background: var(--deep);
-    color: var(--fg);
-    transform: translateY(-200%);
-}
-
-.skip-link:focus {
-    transform: translateY(0);
-    outline: 2px solid var(--yellow-bright);
-}
-
 @media (max-width: 760px) {
     .profile-name {
         font-size: 1.375rem;
@@ -1857,41 +1722,20 @@ html:has(.photo-view[open]) {
     .profile-name .last {
         white-space: normal;
     }
-
-    .page .research-heading {
-        margin-bottom: 1.75rem;
-        font-size: 2.25rem;
-    }
-
-    .research-entry.research-jmp {
-        padding: 1.25rem 1.125rem 0.85rem;
-    }
-
-    .research-jmp h3 {
-        font-size: 1.75rem;
-    }
 }
 
+/* print: the page script opens every abstract; chevrons dropped */
 @media print {
-    .skip-link {
+    .research-abstract summary::before {
         display: none;
     }
 
-    .research-venue em {
-        color: var(--fg);
+    .research-abstract summary {
+        padding: 0.3rem 0;
     }
 
-    .page .research-heading {
-        margin-bottom: 1.25rem;
-    }
-
-    .research-entry {
-        break-inside: avoid;
-    }
-
-    .research-entry.research-jmp {
-        border: 1px solid var(--bg1);
-        border-top: 2px solid var(--red-bright);
+    .abstract-text {
+        margin-top: 0.25rem;
     }
 }
 
@@ -1926,11 +1770,11 @@ html:has(.photo-view[open]) {
     text-decoration-color: currentColor;
 }
 
-/* one radio per theme, drawn like the nav: a short dash that lengthens and
-   turns red for the theme in use. the inputs stay in the page, unseen, so
-   the keyboard and screen readers get native radios; theme.js listens to
-   them. each theme's stylesheet draws this picker in its own material, and
-   each sets it in a little from the line above it */
+/* one radio per theme: a short dash that lengthens and turns red for the
+   theme in use. the inputs stay in the page, unseen, so the keyboard and
+   screen readers get native radios; theme.js listens to them. each theme's
+   stylesheet draws this picker in its own material, and each sets it in a
+   little from the line above it */
 .theme-picker {
     display: flex;
     flex-direction: column;
@@ -2011,7 +1855,7 @@ html:has(.photo-view[open]) {
 }
 
 /* ------------------------------------------------------------------ */
-/* text brightens under the cursor (all three pages; glow.js)          */
+/* text brightens under the cursor (both pages; glow.js)               */
 /* ------------------------------------------------------------------ */
 /* glow.js wraps each word of the muted prose in a .w span and gives the
    words near the pointer a share --w (0 to 1) of the lift, falling off
