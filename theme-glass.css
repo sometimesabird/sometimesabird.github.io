@@ -115,7 +115,7 @@ a { color: inherit; text-decoration: underline; text-decoration-thickness: 1px; 
 a:hover { text-decoration-color: var(--link-ink); transition-duration: var(--fade-in); }
 a:focus-visible, button:focus-visible, summary:focus-visible { outline: 2px solid var(--yellow-bright); outline-offset: 3px; }
 .with a, .authors a, .notes a { color: var(--blue); }
-.venue em { color: var(--yellow-bright); font-weight: 400; font-style: italic; }
+.venue em, .notes em { color: var(--yellow-bright); font-weight: 400; font-style: italic; }
 
 /* text links are etched: titles carry a faint line at rest, a dark cut with
    its lower lip lit, so a title says it is a link before anyone hovers; under

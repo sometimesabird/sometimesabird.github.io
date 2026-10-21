@@ -127,7 +127,7 @@ h1, h2, h3, p { margin: 0; }
 svg { display: block; fill: currentColor; }
 img { display: block; }
 .with a, .authors a, .notes a { color: var(--blue); }
-.venue em { color: var(--yellow-bright); font-weight: 400; font-style: italic; }
+.venue em, .notes em { color: var(--yellow-bright); font-weight: 400; font-style: italic; }
 
 /* ------------------------------------------------------------------ */
 /* the lamp                                                             */

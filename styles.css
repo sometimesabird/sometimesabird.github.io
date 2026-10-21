@@ -1215,7 +1215,8 @@ html:has(.photo-view[open]) {
     font-size: 0.9rem;
 }
 
-.page .venue em {
+.page .venue em,
+.page .notes em {
     color: var(--yellow-bright);
     font-weight: 400;
 }

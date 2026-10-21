@@ -460,7 +460,7 @@ html:has(.photo-view[open]) { overflow: hidden; scrollbar-gutter: stable; }
 }
 .theme-instrument .title { font-size: 1.05rem; font-weight: 500; line-height: 1.35; color: var(--fg); }
 .theme-instrument .venue { display: block; margin-top: 0.25rem; font-size: 0.9rem; color: var(--fg3); }
-.theme-instrument .venue em { color: var(--yellow-bright); font-weight: 400; }
+.theme-instrument :is(.venue, .notes) em { color: var(--yellow-bright); font-weight: 400; }
 .theme-instrument .authors { display: block; margin-top: 0.1rem; font-size: 0.875rem; color: var(--fg4); }
 /* notes under a paper (recognition, talks): bullets a step quieter than the coauthors */
 .theme-instrument .notes { list-style: disc; margin: 0.35rem 0 0; padding: 0 0 0 1.1em; font-size: 0.78rem; line-height: 1.6; color: var(--fg4); }

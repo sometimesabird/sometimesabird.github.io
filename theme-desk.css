@@ -310,7 +310,7 @@ html:has(.photo-view[open]) { overflow: hidden; scrollbar-gutter: stable; }
 .theme-desk .title { font-size: 1.05rem; font-weight: 500; line-height: 1.35; color: var(--ink); }
 .theme-desk .venue { display: block; margin-top: 0.3rem; color: var(--ink3); font-size: 0.9rem; }
 /* yellow ink on paper: the brass's deep tone darkened toward the ink so it stays legible at this size */
-.theme-desk .venue em { color: color-mix(in srgb, var(--yellow-deep) 80%, var(--ink)); font-weight: 400; }
+.theme-desk :is(.venue, .notes) em { color: color-mix(in srgb, var(--yellow-deep) 80%, var(--ink)); font-weight: 400; }
 .theme-desk .authors { display: block; margin-top: 0.1rem; color: var(--ink3); font-size: 0.875rem; }
 .theme-desk .authors a, .theme-desk .notes a { color: var(--blue-deep); }
 /* notes under a paper (recognition, talks): bullets a step quieter than the coauthors */
@@ -426,7 +426,7 @@ html:has(.photo-view[open]) { overflow: hidden; scrollbar-gutter: stable; }
   .theme-desk .papers > li { margin: 0; padding: 1rem 1.5rem; border-top: 1px solid var(--bg1); border-radius: 0; }
   .theme-desk .papers > li:last-child { border-bottom: 1px solid var(--bg1); }
   .theme-desk .badge { width: auto; height: auto; margin-top: 0.2rem; padding: 0.15rem 0; border: 1px solid #000; border-radius: 3px; font-size: 0.72rem; color: #000; }
-  .theme-desk .venue em { color: #000; }
+  .theme-desk :is(.venue, .notes) em { color: #000; }
   /* the card prints with its abstract open and may not fit under the
      profile; it breaks rather than leave the first page empty */
   .theme-desk .papers > li { break-inside: avoid; }
