@@ -18,7 +18,7 @@ Every page can be drawn in one of six themes, chosen on `fun.html` and kept in t
 | `assets/headshot.jpg` | 512×512 headshot used in the sidebar and as the social-preview image |
 | `assets/headshot-full.jpg` | 1536×2304 uncropped version of the Columbia headshot (`headshot.jpg` is its top square), shown when the sidebar photo is clicked; lazy, so it only downloads once the sidebar photo is hovered, focused, or opened |
 | `assets/cv.pdf` | CV, linked from the sidebar button |
-| `assets/jmp.pdf` | Job market paper, linked from the homepage card and research page; a copy of `~/Dropbox/Research/mental_health/paper/paper.pdf`, so re-copy it when the paper is revised |
+| `assets/jmp.pdf` | Job market paper, linked from the homepage card; since November 2026 the main text only (the Online Appendix is no longer bundled), supplied by George rather than copied from `~/Dropbox/Research/mental_health/paper/paper.pdf`. The homepage abstract matches the paper's, so update it when the paper changes |
 | `research.html` | Redirect stub to `index.html` (meta refresh plus `location.replace`), kept so old links still land; the research page's content moved onto the homepage in October 2026. Unthemed and without the Google tag |
 | `fun.html` | Fun page: a research line and the theme picker, two sections of equal rank under the heading |
 | `styles.css` | The Flat theme, the site's earlier look: Gruvbox dark, flat panels. Holds the fun page rules too; the pages have no style blocks of their own |
