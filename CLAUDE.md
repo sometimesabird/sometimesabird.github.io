@@ -14,7 +14,7 @@ Every page can be drawn in one of six themes, chosen on `fun.html` and kept in t
 
 | File | Role |
 |---|---|
-| `index.html` | The one content page: sidebar (photo, name, position, contact) + a top line (job-market status on the left, CV key on the right), the JMP card with its expandable abstract, then two sections, "Publications and Conditionally Accepted Papers" and "Working Papers", each row with a venue badge, linked coauthors, notes as bullets, a short summary, a paper link and an expandable abstract |
+| `index.html` | The one content page: sidebar (photo, name, position, contact) + a top line (job-market status on the left, CV key on the right), the JMP card with its expandable abstract, then two sections, "Publications" (the forthcoming AER paper first) and "Working Papers", each row with a venue badge, linked coauthors, notes as bullets, a short summary, a paper link and an expandable abstract |
 | `assets/headshot.jpg` | 512×512 headshot used in the sidebar and as the social-preview image |
 | `assets/headshot-full.jpg` | 1536×2304 uncropped version of the Columbia headshot (`headshot.jpg` is its top square), shown when the sidebar photo is clicked; lazy, so it only downloads once the sidebar photo is hovered, focused, or opened |
 | `assets/cv.pdf` | CV, linked from the sidebar button |
